@@ -1,0 +1,311 @@
+body {
+    font-family: 'Times New Roman', serif; /* Changed font to match mockup */
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #003366; /* Dark blue header */
+    color: #fff;
+    padding: 1em 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+nav ul {
+    padding: 0;
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    padding: 20px;
+    max-width: 1000px; /* Increased max-width for certificate */
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    margin-bottom: 30px; /* Increased margin for sections */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+h2 {
+    color: #003366; /* Dark blue for section titles */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="date"],
+form input[type="email"],
+form input[type="tel"] {
+    width: calc(100% - 22px);
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+form input.invalid {
+    border-color: red;
+}
+
+form button,
+#download-cert,
+#verify-cert-button {
+    background-color: #0056b3; /* Blue button */
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover,
+#download-cert:hover,
+#verify-cert-button:hover {
+    background-color: #004085;
+}
+
+.certificate {
+    border: 10px solid #003366; /* Dark blue border */
+    padding: 40px; /* Increased padding */
+    margin-top: 20px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    background-image: url('https://www.kalingainstitute.in/kit/assets/images/logo.png'); /* Watermark */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+    min-height: 700px; /* Ensure enough height for content */
+}
+
+.certificate-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.kit-logo {
+    width: 100px; /* Larger logo */
+    height: auto;
+    float: left;
+    margin-right: 20px;
+}
+
+.certificate-header h1 {
+    font-size: 2.5em;
+    color: #003366;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.certificate-header p {
+    margin: 3px 0;
+    font-size: 1em;
+    color: #555;
+}
+
+.certificate-body {
+    text-align: left;
+    margin-top: 30px;
+    padding: 0 30px;
+    position: relative; /* For QR code positioning */
+}
+
+.certificate-body p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    font-size: 1.1em;
+}
+
+.certificate-body .reg-no,
+.certificate-body .conferred-to,
+.certificate-body .completion-of,
+.certificate-body .duration,
+.certificate-body .completion-date,
+.certificate-body .roll-number-display,
+.certificate-body .email-display,
+.certificate-body .phone-number-display {
+    font-weight: normal; /* Resetting font-weight */
+    font-size: 1.1em;
+    color: #333;
+}
+
+.certificate-body span {
+    font-weight: bold; /* Make dynamic content bold */
+    text-decoration: none; /* Remove underline */
+    color: #000;
+}
+
+.qr-code-display {
+    position: absolute;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 10; /* Ensure it's above other elements */
+}
+
+.certificate-footer {
+    margin-top: 50px;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    position: relative; /* For QR code positioning if moved here */
+}
+
+.certificate-footer .percentage {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #003366;
+}
+
+.certificate-footer .signatures {
+    display: flex;
+    justify-content: space-around;
+    width: 60%;
+}
+
+.certificate-footer .signature-item {
+    text-align: center;
+    border-top: 1px solid #333;
+    padding-top: 8px;
+    width: 45%;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* Clearfix for floated elements */
+.certificate-body::after,
+.certificate-header::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Styles for All Certificates section */
+.course-section {
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 15px;
+    background-color: #fdfdfd;
+}
+
+.course-section h4 {
+    color: #0056b3;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    border-bottom: 1px dashed #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.certificate-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.certificate-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.certificate-item p {
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+.certificate-item strong {
+    color: #003366;
+}
+
+.certificate-item button {
+    margin-right: 10px;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.certificate-item .edit-cert {
+    background-color: #28a745; /* Green for edit */
+    color: white;
+    border: none;
+}
+
+.certificate-item .edit-cert:hover {
+    background-color: #218838;
+}
+
+.certificate-item .delete-cert {
+    background-color: #dc3545; /* Red for delete */
+    color: white;
+    border: none;
+}
+
+.certificate-item .delete-cert:hover {
+    background-color: #c82333;
+}
+
+/* Verification Result styles */
+#verification-result .certificate {
+    border: 2px dashed #0056b3; /* Different border for verified cert */
+    background-color: #e9f7ef; /* Light green background */
+}
+
+#verification-result #verification-message {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #007bff;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    background-color: #003366; /* Dark blue footer */
+    color: #fff;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 30px;
+}
