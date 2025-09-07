@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             certQrCodeDisplay.innerHTML = '';
             new QRCode(certQrCodeDisplay, {
-                text: `https://your-vercel-deployment-url.vercel.app/verify/${certificateData.id}`, // IMPORTANT: Replace with your actual Vercel domain
+                text: `https://training-center-k6bhf8duu-umesh-jhas-projects.vercel.app/verify/${certificateData.id}`, // IMPORTANT: Replace with your actual Vercel domain
                 width: 128,
                 height: 128
             });
@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 verifiedCertQrCodeDisplay.innerHTML = '';
                 new QRCode(verifiedCertQrCodeDisplay, {
-                    text: `https://your-vercel-deployment-url.vercel.app/verify/${foundCertificate.id}`, // IMPORTANT: Replace with your actual Vercel domain
+                    text: `https://training-center-k6bhf8duu-umesh-jhas-projects.vercel.app/verify/${foundCertificate.id}`, // IMPORTANT: Replace with your actual Vercel domain
                     width: 128,
                     height: 128
                 });
