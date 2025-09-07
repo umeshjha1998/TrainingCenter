@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const certQrCodeDisplay = document.getElementById('cert-qr-code-display'); // This is the QR container inside certificate-display
     const downloadCertButton = document.getElementById('download-cert');
     const certificateIdDisplay = document.getElementById('certificate-id-display');
-    const certRollNumber = document.getElementById('cert-roll-number');
     const certEmail = document.getElementById('cert-email');
     const certPhoneNumber = document.getElementById('cert-phone-number');
 
@@ -50,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         certCourse.textContent = generatedCertificateData.course;
         certDate.textContent = generatedCertificateData.date;
         certificateIdDisplay.textContent = generatedCertificateData.id;
-        certRollNumber.textContent = generatedCertificateData.rollNumber;
         certEmail.textContent = generatedCertificateData.email;
         certPhoneNumber.textContent = generatedCertificateData.phoneNumber;
         certificateOutput.style.display = 'block';
@@ -95,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Generate a unique certificate ID with the new format
         const certificateId = generateUniqueId(courseName, completionDate, rollNumber);
-        certificateIdDisplay.textContent = `Registration No :- ${certificateId}`;
+        certificateIdDisplay.textContent = certificateId;
 
         generatedCertificateData = {
             id: certificateId,
@@ -165,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
             verifiedCertName.textContent = foundCertificate.name;
             verifiedCertCourse.textContent = foundCertificate.course;
             verifiedCertDate.textContent = foundCertificate.date;
-            verifiedCertRollNumber.textContent = foundCertificate.rollNumber;
             verifiedCertEmail.textContent = foundCertificate.email;
             verifiedCertPhoneNumber.textContent = foundCertificate.phoneNumber;
             verifiedCertificateIdDisplay.textContent = foundCertificate.id;
@@ -186,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
             verifiedCertName.textContent = '';
             verifiedCertCourse.textContent = '';
             verifiedCertDate.textContent = '';
-            verifiedCertRollNumber.textContent = '';
             verifiedCertEmail.textContent = '';
             verifiedCertPhoneNumber.textContent = '';
             verifiedCertificateIdDisplay.textContent = '';
@@ -222,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p><strong>Email:</strong> ${cert.email}</p>
                     <p><strong>Phone:</strong> ${cert.phoneNumber}</p>
                     <p><strong>Date:</strong> ${cert.date}</p>
-                    <p><strong>Roll Number:</strong> ${cert.rollNumber}</p>
                     <button class="edit-cert" data-id="${cert.id}" data-course="${cert.course}">Edit</button>
                     <button class="delete-cert" data-id="${cert.id}" data-course="${cert.course}">Delete</button>
                     <hr>
