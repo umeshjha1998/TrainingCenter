@@ -80,13 +80,7 @@ export default function AdminLogin() {
                                 />
                             </div>
 
-                            <div className="flex items-center justify-end">
-                                <div className="text-sm">
-                                    <Link to="/forgot-password" className="font-medium text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
-                                        Forgot your password?
-                                    </Link>
-                                </div>
-                            </div>
+
 
                             <div>
                                 <button
@@ -107,8 +101,8 @@ export default function AdminLogin() {
                             </Link>
                         </div>
                     </div>
-                </div>
-            </main>
-        </div>
+                </div >
+            </main >
+        </div >
     );
 }
