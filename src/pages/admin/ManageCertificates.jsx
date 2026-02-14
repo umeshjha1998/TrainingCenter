@@ -4,12 +4,23 @@ import GenerateCertificateModal from "../../components/admin/GenerateCertificate
 
 export default function ManageCertificates() {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [certificates, setCertificates] = useState([
-        { id: "CERT-2023-8421", student: "Jane Cooper", course: "Advanced React Patterns", date: "Oct 12, 2023", status: "Issued" },
-        { id: "CERT-2023-8422", student: "Cody Fisher", course: "Full Stack Bootcamp", date: "Oct 10, 2023", status: "Issued" },
-        { id: "CERT-2023-8423", student: "Esther Howard", course: "Python for Data Science", date: "Oct 08, 2023", status: "Pending" },
-        { id: "CERT-2023-8424", student: "Jenny Doe", course: "Machine Learning A-Z", date: "Oct 05, 2023", status: "Issued" },
-    ]);
+
+    // Initialize from localStorage or use default data
+    const [certificates, setCertificates] = useState(() => {
+        const saved = localStorage.getItem('certificates');
+        if (saved) return JSON.parse(saved);
+        return [
+            { id: "CERT-2023-8421", student: "Jane Cooper", course: "Advanced React Patterns", date: "Oct 12, 2023", status: "Issued" },
+            { id: "CERT-2023-8422", student: "Cody Fisher", course: "Full Stack Bootcamp", date: "Oct 10, 2023", status: "Issued" },
+            { id: "CERT-2023-8423", student: "Esther Howard", course: "Python for Data Science", date: "Oct 08, 2023", status: "Pending" },
+            { id: "CERT-2023-8424", student: "Jenny Doe", course: "Machine Learning A-Z", date: "Oct 05, 2023", status: "Issued" },
+        ];
+    });
+
+    // Update localStorage whenever certificates change
+    React.useEffect(() => {
+        localStorage.setItem('certificates', JSON.stringify(certificates));
+    }, [certificates]);
 
     const handleGenerate = (data) => {
         const newCert = {
@@ -104,10 +115,18 @@ export default function ManageCertificates() {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div className="flex items-center justify-end space-x-2">
-                                            <button className="text-slate-400 hover:text-primary transition-colors" title="View">
+                                            <button
+                                                className="text-slate-400 hover:text-primary transition-colors"
+                                                title="View"
+                                                onClick={() => window.open(`#/c/${cert.id}`, '_blank')}
+                                            >
                                                 <span className="material-icons text-xl">visibility</span>
                                             </button>
-                                            <button className="text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+                                            <button
+                                                className="text-slate-400 hover:text-red-500 transition-colors"
+                                                title="Delete"
+                                                onClick={() => setCertificates(certificates.filter(c => c.id !== cert.id))}
+                                            >
                                                 <span className="material-icons text-xl">delete</span>
                                             </button>
                                         </div>

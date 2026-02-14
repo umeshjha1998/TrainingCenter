@@ -1,12 +1,39 @@
 import React, { useState } from "react";
 
 export default function ManageCourses() {
-    const [courses, setCourses] = useState([
-        { id: "CR-001", name: "Inverter Refrigerator Repair", duration: "6 Months", subjects: 8, nextExam: "Oct 12, 2023" },
-        { id: "CR-002", name: "3-Phase Motor Winding", duration: "3 Months", subjects: 4, nextExam: "Nov 01, 2023" },
-        { id: "CR-003", name: "PCB Circuit Design", duration: "4 Months", subjects: 6, nextExam: "Not Scheduled" },
-        { id: "CR-004", name: "Advanced HVAC Systems", duration: "6 Months", subjects: 10, nextExam: "Dec 15, 2023" },
-    ]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newCourse, setNewCourse] = useState({ name: "", duration: "", subjects: "", nextExam: "" });
+    const [courses, setCourses] = useState(() => {
+        const saved = localStorage.getItem('courses');
+        if (saved) return JSON.parse(saved);
+        return [
+            { id: "CR-001", name: "Inverter Refrigerator Repair", duration: "6 Months", subjects: 8, nextExam: "Oct 12, 2023" },
+            { id: "CR-002", name: "3-Phase Motor Winding", duration: "3 Months", subjects: 4, nextExam: "Nov 01, 2023" },
+            { id: "CR-003", name: "PCB Circuit Design", duration: "4 Months", subjects: 6, nextExam: "Not Scheduled" },
+            { id: "CR-004", name: "Advanced HVAC Systems", duration: "6 Months", subjects: 10, nextExam: "Dec 15, 2023" },
+        ];
+    });
+
+    // Update localStorage whenever courses change
+    React.useEffect(() => {
+        localStorage.setItem('courses', JSON.stringify(courses));
+    }, [courses]);
+
+    const handleAddCourse = (e) => {
+        e.preventDefault();
+        const course = {
+            id: `CR-00${courses.length > 0 ? courses.length + 1 : 1}`,
+            ...newCourse,
+            subjects: parseInt(newCourse.subjects)
+        };
+        setCourses([...courses, course]);
+        setNewCourse({ name: "", duration: "", subjects: "", nextExam: "" });
+        setIsModalOpen(false);
+    };
+
+    const handleDeleteCourse = (id) => {
+        setCourses(courses.filter(course => course.id !== id));
+    };
 
     return (
         <div className="space-y-6">
@@ -22,6 +49,7 @@ export default function ManageCourses() {
                 <div className="mt-4 sm:ml-4 sm:mt-0 sm:flex-none">
                     <button
                         type="button"
+                        onClick={() => setIsModalOpen(true)}
                         className="inline-flex items-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all active:scale-95"
                     >
                         <span className="material-icons text-lg mr-2">add</span>
@@ -81,7 +109,11 @@ export default function ManageCourses() {
                                         <button className="text-slate-400 hover:text-primary p-1.5 hover:bg-primary/10 rounded transition-colors" title="Edit">
                                             <span className="material-icons text-lg">edit</span>
                                         </button>
-                                        <button className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-500/10 rounded transition-colors" title="Delete">
+                                        <button
+                                            className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-500/10 rounded transition-colors"
+                                            title="Delete"
+                                            onClick={() => handleDeleteCourse(course.id)}
+                                        >
                                             <span className="material-icons text-lg">delete</span>
                                         </button>
                                     </div>
@@ -91,6 +123,49 @@ export default function ManageCourses() {
                     </tbody>
                 </table>
             </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity" onClick={() => setIsModalOpen(false)} aria-hidden="true"></div>
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        <div className="inline-block align-bottom bg-white dark:bg-slate-900 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200 dark:border-slate-800">
+                            <form onSubmit={handleAddCourse}>
+                                <div className="bg-white dark:bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white mb-4" id="modal-title">
+                                        Add New Course
+                                    </h3>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Course Name</label>
+                                            <input type="text" id="name" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.name} onChange={(e) => setNewCourse({ ...newCourse, name: e.target.value })} />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="duration" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Duration</label>
+                                            <input type="text" id="duration" required placeholder="e.g. 6 Months" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.duration} onChange={(e) => setNewCourse({ ...newCourse, duration: e.target.value })} />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="subjects" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Subject Count</label>
+                                            <input type="number" id="subjects" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.subjects} onChange={(e) => setNewCourse({ ...newCourse, subjects: e.target.value })} />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="nextExam" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Next Exam Date</label>
+                                            <input type="text" id="nextExam" placeholder="e.g. Oct 12, 2023" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.nextExam} onChange={(e) => setNewCourse({ ...newCourse, nextExam: e.target.value })} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                    <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm">
+                                        Add Course
+                                    </button>
+                                    <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-slate-300 dark:border-slate-700 shadow-sm px-4 py-2 bg-white dark:bg-slate-800 text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={() => setIsModalOpen(false)}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
