@@ -334,7 +334,18 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            <div className="flex justify-center py-8 bg-slate-50 dark:bg-slate-900/50">
+                <Link
+                    to="/admin-login"
+                    className="inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+                >
+                    <span className="material-icons text-sm mr-2">admin_panel_settings</span>
+                    Admin Login
+                </Link>
+            </div>
+
             <Footer />
-        </div>
+        </div >
     );
 }

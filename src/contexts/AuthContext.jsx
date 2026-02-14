@@ -14,8 +14,12 @@ export function AuthProvider({ children }) {
     const [userRole, setUserRole] = useState(null); // 'admin', 'student', or null
     const [loading, setLoading] = useState(true);
 
+    const [adminOverride, setAdminOverride] = useState(false);
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (adminOverride) return; // Ignore firebase updates if admin is logged in manually
+
             setCurrentUser(user);
             if (user) {
                 // Fetch user role from Firestore
@@ -33,9 +37,29 @@ export function AuthProvider({ children }) {
         });
 
         return unsubscribe;
-    }, []);
+    }, [adminOverride]);
+
+    const loginAsAdmin = (username, password) => {
+        if (username === "admin" && password === "admin") {
+            setAdminOverride(true);
+            setCurrentUser({ uid: "admin", email: "admin@console.local", displayName: "Administrator" });
+            setUserRole("admin");
+            return true;
+        }
+        return false;
+    };
 
     const logout = () => {
+        if (adminOverride) {
+            setAdminOverride(false);
+            setCurrentUser(null);
+            setUserRole(null);
+            // Re-trigger firebase auth check might be good, but for now simple clear is fine.
+            // onAuthStateChanged will pick up usually.
+            // Actually, we should check if firebase user is still there? 
+            // Simplified: just clear and let the user re-login if needed.
+            return Promise.resolve();
+        }
         return auth.signOut();
     }
 
@@ -43,6 +67,7 @@ export function AuthProvider({ children }) {
         currentUser,
         userRole,
         isAdmin: userRole === "admin",
+        loginAsAdmin,
         logout
     };
 
