@@ -24,6 +24,9 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/verify" element={<Home />} />
+          <Route path="/courses" element={<Home />} />
+          <Route path="/about" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmail />} />

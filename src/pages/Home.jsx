@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 export default function Home() {
     const [certId, setCertId] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.pathname === '/verify') {
+            const element = document.getElementById('verify');
+            if (element) element.scrollIntoView({ behavior: 'smooth' });
+        } else if (location.pathname === '/courses') {
+            const element = document.getElementById('courses');
+            if (element) element.scrollIntoView({ behavior: 'smooth' });
+        } else if (location.pathname === '/about') {
+            const element = document.getElementById('about');
+            if (element) element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [location]);
 
     const handleVerify = () => {
         if (certId.trim()) {
@@ -38,19 +52,19 @@ export default function Home() {
                             hands-on workshops in Darbhanga.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <a
+                            <Link
                                 className="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-primary hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30"
-                                href="#courses"
+                                to="/courses"
                             >
                                 Explore Courses
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                                 className="inline-flex justify-center items-center px-6 py-3 border border-slate-600 text-base font-medium rounded-lg text-white bg-slate-800/50 hover:bg-slate-700 backdrop-blur-sm transition-colors"
-                                href="#verify"
+                                to="/verify"
                             >
                                 <span className="material-icons text-sm mr-2">qr_code</span>{" "}
                                 Verify Certificate
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -154,15 +168,15 @@ export default function Home() {
                                 </span>
                             </li>
                         </ul>
-                        <a
+                        <Link
                             className="text-primary font-semibold hover:text-primary-dark transition-colors inline-flex items-center gap-1 group"
-                            href="#contact"
+                            to="/about"
                         >
                             Learn more about our mission{" "}
                             <span className="material-icons text-sm transition-transform group-hover:translate-x-1">
                                 arrow_forward
                             </span>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -272,12 +286,12 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="mt-12 text-center">
-                        <a
+                        <Link
                             className="inline-flex items-center justify-center px-6 py-3 border border-slate-300 dark:border-slate-600 shadow-sm text-base font-medium rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-                            href="#courses"
+                            to="/courses"
                         >
                             View All Courses
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </section>

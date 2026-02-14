@@ -78,25 +78,25 @@ export default function Navbar() {
                         <Link className="text-primary font-semibold px-3 py-2 text-sm" to="/">
                             Home
                         </Link>
-                        <a
+                        <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
-                            href="#courses"
+                            to="/courses"
                         >
                             Courses
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
-                            href="#about"
+                            to="/about"
                         >
                             About Us
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors flex items-center gap-1"
-                            href="#verify"
+                            to="/verify"
                         >
                             <span className="material-icons text-sm">qr_code_scanner</span>{" "}
                             Verification
-                        </a>
+                        </Link>
                     </div>
                     <div className="hidden md:flex items-center gap-3">
                         {!currentUser ? (
@@ -147,13 +147,13 @@ export default function Navbar() {
                     <Link className="block text-primary font-semibold px-3 py-2 text-sm" to="/" onClick={() => setIsMenuOpen(false)}>
                         Home
                     </Link>
-                    <a
+                    <Link
                         className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
-                        href="#courses"
+                        to="/courses"
                         onClick={() => setIsMenuOpen(false)}
                     >
                         Courses
-                    </a>
+                    </Link>
                     <Link
                         className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
                         to="/login"
