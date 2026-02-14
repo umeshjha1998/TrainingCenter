@@ -19,8 +19,20 @@ export default function ManageStudents() {
         localStorage.setItem('students', JSON.stringify(students));
     }, [students]);
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewStudent(prev => ({ ...prev, [name]: value }));
+    };
+
     const handleAddStudent = (e) => {
         e.preventDefault();
+
+        // Basic validation
+        if (!newStudent.name || !newStudent.email || !newStudent.phone || !newStudent.enrolled) {
+            alert("Please fill in all fields");
+            return;
+        }
+
         const student = {
             id: students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1,
             ...newStudent
@@ -122,19 +134,19 @@ export default function ManageStudents() {
                                     <div className="space-y-4">
                                         <div>
                                             <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Name</label>
-                                            <input type="text" id="name" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newStudent.name} onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })} />
+                                            <input type="text" id="name" name="name" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newStudent.name} onChange={handleInputChange} />
                                         </div>
                                         <div>
                                             <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
-                                            <input type="email" id="email" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newStudent.email} onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })} />
+                                            <input type="email" id="email" name="email" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newStudent.email} onChange={handleInputChange} />
                                         </div>
                                         <div>
                                             <label htmlFor="phone" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Phone</label>
-                                            <input type="tel" id="phone" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newStudent.phone} onChange={(e) => setNewStudent({ ...newStudent, phone: e.target.value })} />
+                                            <input type="tel" id="phone" name="phone" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newStudent.phone} onChange={handleInputChange} />
                                         </div>
                                         <div>
                                             <label htmlFor="enrolled" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Enrolled Course</label>
-                                            <input type="text" id="enrolled" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newStudent.enrolled} onChange={(e) => setNewStudent({ ...newStudent, enrolled: e.target.value })} />
+                                            <input type="text" id="enrolled" name="enrolled" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newStudent.enrolled} onChange={handleInputChange} />
                                         </div>
                                     </div>
                                 </div>

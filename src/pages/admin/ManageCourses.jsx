@@ -19,12 +19,33 @@ export default function ManageCourses() {
         localStorage.setItem('courses', JSON.stringify(courses));
     }, [courses]);
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewCourse(prev => ({ ...prev, [name]: value }));
+    };
+
     const handleAddCourse = (e) => {
         e.preventDefault();
+
+        if (!newCourse.name || !newCourse.duration || !newCourse.subjects || !newCourse.nextExam) {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        // Safer ID generation to avoid duplicates locally
+        const maxId = courses.reduce((max, c) => {
+            const num = parseInt(c.id.split('-')[1]);
+            return isNaN(num) ? max : (num > max ? num : max);
+        }, 0);
+
+        const nextId = maxId + 1;
+        // Pad with zeros to 3 digits
+        const idString = `CR-${String(nextId).padStart(3, '0')}`;
+
         const course = {
-            id: `CR-00${courses.length > 0 ? courses.length + 1 : 1}`,
+            id: idString,
             ...newCourse,
-            subjects: parseInt(newCourse.subjects)
+            subjects: parseInt(newCourse.subjects) || 0
         };
         setCourses([...courses, course]);
         setNewCourse({ name: "", duration: "", subjects: "", nextExam: "" });
@@ -137,19 +158,19 @@ export default function ManageCourses() {
                                     <div className="space-y-4">
                                         <div>
                                             <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Course Name</label>
-                                            <input type="text" id="name" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.name} onChange={(e) => setNewCourse({ ...newCourse, name: e.target.value })} />
+                                            <input type="text" id="name" name="name" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.name} onChange={handleInputChange} />
                                         </div>
                                         <div>
                                             <label htmlFor="duration" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Duration</label>
-                                            <input type="text" id="duration" required placeholder="e.g. 6 Months" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.duration} onChange={(e) => setNewCourse({ ...newCourse, duration: e.target.value })} />
+                                            <input type="text" id="duration" name="duration" required placeholder="e.g. 6 Months" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.duration} onChange={handleInputChange} />
                                         </div>
                                         <div>
                                             <label htmlFor="subjects" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Subject Count</label>
-                                            <input type="number" id="subjects" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.subjects} onChange={(e) => setNewCourse({ ...newCourse, subjects: e.target.value })} />
+                                            <input type="number" id="subjects" name="subjects" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.subjects} onChange={handleInputChange} />
                                         </div>
                                         <div>
                                             <label htmlFor="nextExam" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Next Exam Date</label>
-                                            <input type="text" id="nextExam" placeholder="e.g. Oct 12, 2023" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.nextExam} onChange={(e) => setNewCourse({ ...newCourse, nextExam: e.target.value })} />
+                                            <input type="text" id="nextExam" name="nextExam" placeholder="e.g. Oct 12, 2023" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={newCourse.nextExam} onChange={handleInputChange} />
                                         </div>
                                     </div>
                                 </div>

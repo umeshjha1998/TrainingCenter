@@ -9,8 +9,19 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate }
 
     if (!isOpen) return null;
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!formData.studentName || !formData.courseName || !formData.issueDate) {
+            alert("Please fill in all fields");
+            return;
+        }
+
         onGenerate(formData);
         onClose();
     };
@@ -43,7 +54,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate }
                                                 required
                                                 className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                                                 value={formData.studentName}
-                                                onChange={(e) => setFormData({ ...formData, studentName: e.target.value })}
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                         <div>
@@ -56,7 +67,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate }
                                                 required
                                                 className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                                                 value={formData.courseName}
-                                                onChange={(e) => setFormData({ ...formData, courseName: e.target.value })}
+                                                onChange={handleInputChange}
                                             >
                                                 <option value="">Select a course</option>
                                                 <option value="Advanced React Patterns">Advanced React Patterns</option>
@@ -76,7 +87,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate }
                                                 required
                                                 className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                                                 value={formData.issueDate}
-                                                onChange={(e) => setFormData({ ...formData, issueDate: e.target.value })}
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
