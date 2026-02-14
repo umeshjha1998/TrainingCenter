@@ -87,7 +87,7 @@ export default function Register() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Full Name *</label>
-                                    <input name="fullName" required type="text" className="mt-1 block w-full rounded-lg border-slate-300 px-4 py-2" value={formData.fullName} onChange={handleChange} />
+                                    <input name="fullName" required type="text" className="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.fullName} onChange={handleChange} />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Gender *</label>
@@ -99,11 +99,11 @@ export default function Register() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Phone Number *</label>
-                                    <input name="phone" required type="tel" className="mt-1 block w-full rounded-lg border-slate-300 px-4 py-2" value={formData.phone} onChange={handleChange} />
+                                    <input name="phone" required type="tel" className="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.phone} onChange={handleChange} />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Email Address *</label>
-                                    <input name="email" required type="email" className="mt-1 block w-full rounded-lg border-slate-300 px-4 py-2" value={formData.email} onChange={handleChange} />
+                                    <input name="email" required type="email" className="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.email} onChange={handleChange} />
                                 </div>
                             </div>
 
@@ -113,21 +113,21 @@ export default function Register() {
                                     <span className="material-icons text-primary text-xl">folder_shared</span>
                                     <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Identity & Documents</h3>
                                 </div>
-                                <input name="aadhar" placeholder="Aadhar Number (Optional)" className="block w-full rounded-lg border-slate-300 px-4 py-2 mb-4" value={formData.aadhar} onChange={handleChange} />
-                                <input name="pan" placeholder="PAN Number (Optional)" className="block w-full rounded-lg border-slate-300 px-4 py-2 mb-4" value={formData.pan} onChange={handleChange} />
-                                <input name="passport" placeholder="Passport Number (Optional)" className="block w-full rounded-lg border-slate-300 px-4 py-2 mb-4" value={formData.passport} onChange={handleChange} />
+                                <input name="aadhar" placeholder="Aadhar Number (Optional)" className="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 mb-4 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.aadhar} onChange={handleChange} />
+                                <input name="pan" placeholder="PAN Number (Optional)" className="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 mb-4 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.pan} onChange={handleChange} />
+                                <input name="passport" placeholder="Passport Number (Optional)" className="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 mb-4 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.passport} onChange={handleChange} />
 
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Full Permanent Address *</label>
-                                <textarea name="address" required className="block w-full rounded-lg border-slate-300 px-4 py-2" rows="3" value={formData.address} onChange={handleChange}></textarea>
+                                <textarea name="address" required className="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" rows="3" value={formData.address} onChange={handleChange}></textarea>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Password *</label>
-                                        <input name="password" required type="password" className="block w-full rounded-lg border-slate-300 px-4 py-2" value={formData.password} onChange={handleChange} />
+                                        <input name="password" required type="password" className="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.password} onChange={handleChange} />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Confirm Password *</label>
-                                        <input name="confirmPassword" required type="password" className="block w-full rounded-lg border-slate-300 px-4 py-2" value={formData.confirmPassword} onChange={handleChange} />
+                                        <input name="confirmPassword" required type="password" className="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.confirmPassword} onChange={handleChange} />
                                     </div>
                                 </div>
                             </div>
