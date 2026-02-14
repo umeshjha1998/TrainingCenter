@@ -1,9 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  body {
-    @apply bg-background-light text-slate-800 dark:bg-background-dark dark:text-slate-100 font-display antialiased leading-relaxed;
-  }
-}
