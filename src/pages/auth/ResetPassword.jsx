@@ -17,7 +17,6 @@ export default function ResetPassword() {
     // Initialize error state based on oobCode presence
     const [message, setMessage] = useState('');
     const [error, setError] = useState(oobCode ? '' : 'Invalid or missing reset code. Please try requesting a new password reset link.');
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -34,7 +33,6 @@ export default function ResetPassword() {
             return;
         }
 
-        setIsSubmitting(true);
         try {
             await confirmPasswordReset(auth, oobCode, password);
             setMessage("Password has been reset successfully. Redirecting to login...");
@@ -45,7 +43,6 @@ export default function ResetPassword() {
             console.error(err);
             setError("Failed to reset password. The link may have expired or is invalid.");
         }
-        setIsSubmitting(false);
     };
 
     const hasMinLength = password.length >= 8;
