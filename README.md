@@ -3,7 +3,7 @@
 A comprehensive web platform for managing a technical training institute, featuring student enrollment, course management, and a secure certificate verification system.
 
 ## Live Demo
-Check out the live application here: [AC & DC Technical Institute Training Center](https://training-center-kappa.vercel.app/)
+Check out the live application here: [AC & DC Technical Institute Training Center](https://acdcinstitute.vercel.app/#/)
 
 ## Features
 
