@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Registration with OTP - AC &amp; DC Technical Institute</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4a7c2b", 
+                        "primary-dark": "#3a6121",
+                        "primary-light": "#e8f5e1",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .form-radio:checked {
+            background-color: #4a7c2b;
+            border-color: #4a7c2b;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+        }
+        .form-checkbox:checked {
+            background-color: #4a7c2b;
+            border-color: #4a7c2b;
+        }
+        html {
+            scroll-behavior: smooth;
+        }.circuit-overlay {
+            background-image: radial-gradient(#4a7c2b 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+        }
+        .circuit-lines-abstract {
+            background-image: 
+                linear-gradient(45deg, transparent 48%, rgba(74, 124, 43, 0.08) 49%, rgba(74, 124, 43, 0.08) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(74, 124, 43, 0.08) 49%, rgba(74, 124, 43, 0.08) 51%, transparent 52%);
+            background-size: 60px 60px;
+        }.material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 300,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8 text-slate-900 dark:text-slate-100">
+<header class="w-full max-w-5xl mb-12 text-center flex flex-col items-center relative">
+<div class="w-full h-56 mb-8 rounded-2xl overflow-hidden relative border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col items-center justify-center shadow-sm">
+<div class="absolute inset-0 bg-slate-50 dark:bg-slate-900"></div>
+<div class="absolute inset-0 circuit-overlay"></div>
+<div class="absolute inset-0 circuit-lines-abstract"></div>
+<div class="absolute inset-0 overflow-hidden opacity-30 pointer-events-none">
+<svg class="absolute -left-10 top-1/2 -translate-y-1/2 h-64 w-64 text-primary/20" fill="none" viewBox="0 0 200 200">
+<circle cx="100" cy="100" r="80" stroke="currentColor" stroke-dasharray="10 5" stroke-width="1"></circle>
+<circle cx="100" cy="100" r="60" stroke="currentColor" stroke-width="0.5"></circle>
+<circle cx="100" cy="100" r="40" stroke="currentColor" stroke-width="0.5"></circle>
+</svg>
+<svg class="absolute -right-10 top-1/2 -translate-y-1/2 h-64 w-64 text-primary/20" fill="none" viewBox="0 0 200 200">
+<rect fill="none" height="160" rx="20" stroke="currentColor" stroke-width="1" width="160" x="20" y="20"></rect>
+<path d="M20 100 L180 100 M100 20 L100 180" stroke="currentColor" stroke-width="0.5"></path>
+</svg>
+</div>
+<div class="relative z-10 flex flex-col items-center justify-center p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-xl border border-white/50 dark:border-slate-700/50 shadow-sm h-40 w-40">
+<svg class="w-full h-full text-primary" fill="currentColor" viewBox="0 0 200 160">
+<defs>
+<pattern height="8" id="binaryPattern" patternUnits="userSpaceOnUse" width="8" x="0" y="0">
+<text fill="#4a7c2b" font-family="monospace" font-size="6" opacity="0.4" x="0" y="6">1</text>
+<text fill="#3a6121" font-family="monospace" font-size="6" opacity="0.3" x="4" y="6">0</text>
+</pattern>
+</defs>
+<g transform="translate(65, 0)">
+<path d="M10,40 L10,32 L22,10 L34,32 L34,40 L28,40 L26,35 L18,35 L16,40 L10,40 Z M20,29 L24,29 L22,23 Z" fill="url(#binaryPattern)" stroke="#2d4a1a" stroke-width="1.5"></path>
+<path d="M60,32 L60,35 A8,8 0 0,1 52,35 L52,15 A8,8 0 0,1 60,15 L60,18 L66,18 L66,15 A14,14 0 0,0 52,9 L52,9 A14,14 0 0,0 38,25 L38,25 A14,14 0 0,0 52,41 L52,41 A14,14 0 0,0 66,32 Z" fill="url(#binaryPattern)" stroke="#2d4a1a" stroke-width="1.5"></path>
+</g>
+<g transform="translate(50, 45)">
+<rect fill="#3a6121" height="8" width="30" x="0" y="15"></rect>
+<rect fill="#3a6121" height="8" width="40" x="-10" y="45"></rect>
+<rect fill="#3a6121" height="8" width="30" x="0" y="75"></rect>
+<path d="M30,0 L30,98 L60,98 C87,98 109,76 109,49 C109,22 87,0 60,0 Z" fill="none" stroke="#3a6121" stroke-width="8"></path>
+<path d="M30,0 L30,98 L60,98 C87,98 109,76 109,49 C109,22 87,0 60,0 Z" fill="url(#binaryPattern)" opacity="0.5"></path>
+<rect fill="#3a6121" height="8" width="25" x="109" y="45"></rect>
+<text fill="#3a6121" font-family="serif" font-size="40" font-weight="bold" x="50" y="65">&amp;</text>
+</g>
+<g transform="translate(155, 95)">
+<path d="M0,0 L12,0 C22,0 28,8 28,20 C28,32 22,40 12,40 L0,40 Z M6,6 L6,34 L12,34 C18,34 22,29 22,20 C22,11 18,6 12,6 Z" fill="url(#binaryPattern)" stroke="#2d4a1a" stroke-width="1.5"></path>
+<path d="M52,32 L52,35 A8,8 0 0,1 44,35 L44,15 A8,8 0 0,1 52,15 L52,18 L58,18 L58,15 A14,14 0 0,0 44,9 L44,9 A14,14 0 0,0 30,25 L30,25 A14,14 0 0,0 44,41 L44,41 A14,14 0 0,0 58,32 Z" fill="url(#binaryPattern)" stroke="#2d4a1a" stroke-width="1.5"></path>
+</g>
+</svg>
+</div>
+</div>
+<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">AC &amp; DC Technical Institute</h1>
+<p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Excellence in Electrical Engineering &amp; Technology</p>
+</header>
+<main class="w-full max-w-5xl bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex justify-between items-center flex-wrap gap-4">
+<div>
+<h2 class="text-xl font-semibold text-slate-800 dark:text-white">Student Registration</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Please fill in your details to create an account.</p>
+</div>
+</div>
+<div class="p-8">
+<form action="#" method="POST">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8">
+<div class="space-y-6">
+<div class="flex items-center space-x-2 mb-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary !text-[22px]">id_card</span>
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Personal Information</h3>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="full-name">
+                                Full Name <span class="text-red-500">*</span>
+</label>
+<div class="mt-1 relative rounded-md shadow-sm group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-primary">
+<span class="material-symbols-outlined text-slate-400 !text-[20px] group-focus-within:text-primary transition-colors">person</span>
+</div>
+<input class="pl-10 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 transition-colors" id="full-name" name="full-name" placeholder="e.g. John Doe" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                Gender <span class="text-red-500">*</span>
+</label>
+<div class="grid grid-cols-3 gap-3">
+<label class="cursor-pointer relative">
+<input class="sr-only peer" name="gender" type="radio" value="male"/>
+<div class="w-full flex items-center justify-center px-3 py-2 border rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 peer-checked:bg-primary-light peer-checked:border-primary peer-checked:text-primary-dark transition-all">
+<span class="material-symbols-outlined !text-[18px] mr-1.5">man</span> Male
+                                    </div>
+</label>
+<label class="cursor-pointer relative">
+<input class="sr-only peer" name="gender" type="radio" value="female"/>
+<div class="w-full flex items-center justify-center px-3 py-2 border rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 peer-checked:bg-primary-light peer-checked:border-primary peer-checked:text-primary-dark transition-all">
+<span class="material-symbols-outlined !text-[18px] mr-1.5">woman</span> Female
+                                    </div>
+</label>
+<label class="cursor-pointer relative">
+<input class="sr-only peer" name="gender" type="radio" value="other"/>
+<div class="w-full flex items-center justify-center px-3 py-2 border rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 peer-checked:bg-primary-light peer-checked:border-primary peer-checked:text-primary-dark transition-all">
+<span class="material-symbols-outlined !text-[18px] mr-1.5">wc</span> Other
+                                    </div>
+</label>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="phone">
+                                Phone Number <span class="text-red-500">*</span>
+</label>
+<div class="mt-1 relative rounded-md shadow-sm group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 !text-[20px] group-focus-within:text-primary transition-colors">phone_iphone</span>
+</div>
+<input class="pl-10 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 transition-colors" id="phone" name="phone" placeholder="+91 98765 43210" type="tel"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="email">
+                                Email Address <span class="text-red-500">*</span>
+</label>
+<div class="mt-1 flex rounded-md shadow-sm relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+<span class="material-symbols-outlined text-slate-400 !text-[20px] group-focus-within:text-primary transition-colors">mail</span>
+</div>
+<input class="pl-10 block w-full rounded-l-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 transition-colors" id="email" name="email" placeholder="student@example.com" type="email"/>
+<button class="relative -ml-px inline-flex items-center space-x-2 rounded-r-lg border border-primary bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors whitespace-nowrap" type="button">
+<span>Send OTP</span>
+<span class="material-symbols-outlined !text-[18px]">send</span>
+</button>
+</div>
+<p class="mt-1.5 text-xs text-slate-500 flex items-center">
+<span class="material-symbols-outlined !text-[14px] mr-1 text-slate-400">info</span> 
+                                OTP will be sent to confirm your email.
+                            </p>
+</div>
+<div class="hidden">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="otp">Enter OTP</label>
+<input class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-2.5" id="otp" placeholder="------" type="text"/>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex items-center space-x-2 mb-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary !text-[22px]">badge</span>
+<h3 class="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Identity &amp; Documents</h3>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="col-span-1 sm:col-span-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="aadhar">
+                                    Aadhar Card Number <span class="text-xs text-slate-400 font-normal">(Optional)</span>
+</label>
+<div class="relative group mt-1">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 !text-[20px] group-focus-within:text-primary transition-colors">fingerprint</span>
+</div>
+<input class="pl-10 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 transition-colors" id="aadhar" name="aadhar" placeholder="XXXX XXXX XXXX" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="pan">
+                                    PAN Card Number <span class="text-xs text-slate-400 font-normal">(Optional)</span>
+</label>
+<input class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 transition-colors" id="pan" name="pan" placeholder="ABCDE1234F" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="passport">
+                                    Passport Number <span class="text-xs text-slate-400 font-normal">(Optional)</span>
+</label>
+<input class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 transition-colors" id="passport" name="passport" placeholder="A1234567" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="address">
+                                Full Permanent Address <span class="text-red-500">*</span>
+</label>
+<div class="mt-1 relative group">
+<div class="absolute top-3 left-3 flex pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 !text-[20px] group-focus-within:text-primary transition-colors">home_pin</span>
+</div>
+<textarea class="pl-10 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm transition-colors min-h-[100px]" id="address" name="address" placeholder="Street, City, State, ZIP Code" rows="3"></textarea>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="password">
+                                    Password <span class="text-red-500">*</span>
+</label>
+<div class="mt-1 relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 !text-[20px] group-focus-within:text-primary transition-colors">lock</span>
+</div>
+<input class="pl-10 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 transition-colors" id="password" name="password" type="password"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="confirm-password">
+                                    Confirm Password <span class="text-red-500">*</span>
+</label>
+<div class="mt-1 relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 !text-[20px] group-focus-within:text-primary transition-colors">verified_user</span>
+</div>
+<input class="pl-10 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 transition-colors" id="confirm-password" name="confirm-password" type="password"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-10 pt-8 border-t border-slate-100 dark:border-slate-800">
+<div class="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
+<div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700 w-full md:w-auto">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">Security Check</label>
+<div class="flex flex-col sm:flex-row items-center gap-4">
+<div class="h-20 w-56 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 flex items-center p-2 relative select-none">
+<div class="w-12 h-12 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded mr-3">
+<span class="material-symbols-outlined text-primary !text-[28px]">token</span>
+</div>
+<div class="text-xs text-slate-500">
+<p class="font-medium text-slate-700 dark:text-slate-300 mb-1">Select the matching object</p>
+<div class="flex gap-2">
+<button class="w-6 h-6 rounded bg-slate-100 hover:bg-primary/20 hover:text-primary flex items-center justify-center transition-colors" type="button"><span class="material-symbols-outlined !text-[16px]">pentagon</span></button>
+<button class="w-6 h-6 rounded bg-slate-100 hover:bg-primary/20 hover:text-primary flex items-center justify-center transition-colors text-primary border border-primary/30" type="button"><span class="material-symbols-outlined !text-[16px]">token</span></button>
+<button class="w-6 h-6 rounded bg-slate-100 hover:bg-primary/20 hover:text-primary flex items-center justify-center transition-colors" type="button"><span class="material-symbols-outlined !text-[16px]">hexagon</span></button>
+</div>
+</div>
+</div>
+<div class="flex-1 min-w-[120px]">
+<div class="text-xs text-green-600 dark:text-green-400 mb-1.5 flex items-center font-medium">
+<span class="material-symbols-outlined !text-[16px] mr-1">check_circle</span> Verified
+                                </div>
+<div class="h-1.5 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-green-500 w-full transition-all"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary transition-colors order-2 sm:order-1" href="#">
+                                Already have an account? <span class="text-primary hover:underline">Log in</span>
+</a>
+<button class="w-full sm:w-auto order-1 sm:order-2 inline-flex justify-center items-center py-3 px-8 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all shadow-primary/30 hover:shadow-primary/50" type="submit">
+                                Create Account
+                                <span class="material-symbols-outlined !text-[18px] ml-2">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</form>
+</div>
+</main>
+<footer class="mt-12 text-center text-sm text-slate-400 dark:text-slate-600 pb-10">
+<p>© 2024 AC &amp; DC Technical Institute. All rights reserved.</p>
+<div class="mt-2 space-x-4">
+<a class="hover:text-slate-600 dark:hover:text-slate-400 transition-colors" href="#">Privacy Policy</a>
+<span>•</span>
+<a class="hover:text-slate-600 dark:hover:text-slate-400 transition-colors" href="#">Terms of Service</a>
+<span>•</span>
+<a class="hover:text-slate-600 dark:hover:text-slate-400 transition-colors" href="#">Help Center</a>
+</div>
+</footer>
+</body></html>

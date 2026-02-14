@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Email OTP Verification - Technical Training Institute</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                    // Updated brand green based on AC & DC logo
+                    "primary": "#3E6B36", 
+                    "primary-hover": "#2f5229",
+                    "background-light": "#f6f7f8",
+                    "background-dark": "#101922",
+                },
+                fontFamily: {
+                    "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+            },
+        }
+    </script>
+<style>input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-gray-100 min-h-screen flex flex-col antialiased">
+<nav class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
+<div class="max-w-7xl mx-auto flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="h-10 w-auto flex items-center justify-center">
+<img alt="AC &amp; DC Logo" class="h-10 w-auto object-contain mix-blend-multiply dark:mix-blend-normal dark:brightness-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAznmGPPiii6HYPEosd1uJi4q-rfXxzrw5K426JcWMI3Ut4wt3tRtfRC5ZK5NwloQYeFrDo5LgV3brx7cRsf6v7cYQkpSxvYEfu8dV2hNVuilEYAshCYgUlzIZjq7Joa5_JlAGbzz90PAS-y5oktcKeDvas7I6obS7u_0eoWpOjUrhfKv9rRLbyDu6RUfvmIzqMahluQOnW46xf2grXJqPl1BSOoVY31dnl3p8IU63zEkGaquY2PMn3vf1kzs0Rh1e7n7unDCaSSvU"/>
+</div>
+<span class="sr-only">AC &amp; DC Technical Institute</span>
+</div>
+<div class="text-sm text-gray-500 dark:text-gray-400 hidden sm:block">
+                Need help? <a class="text-primary hover:text-primary-hover font-medium" href="#">Contact Support</a>
+</div>
+</div>
+</nav>
+<main class="flex-grow flex items-center justify-center p-4 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+<div class="absolute top-[-10%] left-[-5%] w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute bottom-[-10%] right-[-5%] w-[30rem] h-[30rem] bg-primary/10 rounded-full blur-3xl"></div>
+</div>
+<div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-700 relative z-10 overflow-hidden">
+<div class="w-full bg-gray-100 dark:bg-gray-700 h-1">
+<div class="bg-primary h-1 w-3/4 rounded-r-full"></div>
+</div>
+<div class="p-8 sm:p-10">
+<div class="text-center mb-8">
+<div class="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+<span class="material-icons text-primary text-3xl">mark_email_unread</span>
+</div>
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Verify your email</h2>
+<p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        We've sent a 6-digit verification code to <br/>
+<span class="font-semibold text-gray-800 dark:text-gray-200">student@tech-institute.edu</span>
+</p>
+</div>
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<div class="flex justify-between gap-2 sm:gap-3 mb-6">
+<input autofocus="" class="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-gray-900 dark:text-white shadow-sm caret-primary" data-alt="OTP digit 1 input" maxlength="1" type="text"/>
+<input class="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-gray-900 dark:text-white shadow-sm caret-primary" data-alt="OTP digit 2 input" maxlength="1" type="text"/>
+<input class="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-gray-900 dark:text-white shadow-sm caret-primary" data-alt="OTP digit 3 input" maxlength="1" type="text"/>
+<input class="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-gray-900 dark:text-white shadow-sm caret-primary" data-alt="OTP digit 4 input" maxlength="1" type="text"/>
+<input class="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-gray-900 dark:text-white shadow-sm caret-primary" data-alt="OTP digit 5 input" maxlength="1" type="text"/>
+<input class="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-gray-900 dark:text-white shadow-sm caret-primary" data-alt="OTP digit 6 input" maxlength="1" type="text"/>
+</div>
+<button class="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors duration-200 flex items-center justify-center gap-2 group" type="submit">
+<span>Verify &amp; Complete Registration</span>
+<span class="material-icons text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+<div class="mt-8 text-center space-y-4">
+<div class="text-sm text-gray-500 dark:text-gray-400">
+                        Didn't receive the code? 
+                        <br class="sm:hidden"/>
+<a class="font-semibold text-gray-400 cursor-not-allowed ml-1 inline-flex items-center gap-1 pointer-events-none" href="#">
+                            Resend OTP 
+                            <span class="font-normal text-gray-500">(00:24)</span>
+</a>
+</div>
+<div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+<a class="text-sm text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition-colors flex items-center justify-center gap-2" href="#">
+<span class="material-icons text-base">arrow_back</span>
+<span>Wrong email? Change email address</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden lg:block absolute bottom-10 right-10 opacity-30 w-64">
+<img alt="Abstract server technology pattern" class="rounded-xl grayscale" data-alt="Abstract server racks and data flow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-NPRN8eUqnlZAM1KidmfUeoO8ZbPkQFxP8s_tAS-Z7tiZw-DO72i38RJKdXmB_jlezo0UQtzCbCtm_vNQIFMV0WzpR06lpvJAR_kaA53992UGJQ-W9ZdbAX-W3O_sZbkr2ksb0QVAJp3gQ0fp5x2Bi6KCNxdt9q_5eq8EWFoqRJAMPaH7Jte83221ISHTe5Jrl6n4Z4XbOnuxTrplEIuIuQHndXuf6uMtZuuKG7dCULr0s2AOwXexPxZJFiOW-ExBMc4u8sSlAU0"/>
+</div>
+</main>
+<footer class="w-full py-6 text-center text-xs text-gray-400 dark:text-gray-600">
+        © 2023 Technical Training Institute. All rights reserved.
+    </footer>
+
+</body></html>

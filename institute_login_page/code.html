@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Institute Login Page</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3e8e41", // Adjusted to match the darker green in the AC&DC logo reference
+                        "primary-dark": "#2e6b30", 
+                        "primary-bright": "#4CAF50", // Brighter green for hover states/accents if needed
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102210",
+                        "neutral-light": "#e2e8e2", 
+                        "neutral-dark": "#1a2e1a",  
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+        .bg-pattern {
+            background-image: radial-gradient(circle at 1px 1px, #3e8e41 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col antialiased transition-colors duration-300">
+<main class="flex-grow flex items-center justify-center p-4 relative overflow-hidden">
+<div class="absolute inset-0 bg-pattern opacity-[0.03] dark:opacity-[0.05] pointer-events-none"></div>
+<div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="w-full max-w-md bg-white dark:bg-neutral-dark rounded-xl shadow-xl dark:shadow-black/50 overflow-hidden relative z-10 border border-neutral-light dark:border-neutral-dark/50">
+<div class="px-8 pt-10 pb-6 text-center">
+<div class="mx-auto h-24 w-auto flex items-center justify-center mb-6">
+<svg fill="none" height="90" viewBox="0 0 140 100" width="120" xmlns="http://www.w3.org/2000/svg">
+<path d="M50 35 H90 C110 35 125 48 125 65 C125 82 110 95 90 95 H50 V35 Z" fill="none" stroke="#3e8e41" stroke-width="8"></path>
+<rect fill="#3e8e41" height="6" width="40" x="10" y="42"></rect>
+<rect fill="#3e8e41" height="6" width="40" x="10" y="62"></rect>
+<rect fill="#3e8e41" height="6" width="40" x="10" y="82"></rect>
+<rect fill="#3e8e41" height="6" width="15" x="125" y="62"></rect>
+<path d="M55 30 L60 10 H68 L73 30 M58 22 H70" stroke="#3e8e41" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"></path>
+<path d="M85 30 C80 30 78 25 78 20 C78 15 80 10 85 10 C88 10 90 12 90 15" fill="none" stroke="#3e8e41" stroke-linecap="round" stroke-width="6"></path>
+<text fill="#3e8e41" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" x="75" y="75">&amp;</text>
+<path d="M110 95 V75 C110 75 120 75 120 85 C120 95 110 95 110 95 Z" fill="#3e8e41" stroke="#3e8e41" stroke-width="0" transform="translate(10, 10) scale(0.4)"></path> 
+</svg>
+</div>
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">AC &amp; DC Technical Institute</h2>
+<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Welcome back! Please sign in to continue.</p>
+</div>
+<div class="px-8 pb-10">
+<form action="#" class="space-y-6" method="POST">
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="email">Email Address</label>
+<div class="relative rounded-md shadow-sm">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons text-gray-400 text-lg">mail_outline</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg leading-5 bg-gray-50 dark:bg-black/20 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150 ease-in-out sm:text-sm" id="email" name="email" placeholder="student@acdc-institute.edu" type="email"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="password">Password</label>
+<div class="relative rounded-md shadow-sm">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons text-gray-400 text-lg">lock_outline</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg leading-5 bg-gray-50 dark:bg-black/20 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150 ease-in-out sm:text-sm" id="password" name="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<input class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer bg-gray-50 dark:bg-black/20 dark:border-gray-600" id="remember-me" name="remember-me" type="checkbox"/>
+<label class="ml-2 block text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none" for="remember-me">
+                            Remember me
+                        </label>
+</div>
+<div class="text-sm">
+<a class="font-medium text-primary hover:text-primary-dark dark:text-primary dark:hover:text-primary-bright hover:underline decoration-primary decoration-2 underline-offset-2 transition-colors" href="#">
+                            Forgot password?
+                        </a>
+</div>
+</div>
+<div>
+<button class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 transform active:scale-[0.98]" type="submit">
+                        Login
+                    </button>
+</div>
+</form>
+<div class="mt-6">
+<div class="relative">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="px-2 bg-white dark:bg-neutral-dark text-gray-500">Need help?</span>
+</div>
+</div>
+<div class="mt-4 grid grid-cols-1 gap-3 text-center">
+<a class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary-bright transition-colors" href="#">
+                        Contact Administration
+                    </a>
+</div>
+</div>
+</div>
+<div class="h-1.5 w-full bg-gradient-to-r from-primary/40 via-primary to-primary/40"></div>
+</div>
+</main>
+<footer class="py-6 text-center text-xs text-gray-400 dark:text-gray-600">
+<p>© 2023 AC &amp; DC Technical Institute. All rights reserved.</p>
+</footer>
+
+</body></html>

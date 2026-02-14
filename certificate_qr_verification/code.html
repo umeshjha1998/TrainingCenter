@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Certificate QR Verification | AC &amp; DC Technical Institute</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#45a049", 
+                        "primary-dark": "#388e3c",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .scan-overlay {
+            background: linear-gradient(to right, #45a049 4px, transparent 4px) 0 0,
+            linear-gradient(to right, #45a049 4px, transparent 4px) 0 100%,
+            linear-gradient(to left, #45a049 4px, transparent 4px) 100% 0,
+            linear-gradient(to left, #45a049 4px, transparent 4px) 100% 100%,
+            linear-gradient(to bottom, #45a049 4px, transparent 4px) 0 0,
+            linear-gradient(to bottom, #45a049 4px, transparent 4px) 100% 0,
+            linear-gradient(to top, #45a049 4px, transparent 4px) 0 100%,
+            linear-gradient(to top, #45a049 4px, transparent 4px) 100% 100%;
+            background-repeat: no-repeat;
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen flex flex-col font-display">
+<nav class="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-20">
+<div class="flex items-center gap-4">
+<img alt="AC &amp; DC Technical Institute Logo" class="h-12 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnnG6_15EKVCy_XtwDRNaaD_tTB5SPNuhsC_uqVE0hKi47lDnFr0H342HEBnBDRQCx2fVqxenS3xwxg6nXZiUD_m1A30lIn_cj_8_OlL2Jq9lwDCP3nzdPitda6vz3VQ40FX_dhYVfS9mav3bMO2I3EQh8TJzFPXgAnnfc8PzL0L0qIHh43_n1ZdiQNMT9qMM_TwoJ7lBABLeTCvW37HiISVe_TKDqm_oUY0GWPB9to-EZLFDMimZCnaAEGU1d7vvaf4rsbLzHg7M"/>
+<div class="flex flex-col">
+<span class="font-bold text-xl leading-tight text-slate-900 dark:text-white">AC &amp; DC <span class="text-primary">Technical Institute</span></span>
+<span class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide">CERTIFICATION PORTAL</span>
+</div>
+</div>
+<div class="flex items-center">
+<a class="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                        Back to Home
+                    </a>
+</div>
+</div>
+</div>
+</nav>
+<main class="flex-grow flex items-center justify-center p-4 sm:p-8">
+<div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<div class="lg:col-span-7 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-100 dark:border-slate-800 overflow-hidden">
+<div class="p-6 sm:p-8">
+<div class="mb-8">
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Verify Certificate Authenticity</h1>
+<p class="text-slate-500 dark:text-slate-400">Validate official credentials issued by the AC &amp; DC Technical Institute securely.</p>
+</div>
+<div class="flex space-x-1 rounded-lg bg-slate-100 dark:bg-slate-800 p-1 mb-8 w-fit">
+<button class="flex items-center gap-2 rounded-md bg-white dark:bg-slate-700 shadow-sm py-2 px-4 text-sm font-semibold text-primary dark:text-primary ring-1 ring-inset ring-slate-200 dark:ring-slate-600">
+<span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+                            Scan &amp; Verify
+                        </button>
+<button class="flex items-center gap-2 rounded-md py-2 px-4 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+<span class="material-symbols-outlined text-[18px]">history</span>
+                            History
+                        </button>
+</div>
+<div class="bg-slate-50 dark:bg-slate-950/50 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 p-8 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 relative overflow-hidden" style="min-height: 280px;">
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#45a049 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="scan-overlay w-48 h-48 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="bg-white dark:bg-slate-800 p-4 rounded-full shadow-md mb-4 group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-4xl text-primary">photo_camera</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-1">Scan QR Code</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-4">Point your camera at the QR code located on the bottom-right of the certificate.</p>
+<button class="bg-primary text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-green-600 transition-colors shadow-sm shadow-green-500/20">
+                                Launch Camera
+                            </button>
+</div>
+</div>
+<div class="relative flex py-8 items-center">
+<div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+<span class="flex-shrink-0 mx-4 text-xs font-semibold uppercase text-slate-400 tracking-wider bg-white dark:bg-slate-900 px-2">Or enter manually</span>
+<div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200 mb-1" for="cert-id">
+                                Certificate ID
+                            </label>
+<div class="relative mt-2 rounded-md shadow-sm">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">badge</span>
+</div>
+<input class="block w-full rounded-lg border-0 py-3 pl-10 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-slate-800 dark:ring-slate-700 dark:text-white sm:text-sm sm:leading-6 font-mono tracking-wide" id="cert-id" name="cert-id" placeholder="e.g. AC-DC-2023-8849" type="text"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-green-500 text-[20px] hidden">check_circle</span> 
+</div>
+</div>
+<p class="mt-2 text-xs text-slate-500 dark:text-slate-400">The ID is typically 12-16 characters long.</p>
+</div>
+<button class="w-full flex justify-center items-center gap-2 rounded-lg bg-primary px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all shadow-primary/25" type="button">
+                            Verify Certificate
+                            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-950/30 px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        Database Connected
+                    </div>
+<span>Secure SSL Verification</span>
+</div>
+</div>
+<div class="lg:col-span-5 space-y-6">
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+<h2 class="text-base font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+                        Why Verify?
+                    </h2>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
+                        Verification ensures that the certificate is authentic and has not been tampered with. It protects the integrity of our qualifications and provides assurance to employers.
+                    </p>
+<div class="bg-green-50 dark:bg-green-900/20 border-l-4 border-primary p-4 rounded-r-md">
+<div class="flex">
+<div class="flex-shrink-0">
+<span class="material-symbols-outlined text-primary text-sm">info</span>
+</div>
+<div class="ml-3">
+<p class="text-xs text-green-700 dark:text-green-300">
+                                    Only certificates issued after January 2020 are available for digital verification.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+<h2 class="text-base font-semibold text-slate-900 dark:text-white mb-4">How to locate the ID</h2>
+<div class="relative rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mb-6 group">
+<div class="aspect-video w-full bg-white dark:bg-slate-800 p-4 relative flex flex-col justify-between shadow-inner">
+<div class="h-2 w-1/3 bg-slate-200 dark:bg-slate-700 rounded mb-2"></div>
+<div class="h-2 w-1/2 bg-slate-200 dark:bg-slate-700 rounded mb-4"></div>
+<div class="flex items-end justify-between mt-8">
+<div class="h-8 w-8 bg-amber-100 dark:bg-amber-900/30 rounded-full border border-amber-300 dark:border-amber-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-500 text-[16px]">workspace_premium</span>
+</div>
+<div class="flex flex-col items-end">
+<div class="h-16 w-16 bg-slate-900 rounded-lg flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-white text-3xl">qr_code_2</span>
+</div>
+<div class="h-2 w-28 bg-primary/20 rounded border border-primary text-[6px] text-primary font-mono flex items-center justify-center">ID: AC-DC-XXXX</div>
+</div>
+</div>
+<div class="absolute bottom-4 right-4 w-32 h-20 border-2 border-primary rounded-lg shadow-[0_0_15px_rgba(69,160,73,0.3)] animate-pulse"></div>
+<div class="absolute bottom-[5.5rem] right-[5.5rem] bg-primary text-white text-xs px-2 py-1 rounded shadow-lg transform translate-y-2">Scan Here</div>
+</div>
+</div>
+<ul class="space-y-4">
+<li class="flex gap-3">
+<div class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400">1</div>
+<p class="text-sm text-slate-600 dark:text-slate-300">Locate the QR code or the alphanumeric ID at the bottom right corner of the physical certificate.</p>
+</li>
+<li class="flex gap-3">
+<div class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400">2</div>
+<p class="text-sm text-slate-600 dark:text-slate-300">Use the camera option to scan the code automatically OR type the ID exactly as shown.</p>
+</li>
+<li class="flex gap-3">
+<div class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-400">3</div>
+<p class="text-sm text-slate-600 dark:text-slate-300">Click verify. Valid certificates will show the graduate's name, course completion date, and distinction level.</p>
+</li>
+</ul>
+</div>
+<div class="text-center">
+<a class="text-sm text-primary hover:text-green-700 font-medium inline-flex items-center gap-1 transition-colors" href="#">
+                        Need help verifying? Contact Support
+                        <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8 mt-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+<div class="flex items-center gap-2">
+<img alt="AC &amp; DC Logo" class="h-6 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy0xHO0Fmi-cOLf34SZhQC71nq4Sb7G9EKZpgmNSG9QeoCAdxcVBB-b91SXsLC4sBT8T4JAnBRXEeLNJe8YgzBmHBp9KeBLQ-gD7GiaXxkAU6yqhg8M_XAd_e79I2yWNiRV6DEGGFKbZiLMj5QPTjBAEPZ4mPmtuOlq9I8MlY4STrsyPrpZvDtwL4XJhtcgntyl0WK95M9uPfdnnIuu6AE7NjA9Ld1Ig8T77t3nOqkvJAsuzSVaR5sxjioVNgsefeQTO2yOpNUza8"/>
+<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">AC &amp; DC Technical Institute</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-500">© 2023 AC &amp; DC Technical Institute. All rights reserved.</p>
+</div>
+<div class="flex gap-6">
+<a class="text-xs text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors" href="#">Privacy Policy</a>
+<a class="text-xs text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+
+</body></html>

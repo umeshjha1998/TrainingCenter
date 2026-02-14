@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AC &amp; DC Technical Institute Home</title>
+<meta content="Technical Training Institute website for certificate management and verification." name="description"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F6F45", // Adjusted to match the mossy green from the AC&DC logo reference
+                        "primary-dark": "#3A5233", // Darker shade of the logo green
+                        "secondary": "#2A2A2A", // Dark gray from the logo text
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 font-display antialiased selection:bg-primary/30 selection:text-primary">
+<nav class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-20 items-center">
+<div class="flex-shrink-0 flex items-center gap-3">
+<div class="h-12 w-12 flex items-center justify-center text-primary">
+<svg class="w-full h-full" fill="currentColor" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<path d="M40 30 V70 C40 70 75 70 75 50 C75 30 40 30 40 30 Z" fill="none" stroke="currentColor" stroke-width="8"></path>
+<path d="M15 40 H40" stroke="currentColor" stroke-width="6"></path>
+<path d="M15 50 H40" stroke="currentColor" stroke-width="6"></path>
+<path d="M15 60 H40" stroke="currentColor" stroke-width="6"></path>
+<path d="M75 50 H90" stroke="currentColor" stroke-width="6"></path>
+<text fill="currentColor" font-family="Arial, sans-serif" font-size="20" font-weight="900" text-anchor="middle" x="40" y="25">AC</text>
+<text fill="currentColor" font-family="Arial, sans-serif" font-size="20" font-weight="900" text-anchor="middle" x="85" y="75">DC</text>
+<text fill="currentColor" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" x="50" y="58">&amp;</text>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-lg md:text-xl tracking-tight text-slate-900 dark:text-white leading-none">AC &amp; DC</span>
+<span class="text-xs font-semibold text-primary uppercase tracking-wide">Technical Institute</span>
+</div>
+</div>
+<div class="hidden md:flex space-x-8 items-center">
+<a class="text-primary font-semibold px-3 py-2 text-sm" href="#">Home</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors" href="#courses">Courses</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors" href="#about">About Us</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors flex items-center gap-1" href="#verify">
+<span class="material-icons text-sm">qr_code_scanner</span> Verification
+                    </a>
+</div>
+<div class="hidden md:flex items-center gap-3">
+<a class="bg-white dark:bg-slate-900 text-primary hover:text-primary-dark border border-primary/40 hover:border-primary hover:bg-green-50/50 dark:hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2" href="#login">
+<span class="material-icons text-sm">person_outline</span> Login / Register
+                    </a>
+<a class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700" href="#admin">
+<span class="material-icons text-sm">dashboard</span> Admin
+                    </a>
+</div>
+<div class="md:hidden flex items-center">
+<button class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none" type="button">
+<span class="material-icons">menu</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<header class="relative bg-slate-900 dark:bg-black overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-50 bg-[url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80')] bg-cover bg-center" data-alt="Technical workshop with students working on electrical equipment"></div>
+<div class="absolute inset-0 z-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-transparent"></div>
+<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+<div class="lg:w-2/3">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-green-200 text-xs font-semibold uppercase tracking-wider mb-6">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Admissions Open 2024
+                </div>
+<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                    Master Technical Skills for a <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-300">Better Future</span>
+</h1>
+<p class="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl leading-relaxed">
+                    Industry-leading vocational training in AC Repair, Motor Winding, and Electrical Engineering. Get certified and job-ready with hands-on workshops in Darbhanga.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<a class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-primary hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30" href="#enroll">
+                        Explore Courses
+                    </a>
+<a class="inline-flex justify-center items-center px-6 py-3 border border-slate-600 text-base font-medium rounded-lg text-white bg-slate-800/50 hover:bg-slate-700 backdrop-blur-sm transition-colors" href="#verify">
+<span class="material-icons text-sm mr-2">qr_code</span> Verify Certificate
+                    </a>
+</div>
+</div>
+</div>
+</header>
+<div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 relative z-20 -mt-8 mx-4 md:mx-auto max-w-7xl rounded-xl shadow-xl flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-800">
+<div class="flex-1 p-6 flex items-center gap-4">
+<div class="p-3 rounded-full bg-primary/10 text-primary">
+<span class="material-icons">school</span>
+</div>
+<div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">5,000+</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Students Trained</p>
+</div>
+</div>
+<div class="flex-1 p-6 flex items-center gap-4">
+<div class="p-3 rounded-full bg-primary/10 text-primary">
+<span class="material-icons">handyman</span>
+</div>
+<div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">100%</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Practical Training</p>
+</div>
+</div>
+<div class="flex-1 p-6 flex items-center gap-4">
+<div class="p-3 rounded-full bg-primary/10 text-primary">
+<span class="material-icons">verified</span>
+</div>
+<div>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">ISO</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Certified Institute</p>
+</div>
+</div>
+</div>
+<section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="about">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="relative">
+<div class="absolute -top-4 -left-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl"></div>
+<div class="relative rounded-2xl overflow-hidden shadow-2xl">
+<img alt="Students learning electrical repairs in a workshop" class="w-full h-full object-cover" data-alt="Students learning electrical repairs in a workshop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmeyOX-e1GVgVvRe4aohZzrQRx5plCbtNJrcQvipfsdmhBs1T12CGhniRVbbdf9KZq54yV-2DMlEI0Cgors78m4SZYVyeMJAb02DlvKYYlcOqAq08M5Ame4mSS3D3JlaUWrAKdyCEn8uNgsezX4o38Xz6MgSkTfGBfjySlbVdl8qiaZLBTPPrbrTeEzaKT8_JL1t2VaZdp1bpHmj4U7Wu8a6qOMRZkBkgOsthiNAIjrERkI9nPbc1RtWOiHs2V2FjpeANgSgzFrwE"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+<p class="text-white font-medium flex items-center gap-2">
+<span class="material-icons text-primary">location_on</span> Rambhadrapur, Darbhanga
+                        </p>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-primary font-semibold text-sm uppercase tracking-wider mb-2">Who We Are</h2>
+<h3 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">Empowering Youth Through Technical Excellence</h3>
+<p class="text-slate-600 dark:text-slate-300 text-lg mb-6 leading-relaxed">
+                    AC &amp; DC Technical Institute is the premier destination for vocational training in Bihar. We bridge the gap between theoretical knowledge and industrial application.
+                </p>
+<ul class="space-y-4 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-icons text-primary mt-1">check_circle</span>
+<span class="text-slate-700 dark:text-slate-200">State-of-the-art labs with modern diagnostic tools.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-icons text-primary mt-1">check_circle</span>
+<span class="text-slate-700 dark:text-slate-200">Curriculum designed by industry veterans.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-icons text-primary mt-1">check_circle</span>
+<span class="text-slate-700 dark:text-slate-200">Placement assistance with top service centers.</span>
+</li>
+</ul>
+<a class="text-primary font-semibold hover:text-primary-dark transition-colors inline-flex items-center gap-1 group" href="#contact">
+                    Learn more about our mission <span class="material-icons text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<section class="bg-slate-50 dark:bg-slate-800/50 py-20 border-y border-slate-200 dark:border-slate-800" id="courses">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Popular Technical Courses</h2>
+<p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    Choose from our wide range of certificate programs designed to get you hired immediately.
+                </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-slate-200 dark:border-slate-700 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<img alt="Close up of refrigerator repair tools" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" data-alt="Close up of refrigerator repair tools" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2NBGb_wkFZdnpIVDLiyJBRmwFPXfGf9HssEf5kR0f59Tm6Ks9UcWdT83UWAU6sGUoB0C23PN3NKubdv3EPNbKrTBj_keSbgYbsBVvudQnSH01z7LWXq6xmx5IabHFvRML-l1EH_J5KgA8N4sqj9KH9J1ApNuuqh-Le47CEqd3qehmOdCxu0PAqe19lCSP1ZEqXnY5kS4PQrOVaJ7irIJ_3zaatdPyDy92nU15Lj2g00zfcJ2aZ0kiIdiluvVnczZRHhtUwmQjF0U"/>
+<div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 shadow-sm">
+                            3 Months
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">Inverter Refrigerator Repair</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
+                            Comprehensive training on modern inverter technology fridges. Learn PCB diagnosis, gas charging, and compressor repair.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Certificate Course</span>
+<button class="text-primary hover:text-primary-dark font-semibold text-sm flex items-center gap-1">
+                                Details <span class="material-icons text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-slate-200 dark:border-slate-700 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<img alt="Copper wire motor winding close up" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" data-alt="Copper wire motor winding close up" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVKiKWaCANhM3HFBJz3-bEGlhkMvHB_55c3XlS5dTO7F7mcyLvnYxYcI3jApjtNzvg1ibqF6RNxN4M_7X4znPu678CN_1bJ4QPn4yA9Wy7W5b-Aq4F0jtWvUU0E8P6-Dxkc_fpzVsjssdrZSHeIXEhj_TLloJq41zk95-yXmyycn54VmlFS0w7NpWr7nhZdO7r9s33rwREtUPsfo3XwC__2NYIQkx14XRU244biaFeSAb-wtcuE0BqCOhE2p_JCy1gihP8bB5XZqY"/>
+<div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 shadow-sm">
+                            2 Months
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">Motor Winding Masterclass</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
+                            Master the art of rewinding AC and DC motors. Covers ceiling fans, cooler motors, and industrial pump motors.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Skill Workshop</span>
+<button class="text-primary hover:text-primary-dark font-semibold text-sm flex items-center gap-1">
+                                Details <span class="material-icons text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-slate-200 dark:border-slate-700 group flex flex-col h-full">
+<div class="h-48 overflow-hidden relative">
+<img alt="Electronic circuit board repair soldering" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" data-alt="Electronic circuit board repair soldering" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOYCjPZH4RURtlcX-XWGnraRa_2cieOUevXT7-lEvJoGYwnNdMP4gwS5DjLeh09JO9vJvRPkiRhvyBWi_BdybrxdWsqiysKTCxJsjD66ZJSG-3HX3KWWVcSEVn9vcKbIua5B673XjwRnpK7m5N0c2lJMxgPi131zMk53cNxIfHAcpqLiszYOlFNAp5KgS_EkAiPE_wyDeg3EyyuRZJFyTIhbrz1dBIKH-PlpoBdgcfeJG_TQ3IWv7VttIYKdh6Z2fzMrHEMvXUQK4"/>
+<div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 shadow-sm">
+                            6 Months
+                        </div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">Advanced PCB Repair</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
+                            Deep dive into electronics. Learn to troubleshoot and repair complex PCBs for air conditioners, washing machines, and inverters.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Diploma</span>
+<button class="text-primary hover:text-primary-dark font-semibold text-sm flex items-center gap-1">
+                                Details <span class="material-icons text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center">
+<a class="inline-flex items-center justify-center px-6 py-3 border border-slate-300 dark:border-slate-600 shadow-sm text-base font-medium rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" href="#">
+                    View All Courses
+                </a>
+</div>
+</div>
+</section>
+<section class="py-16 bg-primary overflow-hidden relative">
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-white/20">
+<div class="md:w-1/2">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 dark:bg-green-900/30 text-primary text-xs font-bold uppercase tracking-wider mb-4">
+<span class="material-icons text-base">verified_user</span> For Employers
+                    </div>
+<h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Instant Certificate Verification</h2>
+<p class="text-slate-600 dark:text-slate-300 mb-6">
+                        Validate the authenticity of any certificate issued by AC &amp; DC Technical Institute instantly. Enter the unique Certificate ID or scan the QR code.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-3">
+<input class="flex-1 rounded-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none shadow-sm" placeholder="Enter Certificate ID" type="text"/>
+<button class="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-medium shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2">
+                            Verify Now <span class="material-icons text-sm">search</span>
+</button>
+</div>
+</div>
+<div class="md:w-5/12 flex justify-center">
+<div class="relative w-48 h-48 bg-white p-4 rounded-xl shadow-inner border border-slate-100 flex items-center justify-center">
+<span class="material-icons text-9xl text-slate-800">qr_code_2</span>
+<div class="absolute -bottom-4 -right-4 bg-green-500 text-white p-2 rounded-full shadow-lg border-4 border-white dark:border-slate-900">
+<span class="material-icons">check</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-slate-900 dark:bg-black text-slate-300 pt-16 pb-8 border-t border-slate-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+<div class="col-span-1 md:col-span-2 lg:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<div class="h-10 w-10 flex items-center justify-center bg-white/90 rounded p-1 text-primary">
+<svg class="w-full h-full" fill="currentColor" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<path d="M40 30 V70 C40 70 75 70 75 50 C75 30 40 30 40 30 Z" fill="none" stroke="currentColor" stroke-width="8"></path>
+<path d="M15 40 H40" stroke="currentColor" stroke-width="6"></path>
+<path d="M15 50 H40" stroke="currentColor" stroke-width="6"></path>
+<path d="M15 60 H40" stroke="currentColor" stroke-width="6"></path>
+<path d="M75 50 H90" stroke="currentColor" stroke-width="6"></path>
+<text fill="currentColor" font-family="Arial, sans-serif" font-size="20" font-weight="900" text-anchor="middle" x="40" y="25">AC</text>
+<text fill="currentColor" font-family="Arial, sans-serif" font-size="20" font-weight="900" text-anchor="middle" x="85" y="75">DC</text>
+<text fill="currentColor" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" x="50" y="58">&amp;</text>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-base text-white leading-none">AC &amp; DC</span>
+<span class="text-[10px] font-semibold text-primary uppercase tracking-wide">Tech Institute</span>
+</div>
+</div>
+<p class="text-sm leading-relaxed mb-6 text-slate-400">
+                        Building the technical workforce of tomorrow with hands-on training and industry-recognized certifications.
+                    </p>
+<div class="flex gap-4">
+<a class="w-8 h-8 rounded bg-slate-800 hover:bg-primary hover:text-white flex items-center justify-center transition-colors text-slate-400" href="#">
+<span class="material-icons text-sm">facebook</span>
+</a>
+<a class="w-8 h-8 rounded bg-slate-800 hover:bg-primary hover:text-white flex items-center justify-center transition-colors text-slate-400" href="#">
+<span class="material-icons text-sm">call</span>
+</a>
+<a class="w-8 h-8 rounded bg-slate-800 hover:bg-primary hover:text-white flex items-center justify-center transition-colors text-slate-400" href="#">
+<span class="material-icons text-sm">mail</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-semibold mb-6">Quick Links</h4>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Home</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">All Courses</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Certificate Verification</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Admin Login</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Student Portal</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-semibold mb-6">Top Courses</h4>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">AC Repair &amp; Maintenance</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Motor Winding</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Inverter Technology</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Home Wiring</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-semibold mb-6">Contact Us</h4>
+<ul class="space-y-4 text-sm">
+<li class="flex items-start gap-3">
+<span class="material-icons text-primary text-base mt-0.5">location_on</span>
+<span>
+                                Rambhadrapur, Darbhanga,<br/>
+                                Bihar, India - 846004
+                            </span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-icons text-primary text-base">phone</span>
+<span>+91 98765 43210</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-icons text-primary text-base">email</span>
+<span>info@acdctech.edu</span>
+</li>
+</ul>
+<div class="mt-6 w-full h-32 bg-slate-800 rounded-lg overflow-hidden relative group cursor-pointer border border-slate-700">
+<img alt="Map location of Darbhanga" class="w-full h-full object-cover opacity-50 group-hover:opacity-75 transition-opacity" data-location="Darbhanga" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc21DCp9AOAGrXaSq69lb7_xZqKW7W-2xu2yrUwLpXwQLgNgl94yymIzD12bpJCVXfXmbICNEYDySgwX-XuuZoFDLnegJicp2fnyL64ASTDpnYDv8ypHZVP9fK7XOisIxGrPyTz26iPE0sHawCZUjPE8JNOUEnOMIrZG5FcUoL1JFTgJIvOlDYofZd5l5HwwG-6LZd1SgyQd0Qy-RTof8HNcmfIgqxhmF1eAa0AdcRI4cvsdbqGj5COgpIAKPoK_3LOEks3c6HVJk"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="bg-slate-900/80 px-3 py-1 rounded text-xs text-white">View on Map</span>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
+<p>© 2024 AC &amp; DC Technical Institute. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>
