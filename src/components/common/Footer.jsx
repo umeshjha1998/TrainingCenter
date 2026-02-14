@@ -113,7 +113,7 @@ export default function Footer() {
                                 </a>
                             </li>
                             <li>
-                                <Link className="hover:text-primary transition-colors" to="/login">
+                                <Link className="hover:text-primary transition-colors" to="/admin-login">
                                     Admin Login
                                 </Link>
                             </li>
