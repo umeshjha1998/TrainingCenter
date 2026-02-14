@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: '/TrainingCenter/',
+  // base: '/TrainingCenter/', removed for Vercel deployment
 })
