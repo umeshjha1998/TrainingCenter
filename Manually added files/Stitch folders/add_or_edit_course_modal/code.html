@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AC &amp; DC Technical Institute - Add Course</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#13ec5b",
+              "primary-dark": "#0eb545",
+              "background-light": "#f6f8f6",
+              "background-dark": "#102216",
+              "surface-dark": "#1a2e22",
+              "surface-lighter": "#243c2d",
+            },
+            fontFamily: {
+              "display": ["Lexend", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem", 
+              "lg": "0.5rem", 
+              "xl": "0.75rem", 
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .input-base {
+                @apply w-full bg-surface-lighter dark:bg-surface-lighter border border-surface-lighter dark:border-surface-lighter rounded text-gray-900 dark:text-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 placeholder-gray-500;
+            }
+            .label-base {
+                @apply block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5 ml-1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased min-h-screen relative flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 pointer-events-none overflow-hidden">
+<div class="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-background-dark to-transparent"></div>
+<div class="absolute inset-0 bg-[linear-gradient(rgba(19,236,91,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(19,236,91,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+</div>
+<div aria-hidden="true" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 transition-opacity"></div>
+<div class="relative z-50 w-full max-w-2xl px-4 md:px-0">
+<div class="bg-white dark:bg-surface-dark w-full rounded-xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden transform transition-all scale-100">
+<div class="bg-surface-lighter/50 px-6 py-5 border-b border-white/5 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+<svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 4V20" stroke="#13ec5b" stroke-linecap="round" stroke-width="2"></path>
+<path d="M6 12H10" stroke="#13ec5b" stroke-linecap="round" stroke-width="2"></path>
+<path d="M10 5C10 5 18 5 18 12C18 19 10 19 10 19H10V5Z" stroke="#13ec5b" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<circle cx="19" cy="12" r="1.5" stroke="#13ec5b" stroke-width="1.5"></circle>
+</svg>
+</div>
+<div>
+<h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Add New Course</h2>
+<p class="text-xs text-primary font-medium tracking-wide uppercase">Course Management</p>
+</div>
+</div>
+<button class="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5" type="button">
+<span class="material-icons">close</span>
+</button>
+</div>
+<div class="p-6 md:p-8 space-y-8 max-h-[75vh] overflow-y-auto custom-scrollbar">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-1 md:col-span-2">
+<label class="label-base" for="courseName">Course Name</label>
+<div class="relative">
+<input class="input-base pl-10" id="courseName" placeholder="e.g. Advanced Circuit Theory II" type="text"/>
+<span class="material-icons absolute left-3 top-2.5 text-gray-500 text-sm">school</span>
+</div>
+</div>
+<div>
+<label class="label-base" for="duration">Duration</label>
+<div class="relative">
+<select class="input-base appearance-none cursor-pointer" id="duration">
+<option disabled="" selected="" value="">Select Duration</option>
+<option value="4w">4 Weeks</option>
+<option value="6w">6 Weeks</option>
+<option value="3m">3 Months</option>
+<option value="6m">6 Months</option>
+</select>
+<span class="material-icons absolute right-3 top-2.5 text-gray-500 pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<label class="label-base" for="courseCode">Course Code</label>
+<div class="relative">
+<input class="input-base font-mono cursor-not-allowed opacity-75 bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400" id="courseCode" readonly="" type="text" value="AC-205 (Auto-generated)"/>
+<span class="material-icons absolute right-3 top-2.5 text-gray-500 text-sm" title="System Generated">lock</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between border-b border-white/10 pb-2">
+<label class="label-base !mb-0 text-primary">Course Subjects</label>
+<span class="text-xs text-gray-500">Add topics covered in this course</span>
+</div>
+<div class="space-y-3" id="subject-list">
+<div class="flex gap-3 group">
+<div class="relative flex-grow">
+<span class="absolute left-3 top-2.5 w-1.5 h-1.5 rounded-full bg-primary/50"></span>
+<input class="input-base pl-8" placeholder="Subject Name" type="text" value="Ohm's Law &amp; Power"/>
+</div>
+<button class="text-gray-500 hover:text-red-400 p-2 rounded bg-white/5 hover:bg-red-500/10 transition-colors" title="Remove" type="button">
+<span class="material-icons text-lg">delete_outline</span>
+</button>
+</div>
+<div class="flex gap-3 group">
+<div class="relative flex-grow">
+<span class="absolute left-3 top-2.5 w-1.5 h-1.5 rounded-full bg-primary/50"></span>
+<input class="input-base pl-8" placeholder="Subject Name" type="text" value="Series &amp; Parallel Circuits"/>
+</div>
+<button class="text-gray-500 hover:text-red-400 p-2 rounded bg-white/5 hover:bg-red-500/10 transition-colors" title="Remove" type="button">
+<span class="material-icons text-lg">delete_outline</span>
+</button>
+</div>
+</div>
+<button class="inline-flex items-center gap-2 text-sm text-primary hover:text-primary-dark font-medium transition-colors mt-2" type="button">
+<span class="material-icons text-sm bg-primary/20 rounded-full p-0.5">add</span>
+                        Add Another Subject
+                    </button>
+</div>
+<div class="bg-surface-lighter/30 rounded-lg p-5 border border-white/5">
+<h3 class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+<span class="material-icons text-primary text-base">event_available</span>
+                        Schedule Final Exam
+                    </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="label-base">Exam Date</label>
+<input class="input-base [color-scheme:dark]" type="date"/>
+</div>
+<div>
+<label class="label-base">Exam Time</label>
+<input class="input-base [color-scheme:dark]" type="time"/>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-lighter/50 px-6 py-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-end gap-3">
+<button class="w-full sm:w-auto px-5 py-2.5 rounded text-sm font-medium text-gray-400 hover:text-white transition-colors hover:bg-white/5" type="button">
+                    Cancel
+                </button>
+<button class="w-full sm:w-auto px-6 py-2.5 rounded bg-primary text-background-dark font-bold text-sm hover:bg-primary-dark transition-all shadow-[0_0_15px_rgba(19,236,91,0.3)] hover:shadow-[0_0_20px_rgba(19,236,91,0.5)] flex items-center justify-center gap-2" type="button">
+<span class="material-icons text-sm">save</span>
+                    Save Course
+                </button>
+</div>
+</div>
+</div>
+</body></html>

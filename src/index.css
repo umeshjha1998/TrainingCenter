@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4F6F45;
+  --color-primary-dark: #3A5233;
+  --color-secondary: #2A2A2A;
+  --color-background-light: #f6f7f8;
+  --color-background-dark: #101922;
+
+  --font-display: Inter, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --font-signature: "Great Vibes", cursive;
+}
+
+@layer base {
+  body {
+    @apply bg-background-light text-slate-800 dark:bg-background-dark dark:text-slate-100 font-display antialiased leading-relaxed;
+  }
+}

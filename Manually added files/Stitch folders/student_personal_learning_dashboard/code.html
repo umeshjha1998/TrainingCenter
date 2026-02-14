@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Personal Learning Dashboard | AC &amp; DC Tech Institute</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "primary-dark": "#0db846",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-dark": "#152c1e",
+                        "surface-dark-lighter": "#1c3826",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #102216; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1c3826; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2a5238; 
+        }
+        .circuit-pattern {
+            background-image: radial-gradient(#13ec5b 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-white min-h-screen flex flex-col">
+<!-- Header -->
+<header class="w-full bg-white dark:bg-surface-dark border-b border-gray-200 dark:border-white/5 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-20">
+<!-- Logo Area -->
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center w-10 h-10 rounded bg-primary/20 text-primary">
+<span class="material-icons-round text-2xl">memory</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-xl font-bold tracking-tight uppercase leading-none">AC &amp; DC</h1>
+<span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Technical Institute</span>
+</div>
+</div>
+<!-- Navigation (Desktop) -->
+<nav class="hidden md:flex space-x-8">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Courses</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Schedule</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Support</a>
+</nav>
+<!-- User Profile -->
+<div class="flex items-center gap-4">
+<button class="relative p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
+<span class="material-icons-round">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-white/10">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none">Alex Rivera</p>
+<p class="text-xs text-primary mt-1">Student ID: 90024</p>
+</div>
+<img alt="Student Portrait" class="h-10 w-10 rounded-lg object-cover border-2 border-primary/30" data-alt="Portrait of a male student smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAkbmla4NhE7G6cEzqRsNQ0aUJbY5WyAkmu06rXDwW1cNw6e3wOONbMtk14hbi8UYAZlOLtDafd4UWZUarO6hXQ9Uxibh5z4RoCOCuqx5G3D5_Lz8tOb0P4udkaWD7HGBOJxTiEf0Tx082Nq9PDsgZYCFdfttu0aSyrOP92MGqsWgsjS0ooNgTfsIHA1gAArXLEfBG_rA6J5IOi6PUSN7ioDm8gpSHBHklm3oNeaW_8McUmTxkOX-m1oteyFpn56uV7LYWypEZKQo"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Welcome Section -->
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-slate-900 dark:text-white">Dashboard Overview</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Welcome back, Alex. Here's your learning progress for this semester.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Column: Active Course & Subjects -->
+<div class="lg:col-span-8 space-y-6">
+<!-- 1. My Enrolled Courses Card -->
+<div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-white/5 overflow-hidden shadow-sm relative group">
+<div class="absolute inset-0 circuit-pattern pointer-events-none"></div>
+<div class="p-6 md:p-8 relative z-10 flex flex-col md:flex-row gap-6 md:items-center">
+<!-- Course Thumbnail -->
+<div class="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-lg overflow-hidden relative shadow-lg">
+<img alt="Technical workstation" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Close up of electronic circuit board being repaired" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD94A0xnLxC5400o5I2DkuHwPhySJKJySUnfciwAvwkPFVgcQehg9yW8jNlulEVb1Z5xslC_gz91Xy-JZ6bWZZ_cJzlugFlhsJvNiQ25Pt84d-778RHcsKKnS5BVz53O17ufQshMygXwD7s6zYrtqhkfPfj3mL97DjEnPTjkEV7wn_V6Mm-54u0WlgVJo7JouIeO1bRP72dqWowz7Ks0yGGNa-fO6TuTyQgqA_TiUPze3D394zWL8_5q9Y7eJmxrjGlKhQRNa-XJlw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<span class="absolute bottom-3 left-3 bg-primary text-black text-xs font-bold px-2 py-1 rounded">IN PROGRESS</span>
+</div>
+<!-- Course Details -->
+<div class="flex-1">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Current Module</span>
+<span class="text-xs font-mono text-primary bg-primary/10 px-2 py-1 rounded border border-primary/20">MOD-04</span>
+</div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Advanced Inverter Refrigerator Systems</h3>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-slate-400 text-lg">schedule</span>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 dark:text-slate-400">Duration</span>
+<span class="text-sm font-medium">6 Months</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-icons-round text-slate-400 text-lg">person</span>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 dark:text-slate-400">Instructor</span>
+<span class="text-sm font-medium">Eng. Sarah Connor</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex-1 bg-primary hover:bg-primary-dark text-black font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
+<span>Continue Learning</span>
+<span class="material-icons-round text-lg">arrow_forward</span>
+</button>
+<button class="p-3 border border-slate-200 dark:border-white/10 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors" title="Course Details">
+<span class="material-icons-round">info</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Overall Progress Line at bottom -->
+<div class="h-1 w-full bg-surface-dark-lighter">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+</div>
+<!-- 2. Subjects & Progress List -->
+<div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-white/5 p-6 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-icons-round text-primary">playlist_add_check</span>
+                            Subject Progress
+                        </h3>
+<a class="text-sm text-primary hover:text-primary-dark font-medium hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-6">
+<!-- Subject Item 1 -->
+<div class="group">
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="font-semibold text-slate-800 dark:text-slate-200">DC Compressors &amp; Logic Boards</h4>
+<span class="text-xs text-slate-500 dark:text-slate-400">12/15 Lessons Completed</span>
+</div>
+<span class="text-sm font-bold text-primary">80%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-surface-dark-lighter rounded-full h-2.5 overflow-hidden">
+<div class="bg-primary h-2.5 rounded-full transition-all duration-1000 group-hover:bg-primary-dark w-[80%]"></div>
+</div>
+</div>
+<!-- Subject Item 2 -->
+<div class="group">
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="font-semibold text-slate-800 dark:text-slate-200">Thermodynamics in Inverters</h4>
+<span class="text-xs text-slate-500 dark:text-slate-400">4/10 Lessons Completed</span>
+</div>
+<span class="text-sm font-bold text-primary">40%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-surface-dark-lighter rounded-full h-2.5 overflow-hidden">
+<div class="bg-primary h-2.5 rounded-full transition-all duration-1000 group-hover:bg-primary-dark w-[40%]"></div>
+</div>
+</div>
+<!-- Subject Item 3 -->
+<div class="group">
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="font-semibold text-slate-800 dark:text-slate-200">Electrical Safety Protocols</h4>
+<span class="text-xs text-slate-500 dark:text-slate-400">Completed</span>
+</div>
+<span class="text-sm font-bold text-primary">100%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-surface-dark-lighter rounded-full h-2.5 overflow-hidden">
+<div class="bg-primary h-2.5 rounded-full transition-all duration-1000 group-hover:bg-primary-dark w-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Performance & Certs -->
+<div class="lg:col-span-4 space-y-6">
+<!-- 3. Academic Performance (Bar Chart CSS) -->
+<div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-white/5 p-6 shadow-sm">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+<span class="material-icons-round text-primary">insights</span>
+                        Academic Performance
+                    </h3>
+<div class="relative h-64 w-full flex items-end justify-between gap-2 pt-8">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none text-xs text-slate-400 dark:text-slate-600 pb-6">
+<div class="border-b border-dashed border-slate-200 dark:border-white/5 w-full h-0"></div>
+<div class="border-b border-dashed border-slate-200 dark:border-white/5 w-full h-0"></div>
+<div class="border-b border-dashed border-slate-200 dark:border-white/5 w-full h-0"></div>
+<div class="border-b border-dashed border-slate-200 dark:border-white/5 w-full h-0"></div>
+<div class="border-b border-slate-300 dark:border-white/10 w-full h-0"></div>
+</div>
+<!-- Bar 1 -->
+<div class="relative z-10 w-full flex flex-col items-center group">
+<div class="text-xs font-bold text-primary mb-1 opacity-0 group-hover:opacity-100 transition-opacity">92%</div>
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm h-full flex items-end relative overflow-hidden">
+<div class="w-full bg-primary group-hover:bg-primary-dark transition-colors duration-300" style="height: 92%;"></div>
+</div>
+<span class="text-[10px] mt-2 font-medium text-slate-500 uppercase tracking-wide">Theory</span>
+</div>
+<!-- Bar 2 -->
+<div class="relative z-10 w-full flex flex-col items-center group">
+<div class="text-xs font-bold text-primary mb-1 opacity-0 group-hover:opacity-100 transition-opacity">78%</div>
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm h-full flex items-end relative overflow-hidden">
+<div class="w-full bg-primary group-hover:bg-primary-dark transition-colors duration-300" style="height: 78%;"></div>
+</div>
+<span class="text-[10px] mt-2 font-medium text-slate-500 uppercase tracking-wide">Labs</span>
+</div>
+<!-- Bar 3 -->
+<div class="relative z-10 w-full flex flex-col items-center group">
+<div class="text-xs font-bold text-primary mb-1 opacity-0 group-hover:opacity-100 transition-opacity">85%</div>
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm h-full flex items-end relative overflow-hidden">
+<div class="w-full bg-primary group-hover:bg-primary-dark transition-colors duration-300" style="height: 85%;"></div>
+</div>
+<span class="text-[10px] mt-2 font-medium text-slate-500 uppercase tracking-wide">Safety</span>
+</div>
+<!-- Bar 4 -->
+<div class="relative z-10 w-full flex flex-col items-center group">
+<div class="text-xs font-bold text-primary mb-1 opacity-0 group-hover:opacity-100 transition-opacity">64%</div>
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm h-full flex items-end relative overflow-hidden">
+<div class="w-full bg-primary group-hover:bg-primary-dark transition-colors duration-300" style="height: 64%;"></div>
+</div>
+<span class="text-[10px] mt-2 font-medium text-slate-500 uppercase tracking-wide">Quiz</span>
+</div>
+</div>
+</div>
+<!-- 4. My Certificates -->
+<div class="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-white/5 p-6 shadow-sm">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+<span class="material-icons-round text-primary">workspace_premium</span>
+                        My Certificates
+                    </h3>
+<div class="space-y-4">
+<!-- Certificate Item 1 (Available) -->
+<div class="flex items-center gap-4 p-3 rounded-lg border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors">
+<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-icons-round">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">Basic Electronics</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Issued: Aug 2023</p>
+</div>
+<button class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-black hover:scale-110 transition-transform shadow-md shadow-primary/20" title="Download Certificate">
+<span class="material-icons-round text-sm">download</span>
+</button>
+</div>
+<!-- Certificate Item 2 (Pending/In Progress) -->
+<div class="flex items-center gap-4 p-3 rounded-lg border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/5 opacity-75">
+<div class="w-12 h-12 rounded-lg bg-slate-200 dark:bg-white/10 flex items-center justify-center text-slate-400 flex-shrink-0">
+<span class="material-icons-round">lock</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-sm font-bold text-slate-700 dark:text-slate-300 truncate">HVAC Fundamentals</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Completion: 85%</p>
+</div>
+<span class="text-xs font-medium px-2 py-1 rounded bg-slate-200 dark:bg-white/10 text-slate-500 dark:text-slate-400">Locked</span>
+</div>
+</div>
+<button class="w-full mt-4 py-2 text-sm text-center text-slate-500 dark:text-slate-400 hover:text-primary transition-colors border-t border-slate-200 dark:border-white/5 pt-4">
+                        View Certificate History
+                    </button>
+</div>
+<!-- Upcoming Event Mini Widget -->
+<div class="bg-gradient-to-br from-surface-dark-lighter to-surface-dark rounded-xl border border-white/5 p-6 relative overflow-hidden">
+<div class="absolute right-0 top-0 text-white/5 -mr-4 -mt-4 pointer-events-none">
+<span class="material-icons-round text-9xl">event</span>
+</div>
+<div class="relative z-10">
+<span class="text-xs font-bold text-primary uppercase tracking-wider mb-1 block">Next Exam</span>
+<h3 class="text-xl font-bold text-white mb-2">Practical Assessment</h3>
+<p class="text-sm text-slate-400 mb-4">Lab 3 • Building B</p>
+<div class="flex items-center gap-2 text-white">
+<span class="bg-white/10 p-2 rounded text-center min-w-[3rem]">
+<span class="block text-xs uppercase text-slate-400">Oct</span>
+<span class="block text-lg font-bold">24</span>
+</span>
+<div class="h-10 w-px bg-white/10 mx-1"></div>
+<div>
+<span class="block text-xs text-slate-400">Time</span>
+<span class="block font-medium">09:00 AM</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

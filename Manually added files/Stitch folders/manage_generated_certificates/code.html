@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Certificates Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3E5C26", // Deep olive green from AC & DC logo signature
+                        "primary-hover": "#2e451c",
+                        "primary-light": "#E9EFE6",
+                        "background-light": "#f8f9fa",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .logo-blend {
+            mix-blend-mode: multiply;
+        }
+        .dark .logo-blend {
+            mix-blend-mode: normal;
+            filter: brightness(0) invert(1);
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen flex">
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 hidden md:flex flex-col h-screen fixed left-0 top-0 z-20 shadow-sm">
+<div class="h-20 flex items-center px-6 border-b border-slate-100 dark:border-slate-800">
+<div class="h-10 w-10 mr-3 flex items-center justify-center bg-transparent">
+<img alt="AC &amp; DC Logo" class="h-full w-full object-contain logo-blend" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXjC9wjGxsdCSb8KMMhsQmtNdy2fPv_GpNE46WcgJdpRRCjM_X8IxwBy_Mta7Xrk7aw4am7qSepIsQgojZnW7hDG7X4c6fztQbB1WizkfA5gH3rNeg7atCymPJvw92LtuDCAVJEA1CSV3xRh05YZIuwKdFUPSR8av-0jM9EZwQSFt0GTWL0kR89dzRtLNfr3Z3SrWSH-RZpbjFH-0eScaQNn263aZ_Zu_-RVVIyLRLwwZeYLiqjcPJp_QNXkbsxkdMMULXAWlBxIA"/>
+</div>
+<span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">AC &amp; DC</span>
+</div>
+<nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+<a class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 group transition-colors" href="#">
+<span class="material-icons mr-3 text-slate-400 group-hover:text-primary transition-colors">dashboard</span>
+            Dashboard
+        </a>
+<a class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 group transition-colors" href="#">
+<span class="material-icons mr-3 text-slate-400 group-hover:text-primary transition-colors">people</span>
+            Manage Students
+        </a>
+<a class="flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-primary-light text-primary dark:bg-primary/20 dark:text-primary-light group transition-colors shadow-sm ring-1 ring-primary/5" href="#">
+<span class="material-icons mr-3 text-primary dark:text-primary-light">verified</span>
+            Certificates
+        </a>
+<a class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 group transition-colors" href="#">
+<span class="material-icons mr-3 text-slate-400 group-hover:text-primary transition-colors">analytics</span>
+            Reports
+        </a>
+<div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+<h3 class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">System</h3>
+<a class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 group transition-colors" href="#">
+<span class="material-icons mr-3 text-slate-400 group-hover:text-primary transition-colors">settings</span>
+                Settings
+            </a>
+<a class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 group transition-colors" href="#">
+<span class="material-icons mr-3 text-slate-400 group-hover:text-primary transition-colors">help</span>
+                Help &amp; Support
+            </a>
+</div>
+</nav>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900">
+<div class="flex items-center w-full">
+<img alt="User Avatar" class="h-10 w-10 rounded-full ring-2 ring-white dark:ring-slate-800 shadow-sm" data-alt="Admin user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI7KAJGlRWV2iJLI1cwKWRa9t8gpRUB_8eE2x04l536oRCQ5884p5cwC1BINe2PJdsYWpHxx307tOjI6ajnUoG4nhq8AkWP8_V30OA5k2yxJfnCxEAkzhkHjdCYAIA19t7s6d0M7zrkpDj61uTCtkXGeH92K9ToDR_lZULzbnXS1w8o9GuG3i-9NjG-w9LHLdsvD86y7DCfvs9xiSJLLk-J9kbrTLRNtCWtJJW1cUf_FB1N_SSYo-tYqT8tpDAIKLd0RM30oS8OB0"/>
+<div class="ml-3">
+<p class="text-sm font-medium text-slate-700 dark:text-slate-200">Admin User</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 hover:text-primary cursor-pointer transition-colors">View Profile</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 md:ml-64 min-h-screen flex flex-col">
+<div class="md:hidden h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sticky top-0 z-10">
+<div class="flex items-center">
+<div class="h-8 w-8 mr-3 flex items-center justify-center">
+<img alt="AC &amp; DC Logo" class="h-full w-full object-contain logo-blend" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHrwgaDUOeIERzGfsRwWcHc7zTMl6GAWIiwxvIqV0wBjFDmTQpUdOrKnDG0cIhAtli8hEHlhTe0jvgtpb_rJfZgM6KHH-xR8PJvS7uZs5JybZ8kBm7zz97zfIobCXatjkcupeOXFOBZoTIsGbeK5ImFljwKVwJrkuDLLaZe-NkR2zJO7kbX9aOsL3u_IoUqbPzDoAbampx-zf8CxfWx5LFMnDKYIWOlUcJhgZ36NKrL9lJ-G28DPdTrqt4sSa77IcE0vJ-mfKGzQk"/>
+</div>
+<span class="font-bold text-lg text-slate-900 dark:text-white">AC &amp; DC</span>
+</div>
+<button class="text-slate-500 hover:text-primary transition-colors">
+<span class="material-icons">menu</span>
+</button>
+</div>
+<div class="p-6 lg:p-10 max-w-7xl mx-auto w-full">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+<div>
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Manage Generated Certificates</h1>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">View, verify, and manage all issued training certificates.</p>
+</div>
+<button class="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-md shadow-primary/20 text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all active:scale-95">
+<span class="material-icons text-base mr-2">add_circle</span>
+                Generate New Certificate
+            </button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Issued</h3>
+<span class="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-full">+12%</span>
+</div>
+<div class="text-3xl font-bold text-slate-900 dark:text-white">1,248</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">This Month</h3>
+<span class="bg-primary-light text-primary dark:bg-primary/20 dark:text-primary-light text-xs font-semibold px-2.5 py-1 rounded-full">New</span>
+</div>
+<div class="text-3xl font-bold text-slate-900 dark:text-white">86</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Pending Review</h3>
+<span class="bg-orange-100 text-orange-700 text-xs font-semibold px-2.5 py-1 rounded-full">Action Needed</span>
+</div>
+<div class="text-3xl font-bold text-slate-900 dark:text-white">12</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="p-5 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/30 dark:bg-slate-900">
+<div class="relative w-full md:max-w-md">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons text-slate-400 text-xl">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg leading-5 bg-white dark:bg-slate-800 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm text-slate-900 dark:text-white transition-shadow" placeholder="Search by name, course, or ID" type="text"/>
+</div>
+<div class="flex gap-3">
+<div class="relative">
+<select class="block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 appearance-none cursor-pointer transition-shadow">
+<option>All Courses</option>
+<option>Web Development</option>
+<option>Data Science</option>
+<option>UI/UX Design</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+<span class="material-icons text-sm">expand_more</span>
+</div>
+</div>
+<div class="relative">
+<select class="block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 appearance-none cursor-pointer transition-shadow">
+<option>Last 30 Days</option>
+<option>Last 3 Months</option>
+<option>Year to Date</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+<span class="material-icons text-sm">expand_more</span>
+</div>
+</div>
+<button class="inline-flex items-center p-2 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-700 transition-colors">
+<span class="material-icons text-xl">filter_list</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+                                Student Name
+                            </th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+                                Course
+                            </th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+                                Certificate ID
+                            </th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+                                Date Issued
+                            </th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+                                Status
+                            </th>
+<th class="relative px-6 py-3" scope="col">
+<span class="sr-only">Actions</span>
+</th>
+</tr>
+</thead>
+<tbody class="bg-white dark:bg-slate-900 divide-y divide-slate-200 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10">
+<img alt="Jane Cooper" class="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-800" data-alt="Portrait of a woman smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCangRO6YaQRXdGlKCSWbviHnJhIjT0AfzyDx1sGoTtkFwBs4HoTZbLRH5GofEQOoKMPoS0rIKjLCXcyX_GFa5xKfaNVScFUkTZW_FHFiDOhl9TgQM05d_HZyNxZDSncKhKlnaMYcLC7E7laPUP7a2exyWkdL16lDmHRa9kkaYGJxvEZJ2l8435u59Gx1GaIp6dPGqTxxIKwnDvJ83JqYU_hGIfyZ9mq7jpPxpAMPMDcN02ND3DpvrGi_Xz4S78YZhz-mKA2OIgTzs"/>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-slate-900 dark:text-white">Jane Cooper</div>
+<div class="text-sm text-slate-500 dark:text-slate-400">jane.cooper@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-slate-900 dark:text-white">Advanced React Patterns</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">Frontend Development</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
+                                    CERT-2023-8421
+                                </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                                Oct 12, 2023
+                            </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
+                                    Issued
+                                </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end space-x-2">
+<button class="text-slate-400 hover:text-primary transition-colors" title="View Certificate">
+<span class="material-icons text-xl">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-primary transition-colors" title="Edit Details">
+<span class="material-icons text-xl">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+<span class="material-icons text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10">
+<img alt="Cody Fisher" class="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-800" data-alt="Portrait of a man smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB178jXmGnvyD9U1bQySKb2Y5P-bT5SX5npF_Plr9km4f5smRZkJLvo8fepAT8z5vR4DwWlKs8V8w_kSTq12qA-zEeB-Y9BydAi0EtjwGfvJ_NjCM8xpkCHL-ixtqPIhIVH2jDFe4rKk7zkID_K7Tvs4dEZclD9omNTeaRF7gR47eIHN5qXlKECsH2pv27mBeK13sqXz6nP1wkPRq0j3B6-NerTu_yZeTrP_NX9pr5fbVojmPHBvwHajyq_OMgld8h47v8afBQezfQ"/>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-slate-900 dark:text-white">Cody Fisher</div>
+<div class="text-sm text-slate-500 dark:text-slate-400">cody.fisher@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-slate-900 dark:text-white">Full Stack Bootcamp</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">Web Development</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
+                                    CERT-2023-8422
+                                </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                                Oct 10, 2023
+                            </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
+                                    Issued
+                                </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end space-x-2">
+<button class="text-slate-400 hover:text-primary transition-colors" title="View Certificate">
+<span class="material-icons text-xl">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-primary transition-colors" title="Edit Details">
+<span class="material-icons text-xl">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+<span class="material-icons text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10">
+<img alt="Esther Howard" class="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-800" data-alt="Portrait of a woman looking professional" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6HAPvVLSvcTHQw1G0r5QkIrHH-bPEA7Zja6hytpZqM3mxqrseFwVc4kjjDKJB_DTfcLQ8rZW9cMikzDDx5QHENEidskD2qmMQdtUmTHV_5UWbZ9lMGxvBb3joI-yzyqf48wnu4THS-YEtpbUl2NzDPcIyiBa411Ve_BgCfl_0IbecdKxqwMi4xxks7Qwx46Ybfdioulqry33g0GvarH3Qs_CHs5prM52q3tj89iCSyIHFd7ZYDEeFIQ49C8zQvjWTAozNW0PT7IM"/>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-slate-900 dark:text-white">Esther Howard</div>
+<div class="text-sm text-slate-500 dark:text-slate-400">esther.howard@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-slate-900 dark:text-white">Python for Data Science</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">Data Science</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
+                                    CERT-2023-8423
+                                </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                                Oct 08, 2023
+                            </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">
+                                    Pending
+                                </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end space-x-2">
+<button class="text-slate-400 hover:text-primary transition-colors" title="View Certificate">
+<span class="material-icons text-xl">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-primary transition-colors" title="Edit Details">
+<span class="material-icons text-xl">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+<span class="material-icons text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10">
+<div class="h-10 w-10 rounded-full bg-primary-light dark:bg-primary/20 flex items-center justify-center text-primary dark:text-primary-light font-bold ring-2 ring-white dark:ring-slate-800">JD</div>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-slate-900 dark:text-white">Jenny Doe</div>
+<div class="text-sm text-slate-500 dark:text-slate-400">jenny.doe@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-slate-900 dark:text-white">Machine Learning A-Z</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">Data Science</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
+                                    CERT-2023-8424
+                                </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                                Oct 05, 2023
+                            </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
+                                    Issued
+                                </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end space-x-2">
+<button class="text-slate-400 hover:text-primary transition-colors" title="View Certificate">
+<span class="material-icons text-xl">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-primary transition-colors" title="Edit Details">
+<span class="material-icons text-xl">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+<span class="material-icons text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bg-white dark:bg-slate-900 px-4 py-3 flex items-center justify-between border-t border-slate-200 dark:border-slate-800 sm:px-6">
+<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+<div>
+<p class="text-sm text-slate-700 dark:text-slate-300">
+                            Showing <span class="font-medium">1</span> to <span class="font-medium">4</span> of <span class="font-medium">97</span> results
+                        </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+<a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" href="#">
+<span class="sr-only">Previous</span>
+<span class="material-icons text-sm">chevron_left</span>
+</a>
+<a aria-current="page" class="z-10 bg-primary-light border-primary text-primary relative inline-flex items-center px-4 py-2 border text-sm font-medium font-bold" href="#">
+                                1
+                            </a>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors" href="#">
+                                2
+                            </a>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium transition-colors" href="#">
+                                3
+                            </a>
+<span class="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-700 dark:text-slate-300">
+                                ...
+                            </span>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium transition-colors" href="#">
+                                8
+                            </a>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors" href="#">
+                                9
+                            </a>
+<a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" href="#">
+<span class="sr-only">Next</span>
+<span class="material-icons text-sm">chevron_right</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

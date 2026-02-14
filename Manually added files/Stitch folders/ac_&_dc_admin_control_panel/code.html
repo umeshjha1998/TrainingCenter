@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AC &amp; DC Admin Control Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#13ec5b",
+                "primary-dark": "#0eb545",
+                "background-light": "#f6f8f6",
+                "background-dark": "#102216",
+                "surface-light": "#ffffff",
+                "surface-dark": "#162e1d",
+              },
+              fontFamily: {
+                "display": ["Space Grotesk", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-100 h-screen flex overflow-hidden">
+<aside class="w-64 bg-surface-light dark:bg-surface-dark border-r border-gray-200 dark:border-gray-800 flex flex-col justify-between transition-all duration-300">
+<div>
+<div class="h-20 flex items-center px-6 border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center text-primary-dark dark:text-primary">
+<span class="material-icons-round text-2xl">memory</span>
+</div>
+<div>
+<h1 class="font-bold text-lg leading-tight text-gray-900 dark:text-white">AC &amp; DC</h1>
+<p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Technical Institute</p>
+</div>
+</div>
+</div>
+<nav class="mt-6 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 bg-primary text-black rounded-lg transition-colors font-medium shadow-sm shadow-primary/30" href="#">
+<span class="material-icons-round">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium group" href="#">
+<span class="material-icons-round group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">people</span>
+<span>Manage Students</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium group" href="#">
+<span class="material-icons-round group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">workspace_premium</span>
+<span>Generated Certs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium group" href="#">
+<span class="material-icons-round group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">analytics</span>
+<span>Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors font-medium group" href="#">
+<span class="material-icons-round group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</div>
+<div class="p-4 border-t border-gray-100 dark:border-gray-800">
+<button class="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left">
+<div class="relative">
+<img alt="Admin User" class="w-10 h-10 rounded-full border-2 border-surface-light dark:border-surface-dark" data-alt="Profile picture of the current admin user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIqjkIEL5HInx_EUaIfVDb7R2YmV5F-AmHXFo7_r210U7hdZuQWjjGnxaMx5NrTWUtnLDevW4zevjGX81YTaXzQb5R1qgCmGfVBGH8YrokFrJqJ-3RjtGS6pB95ThnBOpAe46HLsfFUpgsztR7A_Ev7Y46SdhGknnlKbL4Qm2tfAiBp8SKlHCU_-AYRqoQt1R2485OV05ZP70yIY5Zd8EXUl2GCIk-Wwm6eIyjaWOTCczRA71qpkZqiKyWE2KvgMpYrDnaIAXkZL4"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-gray-900 dark:text-white truncate">System Admin</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 truncate">admin@acdc.edu</p>
+</div>
+<span class="material-icons-round text-gray-400">logout</span>
+</button>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-hidden relative">
+<header class="h-20 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-8 z-10">
+<div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+<span class="hover:text-primary transition-colors cursor-pointer">Home</span>
+<span class="material-icons-round text-xs">chevron_right</span>
+<span class="text-gray-900 dark:text-white font-medium">Dashboard</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:block">
+<span class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64 text-gray-900 dark:text-white placeholder-gray-500" placeholder="Search student ID..." type="text"/>
+</div>
+<button class="relative p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+<span class="material-icons-round">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-gray-900"></span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8 scroll-smooth">
+<div class="max-w-7xl mx-auto space-y-8">
+<div>
+<h2 class="text-3xl font-bold text-gray-900 dark:text-white">Welcome back, Admin.</h2>
+<p class="text-gray-500 dark:text-gray-400 mt-1">Here's what's happening at the institute today.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-primary">school</span>
+</div>
+<div class="relative z-10">
+<p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Students</p>
+<div class="mt-2 flex items-baseline gap-3">
+<h3 class="text-4xl font-bold text-gray-900 dark:text-white">1,240</h3>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-icons-round text-xs mr-1">trending_up</span>
+                                    12%
+                                </span>
+</div>
+<p class="text-xs text-gray-400 mt-2">Active enrollments this semester</p>
+</div>
+<div class="absolute bottom-0 left-0 h-1 bg-primary w-full transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-primary">verified</span>
+</div>
+<div class="relative z-10">
+<p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Certificates Issued</p>
+<div class="mt-2 flex items-baseline gap-3">
+<h3 class="text-4xl font-bold text-gray-900 dark:text-white">856</h3>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-icons-round text-xs mr-1">trending_up</span>
+                                    5%
+                                </span>
+</div>
+<p class="text-xs text-gray-400 mt-2">Total certified graduates to date</p>
+</div>
+<div class="absolute bottom-0 left-0 h-1 bg-primary w-full transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-primary">person_add</span>
+</div>
+<div class="relative z-10">
+<p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">New Registrations</p>
+<div class="mt-2 flex items-baseline gap-3">
+<h3 class="text-4xl font-bold text-gray-900 dark:text-white">45</h3>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-green-800 dark:text-green-300">
+                                    This Month
+                                </span>
+</div>
+<p class="text-xs text-gray-400 mt-2">Waiting for approval</p>
+</div>
+<div class="absolute bottom-0 left-0 h-1 bg-primary w-full transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+<div class="xl:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+<div class="lg:col-span-1 space-y-6">
+<h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+<span class="material-icons-round text-primary">bolt</span> Quick Actions
+                            </h3>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm h-full flex flex-col gap-4">
+<button class="group w-full bg-primary hover:bg-primary-dark text-black p-4 rounded-lg shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-1 flex items-center justify-between">
+<div class="flex flex-col items-start">
+<span class="font-bold text-lg">Generate Certificate</span>
+<span class="text-xs font-medium opacity-70">Create new for graduate</span>
+</div>
+<span class="material-icons-round bg-black/10 p-2 rounded-full group-hover:bg-black/20 transition-colors">add</span>
+</button>
+<button class="group w-full bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 p-4 rounded-lg transition-all transform hover:-translate-y-1 flex items-center justify-between">
+<div class="flex flex-col items-start">
+<span class="font-bold text-lg">Manage Records</span>
+<span class="text-xs text-gray-500 dark:text-gray-400">Update student data</span>
+</div>
+<span class="material-icons-round bg-gray-100 dark:bg-gray-700 p-2 rounded-full group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors">folder_shared</span>
+</button>
+<div class="mt-auto pt-6 border-t border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-3 mb-2">
+<span class="text-sm font-semibold text-gray-700 dark:text-gray-300">System Status</span>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+</div>
+<div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mb-1">
+<div class="bg-primary h-1.5 rounded-full" style="width: 98%"></div>
+</div>
+<p class="text-xs text-gray-500 dark:text-gray-400">Server uptime: 99.9%</p>
+</div>
+</div>
+</div>
+<div class="lg:col-span-2 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold text-gray-900 dark:text-white">Recent Certifications</h3>
+<a class="text-sm text-primary font-medium hover:underline" href="#">View All</a>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
+<tr>
+<th class="px-6 py-4 font-semibold text-gray-900 dark:text-white">Student Name</th>
+<th class="px-6 py-4 font-semibold text-gray-900 dark:text-white">ID Number</th>
+<th class="px-6 py-4 font-semibold text-gray-900 dark:text-white">Certificate Type</th>
+<th class="px-6 py-4 font-semibold text-gray-900 dark:text-white">Date Issued</th>
+<th class="px-6 py-4 font-semibold text-gray-900 dark:text-white">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">JD</div>
+<span class="font-medium text-gray-900 dark:text-white">John Doe</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400 font-mono">AC-2023-891</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">Electrical Engineering</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Oct 24, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                                        Issued
+                                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 font-bold text-xs">AS</div>
+<span class="font-medium text-gray-900 dark:text-white">Alice Smith</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400 font-mono">DC-2023-442</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">Circuit Design Lv.2</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Oct 23, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                                        Issued
+                                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 font-bold text-xs">RM</div>
+<span class="font-medium text-gray-900 dark:text-white">Robert Miller</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400 font-mono">AC-2023-895</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">Industrial Safety</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Oct 22, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
+                                                        Pending
+                                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-pink-600 dark:text-pink-400 font-bold text-xs">EL</div>
+<span class="font-medium text-gray-900 dark:text-white">Eva Longoria</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400 font-mono">DC-2023-112</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">Robotics Basics</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Oct 21, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                                        Issued
+                                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center text-cyan-600 dark:text-cyan-400 font-bold text-xs">MK</div>
+<span class="font-medium text-gray-900 dark:text-white">Michael King</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400 font-mono">AC-2023-899</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">HVAC Maintenance</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Oct 20, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                                                        Rejected
+                                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/20 flex items-center justify-between">
+<span class="text-xs text-gray-500 dark:text-gray-400">Showing 5 of 128 results</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-xs font-medium rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50">Prev</button>
+<button class="px-3 py-1 text-xs font-medium rounded bg-white dark:bg-gray-700 shadow-sm border border-gray-200 dark:border-gray-600">1</button>
+<button class="px-3 py-1 text-xs font-medium rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">2</button>
+<button class="px-3 py-1 text-xs font-medium rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="xl:col-span-1 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+<span class="material-icons-round text-primary">history</span> Recent Activity
+      </h3>
+<button class="text-gray-400 hover:text-primary transition-colors">
+<span class="material-icons-round text-lg">refresh</span>
+</button>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm h-full">
+<div class="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-200 before:to-transparent dark:before:via-gray-700 before:hidden">
+<div class="absolute left-4 top-4 bottom-4 w-0.5 bg-gray-100 dark:bg-gray-800"></div>
+<div class="relative flex gap-4">
+<div class="relative z-10 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0 border-2 border-surface-light dark:border-surface-dark">
+<span class="material-icons-round text-blue-600 dark:text-blue-400 text-sm">person_add</span>
+</div>
+<div class="flex-1 pt-1 pb-1">
+<p class="text-sm font-medium text-gray-900 dark:text-white">John Doe registered</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">New student enrollment</p>
+<span class="text-[10px] font-medium text-gray-400 mt-1 block">Just now</span>
+</div>
+</div>
+<div class="relative flex gap-4">
+<div class="relative z-10 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shrink-0 border-2 border-surface-light dark:border-surface-dark">
+<span class="material-icons-round text-green-600 dark:text-green-400 text-sm">article</span>
+</div>
+<div class="flex-1 pt-1 pb-1">
+<p class="text-sm font-medium text-gray-900 dark:text-white">Certificate CERT12345 generated</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Automated issuance</p>
+<span class="text-[10px] font-medium text-gray-400 mt-1 block">25 mins ago</span>
+</div>
+</div>
+<div class="relative flex gap-4">
+<div class="relative z-10 w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center shrink-0 border-2 border-surface-light dark:border-surface-dark">
+<span class="material-icons-round text-orange-600 dark:text-orange-400 text-sm">edit</span>
+</div>
+<div class="flex-1 pt-1 pb-1">
+<p class="text-sm font-medium text-gray-900 dark:text-white">Marks updated for Alice Smith</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Final exam results</p>
+<span class="text-[10px] font-medium text-gray-400 mt-1 block">2 hours ago</span>
+</div>
+</div>
+<div class="relative flex gap-4">
+<div class="relative z-10 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center shrink-0 border-2 border-surface-light dark:border-surface-dark">
+<span class="material-icons-round text-purple-600 dark:text-purple-400 text-sm">settings</span>
+</div>
+<div class="flex-1 pt-1 pb-1">
+<p class="text-sm font-medium text-gray-900 dark:text-white">System backup completed</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Daily automated task</p>
+<span class="text-[10px] font-medium text-gray-400 mt-1 block">5 hours ago</span>
+</div>
+</div>
+<div class="relative flex gap-4">
+<div class="relative z-10 w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 border-2 border-surface-light dark:border-surface-dark">
+<span class="material-icons-round text-red-600 dark:text-red-400 text-sm">warning</span>
+</div>
+<div class="flex-1 pt-1 pb-1">
+<p class="text-sm font-medium text-gray-900 dark:text-white">Login attempt failed</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">IP: 192.168.1.105</p>
+<span class="text-[10px] font-medium text-gray-400 mt-1 block">Yesterday</span>
+</div>
+</div>
+<div class="relative flex gap-4 pt-2">
+<button class="w-full text-center text-xs font-medium text-primary hover:text-primary-dark transition-colors py-2 border border-dashed border-gray-200 dark:border-gray-700 rounded-lg">View Full Log</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 pb-4">
+<p>© 2023 AC &amp; DC Technical Institute. All rights reserved.</p>
+<div class="flex gap-4">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</footer>
+</div>
+</main>
+
+</body></html>
