@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Forgot Password - AC &amp; DC Technical Institute</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Subtle grid background pattern */
+        .tech-grid {
+            background-image: 
+                linear-gradient(rgba(19, 236, 91, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(19, 236, 91, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center relative overflow-hidden transition-colors duration-300">
+<!-- Background Decorative Elements -->
+<div class="absolute inset-0 tech-grid pointer-events-none z-0"></div>
+<!-- Abstract Glow -->
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-primary/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+<!-- Main Card Container -->
+<main class="relative z-10 w-full max-w-md p-6">
+<!-- Glassmorphism Card -->
+<div class="bg-white dark:bg-[#152e1e] border border-gray-200 dark:border-primary/20 rounded-xl shadow-2xl overflow-hidden backdrop-blur-sm">
+<!-- Top Accent Bar -->
+<div class="h-1.5 w-full bg-gradient-to-r from-transparent via-primary to-transparent opacity-60"></div>
+<div class="p-8 sm:p-10">
+<!-- Logo Section -->
+<div class="flex justify-center mb-8">
+<div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border border-primary/20 shadow-[0_0_15px_rgba(19,236,91,0.15)]">
+<!-- Logic Gate Style Icon -->
+<span class="material-icons text-primary text-3xl">memory</span>
+</div>
+</div>
+<!-- Text Header -->
+<div class="text-center mb-8">
+<h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Forgot Password?</h1>
+<p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        Don't worry, it happens. Enter your registered email associated with <span class="font-medium text-primary/90">AC &amp; DC Tech</span> to reset your password.
+                    </p>
+</div>
+<!-- Form -->
+<form action="#" class="space-y-6">
+<div class="space-y-2 group">
+<label class="block text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-primary/70 ml-1" for="email">
+                            Email Address
+                        </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons text-gray-400 dark:text-gray-500 text-lg group-focus-within:text-primary transition-colors">mail_outline</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 bg-gray-50 dark:bg-[#0c1a11] border border-gray-200 dark:border-primary/20 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-sm font-medium" id="email" name="email" placeholder="student@acdc-institute.edu" required="" type="email"/>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-lg shadow-lg text-sm font-bold text-background-dark bg-primary hover:bg-[#0fd651] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background-dark transition-all duration-200 transform hover:scale-[1.01]" type="submit">
+                        SEND OTP
+                        <span class="material-icons text-lg ml-2">send</span>
+</button>
+</form>
+<!-- Footer / Navigation -->
+<div class="mt-8 text-center border-t border-gray-100 dark:border-white/5 pt-6">
+<a class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors group" href="#">
+<span class="material-icons text-base mr-1 transform group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                        Back to Login
+                    </a>
+</div>
+</div>
+<!-- Bottom decorative detail for tech feel -->
+<div class="flex justify-between items-end px-4 py-2 bg-gray-50 dark:bg-[#0f2417] border-t border-gray-100 dark:border-white/5 text-[10px] text-gray-400 dark:text-gray-600 font-mono uppercase tracking-widest">
+<span>Sys.Id: 489-B</span>
+<span>Secure // SSL</span>
+</div>
+</div>
+<!-- Copyright / Footer -->
+<p class="text-center text-xs text-gray-400 dark:text-gray-600 mt-8 font-mono">
+            © 2024 AC &amp; DC Technical Institute.
+        </p>
+</main>
+</body></html>

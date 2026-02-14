@@ -79,6 +79,15 @@ export default function AdminLogin() {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
+
+                            <div className="flex items-center justify-end">
+                                <div className="text-sm">
+                                    <Link to="/forgot-password" className="font-medium text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+                                        Forgot your password?
+                                    </Link>
+                                </div>
+                            </div>
+
                             <div>
                                 <button
                                     className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"

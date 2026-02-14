@@ -8,6 +8,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
 import AdminLogin from "./pages/AdminLogin";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import VerifyOTP from "./pages/auth/VerifyOTP";
+import ResetPassword from "./pages/auth/ResetPassword";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageStudents from "./pages/admin/ManageStudents";
@@ -31,6 +34,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/admin-login" element={<AdminLogin />} />
+
+          {/* Auth Routes */}
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-otp" element={<VerifyOTP />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
           <Route path="/c/:id" element={<PublicCertificate />} />
 
           <Route path="/admin" element={
