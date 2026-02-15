@@ -13,8 +13,8 @@ export default function ManageStudents() {
 
     // Fetch students and courses with real-time updates
     useEffect(() => {
-        // Subscribe to Students (Fetch all users)
-        const q = query(collection(db, "users"));
+        // Subscribe to Students
+        const q = query(collection(db, "users"), where("role", "==", "student"));
         const unsubscribeStudents = onSnapshot(q, (snapshot) => {
             const studentsList = snapshot.docs.map(doc => ({
                 id: doc.id,
@@ -107,7 +107,7 @@ export default function ManageStudents() {
                         Manage Students
                     </h1>
                     <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                        A list of all registered users. Assign courses to new registrations here.
+                        A list of all registered students. Assign courses to new registrations here.
                     </p>
                 </div>
             </div>
@@ -118,9 +118,6 @@ export default function ManageStudents() {
                         <tr>
                             <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:pl-6">
                                 Name
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                Role
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                 Contact
@@ -136,8 +133,8 @@ export default function ManageStudents() {
                     <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
                         {students.length === 0 ? (
                             <tr>
-                                <td colSpan="5" className="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
-                                    No users registered yet.
+                                <td colSpan="4" className="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                                    No students registered yet.
                                 </td>
                             </tr>
                         ) : (
@@ -145,9 +142,6 @@ export default function ManageStudents() {
                                 <tr key={student.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
                                         {student.fullName || student.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400 capitalize">
-                                        {student.role || "student"}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
                                         <div className="flex flex-col">
