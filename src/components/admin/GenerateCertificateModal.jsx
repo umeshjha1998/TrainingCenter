@@ -119,6 +119,30 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
         }));
     };
 
+    const [duplicateWarning, setDuplicateWarning] = useState(null);
+
+    // Check for duplicate certificates
+    useEffect(() => {
+        if (selectedStudentId && selectedCourseId && !initialData) {
+            const q = query(
+                collection(db, "certificates"),
+                where("studentId", "==", selectedStudentId),
+                where("courseId", "==", selectedCourseId)
+            );
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const count = snapshot.size;
+                if (count > 0) {
+                    setDuplicateWarning(`Warning: This certificate already exists (Version ${count}). Generating will create Version ${count + 1}.`);
+                } else {
+                    setDuplicateWarning(null);
+                }
+            });
+            return () => unsubscribe();
+        } else {
+            setDuplicateWarning(null);
+        }
+    }, [selectedStudentId, selectedCourseId, initialData]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -131,13 +155,15 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
         }
 
         // Validate marks
-        // Ensure all subjects have marks? Or optional?
-        // Assuming required for generation.
         if (course.subjects) {
             for (let sub of course.subjects) {
                 const m = marks[sub.name];
                 if (!m || m.obtained === "" || m.total === "") {
                     alert(`Please enter marks for ${sub.name}`);
+                    return;
+                }
+                if (parseFloat(m.obtained) > parseFloat(m.total)) {
+                    alert(`Marks obtained for ${sub.name} cannot be greater than total marks.`);
                     return;
                 }
             }
@@ -229,6 +255,21 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
                                         <p className="text-xs text-red-500 mt-1">This student has no enrolled courses.</p>
                                     )}
                                 </div>
+
+                                {duplicateWarning && (
+                                    <div className="bg-red-50 border-l-4 border-red-400 p-4">
+                                        <div className="flex">
+                                            <div className="flex-shrink-0">
+                                                <span className="material-icons text-red-400">warning</span>
+                                            </div>
+                                            <div className="ml-3">
+                                                <p className="text-sm text-red-700">
+                                                    {duplicateWarning}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* Subjects & Marks */}
                                 {fullSelectedCourse && fullSelectedCourse.subjects && fullSelectedCourse.subjects.length > 0 && (

@@ -105,7 +105,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                     </div>
                 </div>
                 {/* Version Number */}
-                <div className="absolute top-8 right-8 text-sm font-bold text-slate-500 bg-white/80 px-3 py-1 rounded border border-slate-200 shadow-sm print:hidden">
+                <div className="absolute top-8 right-8 font-bold text-slate-500 print:hidden" style={{ fontSize: '15px' }}>
                     {data.version ? `Version ${data.version}` : ''}
                 </div>
 
