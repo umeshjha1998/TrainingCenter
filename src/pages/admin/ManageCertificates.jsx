@@ -13,6 +13,14 @@ export default function ManageCertificates() {
     const [students, setStudents] = useState([]);
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [expandedGroups, setExpandedGroups] = useState({});
+
+    const toggleExpand = (certId) => {
+        setExpandedGroups(prev => ({
+            ...prev,
+            [certId]: !prev[certId]
+        }));
+    };
 
     // Fetch students
     useEffect(() => {
@@ -213,70 +221,124 @@ export default function ManageCertificates() {
                                     </td>
                                 </tr>
                             ) : (
-                                certificates.map((cert) => {
-                                    const studentObj = students.find(s => s.id === cert.studentId);
-                                    const courseObj = courses.find(c => c.id === cert.courseId);
-                                    const displayStudentName = studentObj ? (studentObj.fullName || studentObj.name) : cert.student;
-                                    const displayCourseName = courseObj ? courseObj.name : cert.course;
+                                (() => {
+                                    // Group certificates by Student + Course
+                                    const groups = {};
+                                    certificates.forEach(cert => {
+                                        const key = `${cert.studentId}_${cert.courseId}`;
+                                        if (!groups[key]) {
+                                            groups[key] = [];
+                                        }
+                                        groups[key].push(cert);
+                                    });
 
-                                    return (
-                                        <tr key={cert.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center">
-                                                    <div className="flex-shrink-0 h-10 w-10">
-                                                        <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500 font-bold">
-                                                            {displayStudentName ? displayStudentName.charAt(0) : "?"}
+                                    // Sort versions within groups (descending) and convert to array
+                                    const groupedList = Object.values(groups).map(group => {
+                                        group.sort((a, b) => b.version - a.version); // Highest version first
+                                        return group;
+                                    });
+
+                                    // Sort groups by the date of their latest certificate
+                                    groupedList.sort((a, b) => new Date(b[0].isoDate) - new Date(a[0].isoDate));
+
+                                    return groupedList.map(group => {
+                                        const latestCert = group[0];
+                                        const history = group.slice(1);
+                                        const hasHistory = history.length > 0;
+                                        const isExpanded = expandedGroups[latestCert.id];
+
+                                        const studentObj = students.find(s => s.id === latestCert.studentId);
+                                        const courseObj = courses.find(c => c.id === latestCert.courseId);
+                                        const displayStudentName = studentObj ? (studentObj.fullName || studentObj.name) : latestCert.student;
+                                        const displayCourseName = courseObj ? courseObj.name : latestCert.course;
+
+                                        const renderRow = (cert, isLatest, isHistoryRow = false) => (
+                                            <tr key={cert.id} className={`${isHistoryRow ? "bg-slate-50/50 dark:bg-slate-800/30" : "hover:bg-slate-50 dark:hover:bg-slate-800/50"} transition-colors border-b dark:border-slate-800`}>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center">
+                                                        {isLatest && (
+                                                            <div className="mr-3 w-6 flex justify-center">
+                                                                {hasHistory && (
+                                                                    <button
+                                                                        onClick={() => toggleExpand(latestCert.id)}
+                                                                        className="text-slate-400 hover:text-primary transition-colors focus:outline-none"
+                                                                    >
+                                                                        <span className="material-icons text-sm transform transition-transform duration-200" style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                                                                            chevron_right
+                                                                        </span>
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                        {isHistoryRow && <div className="w-9 mr-3"></div>} {/* Spacer for indentation */}
+
+                                                        <div className="flex items-center">
+                                                            <div className="flex-shrink-0 h-10 w-10">
+                                                                <div className={`h-10 w-10 rounded-full flex items-center justify-center text-slate-500 font-bold ${isHistoryRow ? "bg-slate-100 dark:bg-slate-800 scale-90" : "bg-slate-200 dark:bg-slate-700"}`}>
+                                                                    {displayStudentName ? displayStudentName.charAt(0) : "?"}
+                                                                </div>
+                                                            </div>
+                                                            <div className="ml-4">
+                                                                <div className={`font-medium ${isHistoryRow ? "text-slate-600 dark:text-slate-400 text-sm" : "text-slate-900 dark:text-white text-sm"}`}>
+                                                                    {displayStudentName}
+                                                                    {cert.version > 1 && <span className="ml-2 text-xs text-slate-400 font-normal border border-slate-200 dark:border-slate-700 rounded px-1.5 py-0.5">v{cert.version}</span>}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="ml-4">
-                                                        <div className="text-sm font-medium text-slate-900 dark:text-white">{displayStudentName}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-slate-900 dark:text-white">{displayCourseName}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
+                                                        {cert.displayId || cert.id.substring(0, 8).toUpperCase()}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
+                                                    {cert.date}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ring-1 ring-inset ${cert.status === 'Issued' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ring-green-600/20' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 ring-yellow-600/20'}`}>
+                                                        {cert.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    <div className="flex items-center justify-end space-x-2">
+                                                        <button
+                                                            className="text-slate-400 hover:text-primary transition-colors"
+                                                            title="View"
+                                                            onClick={() => window.open(`#/c/${cert.id}`, '_blank')}
+                                                        >
+                                                            <span className="material-icons text-xl">visibility</span>
+                                                        </button>
+                                                        <button
+                                                            className="text-slate-400 hover:text-primary transition-colors"
+                                                            title="Edit"
+                                                            onClick={() => handleEdit(cert)}
+                                                        >
+                                                            <span className="material-icons text-xl">edit</span>
+                                                        </button>
+                                                        <button
+                                                            className="text-slate-400 hover:text-red-500 transition-colors"
+                                                            title="Delete"
+                                                            onClick={() => confirmDelete(cert.id)}
+                                                        >
+                                                            <span className="material-icons text-xl">delete</span>
+                                                        </button>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-slate-900 dark:text-white">{displayCourseName}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
-                                                    {cert.displayId || cert.id.substring(0, 8).toUpperCase()}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
-                                                {cert.date}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ring-1 ring-inset ${cert.status === 'Issued' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ring-green-600/20' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 ring-yellow-600/20'}`}>
-                                                    {cert.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <div className="flex items-center justify-end space-x-2">
-                                                    <button
-                                                        className="text-slate-400 hover:text-primary transition-colors"
-                                                        title="View"
-                                                        onClick={() => window.open(`#/c/${cert.id}`, '_blank')}
-                                                    >
-                                                        <span className="material-icons text-xl">visibility</span>
-                                                    </button>
-                                                    <button
-                                                        className="text-slate-400 hover:text-primary transition-colors"
-                                                        title="Edit"
-                                                        onClick={() => handleEdit(cert)}
-                                                    >
-                                                        <span className="material-icons text-xl">edit</span>
-                                                    </button>
-                                                    <button
-                                                        className="text-slate-400 hover:text-red-500 transition-colors"
-                                                        title="Delete"
-                                                        onClick={() => confirmDelete(cert.id)}
-                                                    >
-                                                        <span className="material-icons text-xl">delete</span>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
+                                                </td>
+                                            </tr>
+                                        );
+
+                                        return (
+                                            <React.Fragment key={latestCert.id}>
+                                                {renderRow(latestCert, true)}
+                                                {isExpanded && history.map(cert => renderRow(cert, false, true))}
+                                            </React.Fragment>
+                                        );
+                                    });
+                                })()
                             )}
                         </tbody>
                     </table>
