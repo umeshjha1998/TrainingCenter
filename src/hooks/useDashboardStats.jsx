@@ -70,7 +70,8 @@ export default function useDashboardStats() {
             studentsData.forEach(s => {
                 if (s.enrolledCourses && Array.isArray(s.enrolledCourses)) {
                     s.enrolledCourses.forEach(c => {
-                        const cName = c.name || "Unknown";
+                        const matchedCourse = coursesData.find(course => course.id === c.id);
+                        const cName = matchedCourse ? matchedCourse.name : (c.name || "Unknown");
                         courseCounts[cName] = (courseCounts[cName] || 0) + 1;
                     });
                 }
