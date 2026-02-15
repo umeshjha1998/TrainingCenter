@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where } from "firebase/firestore";
+import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import GenerateCertificateModal from "../../components/admin/GenerateCertificateModal";
 import ConfirmationModal from "../../components/admin/ConfirmationModal";
@@ -53,6 +53,16 @@ export default function ManageCertificates() {
 
     const handleGenerate = async (data) => {
         try {
+            // Check for existing certificates for this student and course
+            const q = query(
+                collection(db, "certificates"),
+                where("studentId", "==", data.studentId),
+                where("courseId", "==", data.courseId)
+            );
+            const querySnapshot = await getDocs(q);
+            const existingCount = querySnapshot.size;
+            const version = existingCount + 1;
+
             const certData = {
                 student: data.studentName,
                 studentId: data.studentId, // Store ID
@@ -62,13 +72,31 @@ export default function ManageCertificates() {
                 date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
                 isoDate: data.issueDate, // Store ISO date for sorting/input
                 status: "Issued", // Default status
+                version: version, // Store version
                 updatedAt: new Date()
             };
 
             if (data.id) {
                 // Update existing
                 const certRef = doc(db, "certificates", data.id);
-                await updateDoc(certRef, certData);
+                // When updating, we might want to keep the original version or allow edit. 
+                // For now, let's keep the existing version if it exists, or set to 1.
+                // But wait, 'data' comes from the modal. If we are editing, we should probably Pass the version through.
+                // The modal 'data' is constructed from inputs. 
+                // If it's an edit, we should ideally preserve the version from the original record.
+                // However, the current modal flow reconstructs dataToSave. 
+                // Let's assume for editing we just update fields and keep version if passed, or fetch it?
+                // Simpler: Just update the fields we changed. 'data' doesn't have version unless we put it there.
+                // Let's NOT update version on Edit. Only on Create.
+
+                // We need to be careful not to overwrite version with undefined if we don't pass it.
+                // But certData here is a whole new object effectively replacing the old data merges?
+                // updateDoc merges. So if we don't include version in certData, it stays?
+                // BUT certData is creating a fresh object.
+                // Let's just NOT set version in certData for update, unless we want to recalculate it (which we shouldn't).
+
+                const { version, ...updateData } = certData; // Exclude version from update payload to preserve existing
+                await updateDoc(certRef, updateData);
                 alert("Certificate updated successfully!");
             } else {
                 // Create new
@@ -79,7 +107,7 @@ export default function ManageCertificates() {
                     displayId: displayId, // Store readable ID
                     createdAt: new Date()
                 });
-                alert("Certificate generated successfully!");
+                alert(`Certificate generated successfully! (Version ${version})`);
             }
         } catch (error) {
             console.error("Error saving certificate:", error);
