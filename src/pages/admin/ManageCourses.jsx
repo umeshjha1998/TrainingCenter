@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase";
 import CourseModal from "../../components/admin/CourseModal";
+import ConfirmationModal from "../../components/admin/ConfirmationModal";
 
 export default function ManageCourses() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [courseToDelete, setCourseToDelete] = useState(null);
 
     // Fetch courses from Firestore with real-time updates
     useEffect(() => {
@@ -36,12 +39,18 @@ export default function ManageCourses() {
         setIsModalOpen(true);
     };
 
+    const confirmDelete = (courseId) => {
+        setCourseToDelete(courseId);
+        setIsDeleteModalOpen(true);
+    };
 
-    const handleDeleteCourse = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this course?")) return;
+    const handleDeleteCourse = async () => {
+        if (!courseToDelete) return;
 
         try {
-            await deleteDoc(doc(db, "courses", id));
+            await deleteDoc(doc(db, "courses", courseToDelete));
+            setIsDeleteModalOpen(false);
+            setCourseToDelete(null);
         } catch (error) {
             console.error("Error deleting course: ", error);
             alert("Failed to delete course");
@@ -123,7 +132,9 @@ export default function ManageCourses() {
                                         </span>
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                        <div className="text-slate-900 dark:text-white font-medium">{course.subjects} Subjects</div>
+                                        <div className="text-slate-900 dark:text-white font-medium">
+                                            {Array.isArray(course.subjects) ? course.subjects.length : (course.subjects || 0)} Subjects
+                                        </div>
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
                                         <span className="text-slate-900 dark:text-white">{course.nextExam}</span>
@@ -140,7 +151,7 @@ export default function ManageCourses() {
                                             <button
                                                 className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-500/10 rounded transition-colors"
                                                 title="Delete"
-                                                onClick={() => handleDeleteCourse(course.id)}
+                                                onClick={() => confirmDelete(course.id)}
                                             >
                                                 <span className="material-icons text-lg">delete</span>
                                             </button>
@@ -157,6 +168,16 @@ export default function ManageCourses() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 initialData={selectedCourse}
+            />
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteCourse}
+                title="Delete Course"
+                message="Are you sure you want to delete this course? This action cannot be undone."
+                confirmText="Delete"
+                isDanger={true}
             />
         </div>
     );

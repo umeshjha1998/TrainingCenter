@@ -7,16 +7,19 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
     const [formData, setFormData] = useState({
         name: "",
         duration: "",
-        subjects: "",
+        subjects: [], // Now an array of subject objects { id, name }
         nextExam: ""
     });
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (initialData) {
-            setFormData(initialData);
+            setFormData({
+                ...initialData,
+                subjects: Array.isArray(initialData.subjects) ? initialData.subjects : []
+            });
         } else {
-            setFormData({ name: "", duration: "", subjects: "", nextExam: "" });
+            setFormData({ name: "", duration: "", subjects: [], nextExam: "" });
         }
     }, [initialData, isOpen]);
 
@@ -25,25 +28,49 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleAddSubject = () => {
+        setFormData(prev => ({
+            ...prev,
+            subjects: [...prev.subjects, { id: Date.now(), name: "" }]
+        }));
+    };
+
+    const handleSubjectChange = (id, value) => {
+        setFormData(prev => ({
+            ...prev,
+            subjects: prev.subjects.map(sub =>
+                sub.id === id ? { ...sub, name: value } : sub
+            )
+        }));
+    };
+
+    const handleRemoveSubject = (id) => {
+        setFormData(prev => ({
+            ...prev,
+            subjects: prev.subjects.filter(sub => sub.id !== id)
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
+            const courseData = {
+                ...formData,
+                subjects: formData.subjects.filter(s => s.name.trim() !== ""), // Filter empty subjects
+                updatedAt: new Date()
+            };
+
             if (initialData?.id) {
                 // Update existing course
                 const courseRef = doc(db, "courses", initialData.id);
-                await updateDoc(courseRef, {
-                    ...formData,
-                    subjects: parseInt(formData.subjects) || 0,
-                    updatedAt: new Date()
-                });
+                await updateDoc(courseRef, courseData);
                 alert("Course updated successfully!");
             } else {
                 // Add new course
                 await addDoc(collection(db, "courses"), {
-                    ...formData,
-                    subjects: parseInt(formData.subjects) || 0,
+                    ...courseData,
                     createdAt: new Date()
                 });
                 alert("Course added successfully!");
@@ -79,10 +106,42 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
                                     <label htmlFor="duration" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Duration</label>
                                     <input type="text" id="duration" name="duration" required placeholder="e.g. 6 Months" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.duration} onChange={handleInputChange} />
                                 </div>
+
+                                {/* Subjects Section */}
                                 <div>
-                                    <label htmlFor="subjects" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Subject Count</label>
-                                    <input type="number" id="subjects" name="subjects" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.subjects} onChange={handleInputChange} />
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Subjects</label>
+                                    <div className="space-y-2 max-h-48 overflow-y-auto p-1">
+                                        {formData.subjects.map((subject, index) => (
+                                            <div key={subject.id} className="flex items-center gap-2">
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    placeholder={`Subject ${index + 1}`}
+                                                    className="flex-1 rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"
+                                                    value={subject.name}
+                                                    onChange={(e) => handleSubjectChange(subject.id, e.target.value)}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveSubject(subject.id)}
+                                                    className="text-slate-400 hover:text-red-500 p-2"
+                                                    title="Remove Subject"
+                                                >
+                                                    <span className="material-icons text-lg">delete</span>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={handleAddSubject}
+                                        className="mt-2 inline-flex items-center text-sm font-medium text-primary hover:text-primary-dark"
+                                    >
+                                        <span className="material-icons text-lg mr-1">add</span>
+                                        Add Subject
+                                    </button>
                                 </div>
+
                                 <div>
                                     <label htmlFor="nextExam" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Next Exam Date</label>
                                     <input type="text" id="nextExam" name="nextExam" placeholder="e.g. Oct 12, 2023" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.nextExam} onChange={handleInputChange} />

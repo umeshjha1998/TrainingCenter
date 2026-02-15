@@ -1,134 +1,299 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, initialData }) {
-    const [formData, setFormData] = useState({
-        studentName: "",
-        courseName: "",
-        issueDate: new Date().toISOString().split('T')[0],
-    });
+    const [students, setStudents] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [loadingData, setLoadingData] = useState(true);
 
-    React.useEffect(() => {
+    const [selectedStudentId, setSelectedStudentId] = useState("");
+    const [selectedCourseId, setSelectedCourseId] = useState("");
+
+    // Marks state: { [subjectName]: { obtained: "", total: 100 } }
+    const [marks, setMarks] = useState({});
+
+    const [issueDate, setIssueDate] = useState(new Date().toISOString().split('T')[0]);
+
+    // Fetch Students and Courses
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const qStudents = query(collection(db, "users"), where("role", "==", "student"));
+        const unsubStudents = onSnapshot(qStudents, (snapshot) => {
+            const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            list.sort((a, b) => (a.fullName || a.name || "").localeCompare(b.fullName || b.name || ""));
+            setStudents(list);
+        });
+
+        const qCourses = collection(db, "courses");
+        const unsubCourses = onSnapshot(qCourses, (snapshot) => {
+            const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+            setCourses(list);
+        });
+
+        setLoadingData(false);
+
+        return () => {
+            unsubStudents();
+            unsubCourses();
+        };
+    }, [isOpen]);
+
+    // Initialize form with initialData or defaults
+    useEffect(() => {
         if (isOpen && initialData) {
-            // Parse date from "Oct 12, 2023" to "YYYY-MM-DD" for input[type="date"]
-            // Or if storage format varies, handle accordingly.
-            // Current format in ManageCertificates is "Oct 12, 2023".
-            let dateVal = new Date().toISOString().split('T')[0];
-            if (initialData.date) {
-                const d = new Date(initialData.date);
-                if (!isNaN(d.getTime())) {
-                    dateVal = d.toISOString().split('T')[0];
-                }
-            }
+            // Edit mode may be tricky if we don't have IDs. 
+            // Assuming initialData has studentName and courseName, we try to match them.
+            // But ideally we should store studentId and courseId in certificate.
+            // For now, if we can't match ID, we might need to rely on names or just basic edit.
+            // BUT the prompt implies specific generation flow. Editing might just be basic details update?
+            // Let's try to match by name if ID missing, or just set text values if no match.
+            // Provided instructions focus on GENERATION.
 
-            setFormData({
-                id: initialData.id,
-                studentName: initialData.student || "",
-                courseName: initialData.course || "",
-                issueDate: dateVal,
-            });
-        } else if (isOpen) {
-            setFormData({
-                studentName: "",
-                courseName: "",
-                issueDate: new Date().toISOString().split('T')[0],
+            // If we have IDs in initialData (which we should add to certificate creation), use them.
+            // If not, we might fall back to manual text or just simple matching.
+            // For this implementation, I will prioritize the "Generate" flow.
+
+            // Assuming initialData might have 'studentId' and 'courseId' from previous saves,
+            // or we try to find them by name.
+
+            // NOTE: The current ManageCertificates mapping only sends { student: name, course: name }.
+            // We might want to upgrade ManageCertificates to send full object if possible, 
+            // OR find the student/course by name here.
+
+            const findStudent = students.find(s => (s.fullName || s.name) === initialData.student);
+            const findCourse = courses.find(c => c.name === initialData.course);
+
+            if (findStudent) setSelectedStudentId(findStudent.id);
+            if (findCourse) setSelectedCourseId(findCourse.id);
+
+            setIssueDate(initialData.isoDate || initialData.date || new Date().toISOString().split('T')[0]);
+
+            if (initialData.marks) {
+                setMarks(initialData.marks);
+            } else {
+                setMarks({});
+            }
+        } else {
+            // Reset for new entry
+            setSelectedStudentId("");
+            setSelectedCourseId("");
+            setMarks({});
+            setIssueDate(new Date().toISOString().split('T')[0]);
+        }
+    }, [isOpen, initialData, students, courses]);
+
+    // When course changes, initialize marks for subjects
+    useEffect(() => {
+        if (!selectedCourseId) {
+            // Keep marks if we are in edit mode and just loaded data? 
+            // Only reset if user explicitly changes course.
+            // We can check if the current marks match the selected course subjects.
+            return;
+        }
+
+        const course = courses.find(c => c.id === selectedCourseId);
+        if (course && course.subjects) {
+            setMarks(prev => {
+                const newMarks = { ...prev };
+                course.subjects.forEach(sub => {
+                    if (!newMarks[sub.name]) {
+                        newMarks[sub.name] = { obtained: "", total: 100 };
+                    }
+                });
+                return newMarks;
             });
         }
-    }, [isOpen, initialData]);
+    }, [selectedCourseId, courses]);
 
-    if (!isOpen) return null;
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+    const handleMarkChange = (subjectName, field, value) => {
+        setMarks(prev => ({
+            ...prev,
+            [subjectName]: {
+                ...prev[subjectName],
+                [field]: value
+            }
+        }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!formData.studentName || !formData.courseName || !formData.issueDate) {
-            alert("Please fill in all fields");
+        const student = students.find(s => s.id === selectedStudentId);
+        const course = courses.find(c => c.id === selectedCourseId);
+
+        if (!student || !course) {
+            alert("Please select a valid student and course.");
             return;
         }
 
-        onGenerate(formData);
+        // Validate marks
+        // Ensure all subjects have marks? Or optional?
+        // Assuming required for generation.
+        if (course.subjects) {
+            for (let sub of course.subjects) {
+                const m = marks[sub.name];
+                if (!m || m.obtained === "" || m.total === "") {
+                    alert(`Please enter marks for ${sub.name}`);
+                    return;
+                }
+            }
+        }
+
+        const dataToSave = {
+            id: initialData?.id,
+            studentName: student.fullName || student.name,
+            studentId: student.id,
+            courseName: course.name,
+            courseId: course.id,
+            issueDate: issueDate,
+            marks: marks
+        };
+
+        onGenerate(dataToSave);
         onClose();
     };
 
+    if (!isOpen) return null;
+
+    const selectedStudent = students.find(s => s.id === selectedStudentId);
+
+    // Filter enrolled courses for dropdown
+    const enrolledCourses = selectedStudent?.enrolledCourses || []; // Array of { id, name }
+
+    // Get selected course details for subjects
+    const fullSelectedCourse = courses.find(c => c.id === selectedCourseId);
+
     return createPortal(
-        <div className="fixed inset-0 z-[100] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 z-[100] overflow-y-auto" role="dialog">
             <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div className="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity" onClick={onClose} aria-hidden="true"></div>
-                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                <div className="relative z-50 inline-block align-bottom bg-white dark:bg-slate-900 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200 dark:border-slate-800">
+                <div className="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity" onClick={onClose}></div>
+                <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+                <div className="relative z-50 inline-block align-bottom bg-white dark:bg-slate-900 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-slate-200 dark:border-slate-800">
                     <form onSubmit={handleSubmit}>
                         <div className="bg-white dark:bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                            <div className="sm:flex sm:items-start">
-                                <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 sm:mx-0 sm:h-10 sm:w-10">
-                                    <span className="material-icons text-primary">workspace_premium</span>
+                            <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white mb-4">
+                                {initialData ? "Edit Certificate" : "Generate New Certificate"}
+                            </h3>
+
+                            <div className="space-y-4">
+                                {/* Student Selection */}
+                                <div>
+                                    <label htmlFor="student" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                                        Select Student
+                                    </label>
+                                    <select
+                                        id="student"
+                                        required
+                                        className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"
+                                        value={selectedStudentId}
+                                        onChange={e => {
+                                            setSelectedStudentId(e.target.value);
+                                            setSelectedCourseId(""); // Reset course when student changes
+                                        }}
+                                        disabled={!!initialData} // Disable changing student in edit mode to avoid complexity/mismatch
+                                    >
+                                        <option value="">-- Choose Student --</option>
+                                        {students.map(s => (
+                                            <option key={s.id} value={s.id}>{s.fullName || s.name} ({s.email})</option>
+                                        ))}
+                                    </select>
                                 </div>
-                                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                    <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white" id="modal-title">
-                                        {initialData ? "Edit Certificate" : "Generate New Certificate"}
-                                    </h3>
-                                    <div className="mt-4 space-y-4">
-                                        <div>
-                                            <label htmlFor="studentName" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                                                Student Name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="studentName"
-                                                id="studentName"
-                                                required
-                                                className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                                                value={formData.studentName}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="courseName" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                                                Course Name
-                                            </label>
-                                            <select
-                                                id="courseName"
-                                                name="courseName"
-                                                required
-                                                className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                                                value={formData.courseName}
-                                                onChange={handleInputChange}
-                                            >
-                                                <option value="">Select a course</option>
-                                                <option value="Advanced React Patterns">Advanced React Patterns</option>
-                                                <option value="Full Stack Bootcamp">Full Stack Bootcamp</option>
-                                                <option value="Python for Data Science">Python for Data Science</option>
-                                                <option value="Machine Learning A-Z">Machine Learning A-Z</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label htmlFor="issueDate" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                                                Issue Date
-                                            </label>
-                                            <input
-                                                type="date"
-                                                name="issueDate"
-                                                id="issueDate"
-                                                required
-                                                className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                                                value={formData.issueDate}
-                                                onChange={handleInputChange}
-                                            />
+
+                                {/* Course Selection (Enrolled only) */}
+                                <div>
+                                    <label htmlFor="course" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                                        Select Course
+                                    </label>
+                                    <select
+                                        id="course"
+                                        required
+                                        className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"
+                                        value={selectedCourseId}
+                                        onChange={e => setSelectedCourseId(e.target.value)}
+                                        disabled={!selectedStudentId || !!initialData}
+                                    >
+                                        <option value="">-- Choose Enrolled Course --</option>
+                                        {enrolledCourses.map(c => {
+                                            const liveCourse = courses.find(course => course.id === c.id);
+                                            return (
+                                                <option key={c.id} value={c.id}>{liveCourse ? liveCourse.name : c.name}</option>
+                                            );
+                                        })}
+                                    </select>
+                                    {!selectedStudentId && <p className="text-xs text-slate-500 mt-1">Select a student first.</p>}
+                                    {selectedStudentId && enrolledCourses.length === 0 && (
+                                        <p className="text-xs text-red-500 mt-1">This student has no enrolled courses.</p>
+                                    )}
+                                </div>
+
+                                {/* Subjects & Marks */}
+                                {fullSelectedCourse && fullSelectedCourse.subjects && fullSelectedCourse.subjects.length > 0 && (
+                                    <div className="border-t border-slate-200 dark:border-slate-700 pt-4 mt-4">
+                                        <h4 className="text-sm font-medium text-slate-900 dark:text-white mb-3">Subject Marks</h4>
+                                        <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                                            {fullSelectedCourse.subjects.map((sub, idx) => (
+                                                <div key={idx} className="flex gap-4 items-center bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg">
+                                                    <div className="flex-1 font-medium text-sm text-slate-700 dark:text-slate-300">
+                                                        {sub.name}
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-20">
+                                                            <label className="sr-only">Obtained</label>
+                                                            <input
+                                                                type="number"
+                                                                placeholder="Score"
+                                                                required
+                                                                className="w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1 border text-center"
+                                                                value={marks[sub.name]?.obtained || ""}
+                                                                onChange={e => handleMarkChange(sub.name, 'obtained', e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <span className="text-slate-400">/</span>
+                                                        <div className="w-20">
+                                                            <label className="sr-only">Total</label>
+                                                            <input
+                                                                type="number"
+                                                                placeholder="Total"
+                                                                required
+                                                                className="w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1 border text-center"
+                                                                value={marks[sub.name]?.total || 100}
+                                                                onChange={e => handleMarkChange(sub.name, 'total', e.target.value)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
+                                )}
+
+                                {/* Other Details */}
+                                <div>
+                                    <label htmlFor="issueDate" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                                        Issue Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        id="issueDate"
+                                        required
+                                        className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"
+                                        value={issueDate}
+                                        onChange={e => setIssueDate(e.target.value)}
+                                    />
                                 </div>
                             </div>
                         </div>
+
                         <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button
                                 type="submit"
                                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm"
                             >
-                                {initialData ? "Save Changes" : "Generate"}
+                                {initialData ? "Update Certificate" : "Generate"}
                             </button>
                             <button
                                 type="button"

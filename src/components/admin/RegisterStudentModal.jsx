@@ -5,10 +5,8 @@ import React, { useState } from "react";
 // We can try to add to Firestore directly as a "Pre-registered" user.
 
 import { createPortal } from "react-dom";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-
-import { doc, updateDoc } from "firebase/firestore";
 
 export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
     const [formData, setFormData] = useState({

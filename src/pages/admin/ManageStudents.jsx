@@ -3,13 +3,17 @@ import { collection, onSnapshot, query, where, doc, deleteDoc } from "firebase/f
 import { db } from "../../firebase";
 import AssignCourseModal from "../../components/admin/AssignCourseModal";
 import RegisterStudentModal from "../../components/admin/RegisterStudentModal";
+import ConfirmationModal from "../../components/admin/ConfirmationModal";
 
 export default function ManageStudents() {
     const [students, setStudents] = useState([]);
+    const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [studentToDelete, setStudentToDelete] = useState(null);
 
     // Fetch students with real-time updates
     useEffect(() => {
@@ -29,6 +33,21 @@ export default function ManageStudents() {
         return () => unsubscribe();
     }, []);
 
+    // Fetch courses with real-time updates
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(db, "courses"), (snapshot) => {
+            const coursesList = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setCourses(coursesList);
+        }, (error) => {
+            console.error("Error fetching courses: ", error);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
     const openAssignModal = (student) => {
         setSelectedStudent(student);
         setIsAssignModalOpen(true);
@@ -39,11 +58,18 @@ export default function ManageStudents() {
         setIsRegisterModalOpen(true);
     };
 
-    const handleDeleteStudent = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this student? This action cannot be undone.")) return;
+    const confirmDelete = (studentId) => {
+        setStudentToDelete(studentId);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDeleteStudent = async () => {
+        if (!studentToDelete) return;
 
         try {
-            await deleteDoc(doc(db, "users", id));
+            await deleteDoc(doc(db, "users", studentToDelete));
+            setIsDeleteModalOpen(false);
+            setStudentToDelete(null);
         } catch (error) {
             console.error("Error deleting student: ", error);
             alert("Failed to delete student");
@@ -117,11 +143,14 @@ export default function ManageStudents() {
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
                                         {student.enrolledCourses && student.enrolledCourses.length > 0 ? (
                                             <div className="flex flex-wrap gap-1">
-                                                {student.enrolledCourses.map((c, idx) => (
-                                                    <span key={idx} className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/30 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
-                                                        {c.name}
-                                                    </span>
-                                                ))}
+                                                {student.enrolledCourses.map((c, idx) => {
+                                                    const liveCourse = courses.find(course => course.id === c.id);
+                                                    return (
+                                                        <span key={idx} className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/30 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
+                                                            {liveCourse ? liveCourse.name : c.name}
+                                                        </span>
+                                                    );
+                                                })}
                                             </div>
                                         ) : (
                                             <span className="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/30 px-2 py-1 text-xs font-medium text-yellow-800 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">
@@ -148,7 +177,7 @@ export default function ManageStudents() {
                                             <button
                                                 className="text-slate-400 hover:text-red-500 transition-colors"
                                                 title="Delete Student"
-                                                onClick={() => handleDeleteStudent(student.id)}
+                                                onClick={() => confirmDelete(student.id)}
                                             >
                                                 <span className="material-icons">delete</span>
                                             </button>
@@ -166,12 +195,23 @@ export default function ManageStudents() {
                 isOpen={isAssignModalOpen}
                 onClose={() => setIsAssignModalOpen(false)}
                 studentId={selectedStudent?.id}
+                students={students}
             />
 
             <RegisterStudentModal
                 isOpen={isRegisterModalOpen}
                 onClose={() => setIsRegisterModalOpen(false)}
                 initialData={isRegisterModalOpen && !isAssignModalOpen ? selectedStudent : null}
+            />
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteStudent}
+                title="Delete Student"
+                message="Are you sure you want to delete this student? This action cannot be undone."
+                confirmText="Delete"
+                isDanger={true}
             />
         </div>
     );

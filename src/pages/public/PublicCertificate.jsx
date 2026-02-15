@@ -9,23 +9,50 @@ export default function PublicCertificate() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate fetching data
-        // In a real app, fetch from Firestore using 'id'
-        setTimeout(() => {
-            setCertificateData({
-                studentName: "John Doe",
-                courseName: "Single Door Refrigerator Repair",
-                certificateId: id || "ACDC-2023-TEST",
-                issueDate: "Oct 24, 2023",
-                marks: [
-                    { subject: "Electrical Safety", score: 92 },
-                    { subject: "Compressor Systems", score: 88 },
-                    { subject: "Gas Charging", score: 95 },
-                    { subject: "Troubleshooting", score: 89 }
-                ]
-            });
-            setLoading(false);
-        }, 1000);
+        const fetchCertificate = async () => {
+            if (!id) return;
+
+            try {
+                const { doc, getDoc } = await import("firebase/firestore");
+                const { db } = await import("../../firebase");
+
+                const docRef = doc(db, "certificates", id);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+
+                    // Transform marks object to array for template
+                    let marksArray = [];
+                    if (data.marks && !Array.isArray(data.marks)) {
+                        marksArray = Object.entries(data.marks).map(([subject, details]) => ({
+                            subject,
+                            score: `${details.obtained} / ${details.total}`
+                        }));
+                    } else if (Array.isArray(data.marks)) {
+                        // Fallback for any old data or mock structure
+                        marksArray = data.marks;
+                    }
+
+                    setCertificateData({
+                        studentName: data.student,
+                        courseName: data.course,
+                        certificateId: data.displayId || id,
+                        issueDate: data.date,
+                        marks: marksArray
+                    });
+                } else {
+                    setCertificateData(null);
+                }
+            } catch (error) {
+                console.error("Error fetching certificate:", error);
+                setCertificateData(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCertificate();
     }, [id]);
 
     const handlePrint = () => {
