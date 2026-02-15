@@ -108,7 +108,19 @@ export default function ManageCertificates() {
                 alert("Certificate updated successfully!");
             } else {
                 // Create new
-                const displayId = `CERT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+                const currentYear = new Date().getFullYear();
+                const prefix = `CERT-${currentYear}-`;
+
+                // Find max sequence number for current year
+                const maxSeq = certificates.reduce((max, cert) => {
+                    if (cert.displayId && cert.displayId.startsWith(prefix)) {
+                        const seq = parseInt(cert.displayId.split('-').pop(), 10);
+                        return seq > max ? seq : max;
+                    }
+                    return max;
+                }, 0);
+
+                const displayId = `${prefix}${maxSeq + 1}`;
 
                 await addDoc(collection(db, "certificates"), {
                     ...certData,
