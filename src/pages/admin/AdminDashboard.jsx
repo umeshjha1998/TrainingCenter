@@ -1,9 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import GenerateCertificateModal from "../../components/admin/GenerateCertificateModal";
+import AssignCourseModal from "../../components/admin/AssignCourseModal";
+import RegisterStudentModal from "../../components/admin/RegisterStudentModal";
 
 export default function AdminDashboard() {
+    const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
+    const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
+    const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+
+    // Dummy handler for certificate generation (just to close modal)
+    // In a real app, this would save to DB. ManageCertificates page uses localStorage though.
+    // For now, we just close the modal to satisfy the UI requirement.
+    const handleGenerateCertificate = (data) => {
+        console.log("Generating certificate for:", data);
+        // Ideally we should save this to localStorage or Firestore to persist it
+        const saved = localStorage.getItem('certificates');
+        const certificates = saved ? JSON.parse(saved) : [];
+        const newCert = {
+            id: `CERT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+            student: data.studentName,
+            course: data.courseName,
+            date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+            status: "Issued"
+        };
+        localStorage.setItem('certificates', JSON.stringify([newCert, ...certificates]));
+        setIsGenerateModalOpen(false);
+        alert("Certificate Generated Successfully!");
+    };
+
     return (
         <div className="max-w-7xl mx-auto space-y-8">
+            <GenerateCertificateModal
+                isOpen={isGenerateModalOpen}
+                onClose={() => setIsGenerateModalOpen(false)}
+                onGenerate={handleGenerateCertificate}
+            />
+            <AssignCourseModal
+                isOpen={isAssignModalOpen}
+                onClose={() => setIsAssignModalOpen(false)}
+            />
+            <RegisterStudentModal
+                isOpen={isRegisterModalOpen}
+                onClose={() => setIsRegisterModalOpen(false)}
+            />
+
             <div>
                 <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
                     Welcome back, Admin.
@@ -92,7 +133,10 @@ export default function AdminDashboard() {
                             Actions
                         </h3>
                         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm h-full flex flex-col gap-4">
-                            <Link to="/admin/certificates" className="group w-full bg-primary hover:bg-primary-dark text-white p-4 rounded-lg shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-1 flex items-center justify-between">
+                            <button
+                                onClick={() => setIsGenerateModalOpen(true)}
+                                className="group w-full bg-primary hover:bg-primary-dark text-white p-4 rounded-lg shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-1 flex items-center justify-between text-left"
+                            >
                                 <div className="flex flex-col items-start">
                                     <span className="font-bold text-lg">Generate Certificate</span>
                                     <span className="text-xs font-medium opacity-90">
@@ -102,18 +146,37 @@ export default function AdminDashboard() {
                                 <span className="material-icons bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
                                     add
                                 </span>
-                            </Link>
-                            <Link to="/admin/students" className="group w-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 p-4 rounded-lg transition-all transform hover:-translate-y-1 flex items-center justify-between">
+                            </button>
+
+                            <button
+                                onClick={() => setIsRegisterModalOpen(true)}
+                                className="group w-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 p-4 rounded-lg transition-all transform hover:-translate-y-1 flex items-center justify-between text-left"
+                            >
                                 <div className="flex flex-col items-start">
-                                    <span className="font-bold text-lg">Manage Records</span>
+                                    <span className="font-bold text-lg">Register Student</span>
                                     <span className="text-xs text-slate-500 dark:text-slate-400">
-                                        Update student data
+                                        Add new student record
                                     </span>
                                 </div>
                                 <span className="material-icons bg-slate-200 dark:bg-slate-700 p-2 rounded-full group-hover:bg-slate-300 dark:group-hover:bg-slate-600 transition-colors">
-                                    folder_shared
+                                    person_add
                                 </span>
-                            </Link>
+                            </button>
+
+                            <button
+                                onClick={() => setIsAssignModalOpen(true)}
+                                className="group w-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 p-4 rounded-lg transition-all transform hover:-translate-y-1 flex items-center justify-between text-left"
+                            >
+                                <div className="flex flex-col items-start">
+                                    <span className="font-bold text-lg">Assign Course</span>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                                        Link student to course
+                                    </span>
+                                </div>
+                                <span className="material-icons bg-slate-200 dark:bg-slate-700 p-2 rounded-full group-hover:bg-slate-300 dark:group-hover:bg-slate-600 transition-colors">
+                                    school
+                                </span>
+                            </button>
                         </div>
                     </div>
                     <div className="lg:col-span-2 space-y-6">
