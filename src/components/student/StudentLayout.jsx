@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -6,6 +6,7 @@ export default function StudentLayout() {
     const { logout, currentUser } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
     const handleLogout = async () => {
         try {
@@ -49,10 +50,60 @@ export default function StudentLayout() {
 
                         {/* User Profile */}
                         <div className="flex items-center gap-4">
-                            <button className="relative p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
-                                <span className="material-icons">notifications</span>
-                                <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
-                            </button>
+                            <div className="relative">
+                                <button
+                                    onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                                    className="relative p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
+                                >
+                                    <span className="material-icons">notifications</span>
+                                    <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+                                </button>
+
+                                {/* Notification Dropdown */}
+                                {isNotificationsOpen && (
+                                    <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                                            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Notifications</h3>
+                                            <span className="text-xs text-primary font-medium cursor-pointer hover:underline">Mark all read</span>
+                                        </div>
+                                        <div className="max-h-[300px] overflow-y-auto">
+                                            <div className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/40 border-b border-slate-50 dark:border-slate-700/50 cursor-pointer transition-colors">
+                                                <div className="flex gap-3">
+                                                    <div className="mt-1 w-2 h-2 rounded-full bg-green-500 shrink-0"></div>
+                                                    <div>
+                                                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">Exam Schedule Released</p>
+                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">The schedule for the upcoming semester exams has been published.</p>
+                                                        <p className="text-[10px] text-slate-400 mt-1">2 hours ago</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/40 border-b border-slate-50 dark:border-slate-700/50 cursor-pointer transition-colors">
+                                                <div className="flex gap-3">
+                                                    <div className="mt-1 w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
+                                                    <div>
+                                                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">New Course Material</p>
+                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">New lecture notes added to Web Development course.</p>
+                                                        <p className="text-[10px] text-slate-400 mt-1">Yesterday</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/40 cursor-pointer transition-colors">
+                                                <div className="flex gap-3">
+                                                    <div className="mt-1 w-2 h-2 rounded-full bg-yellow-500 shrink-0"></div>
+                                                    <div>
+                                                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">Fee Payment Reminder</p>
+                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Reminder to pay your semester fees by the end of the week.</p>
+                                                        <p className="text-[10px] text-slate-400 mt-1">2 days ago</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-700 text-center">
+                                            <Link to="/student-dashboard/notifications" className="text-xs font-medium text-primary hover:text-primary-dark transition-colors">View all notifications</Link>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                             <div className="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-white/10">
                                 <div className="text-right hidden sm:block">
                                     <p className="text-sm font-bold leading-none text-slate-900 dark:text-white">Student</p>
