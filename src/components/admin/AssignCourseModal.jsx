@@ -154,21 +154,26 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
                                             <p className="text-sm text-slate-500 italic">No active enrollments.</p>
                                         ) : (
                                             <div className="space-y-2 max-h-40 overflow-y-auto border border-slate-200 dark:border-slate-700 rounded-md p-2">
-                                                {studentEnrolledCourses.map((c, idx) => (
-                                                    <div key={idx} className="flex items-center justify-between text-sm bg-slate-50 dark:bg-slate-800 p-2 rounded">
-                                                        <span className="text-slate-700 dark:text-slate-300">{c.name}</span>
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                confirmDropCourse(c.id);
-                                                            }}
-                                                            className="text-red-500 hover:text-red-700 text-xs font-medium"
-                                                        >
-                                                            Dropout
-                                                        </button>
-                                                    </div>
-                                                ))}
+                                                {studentEnrolledCourses.map((c, idx) => {
+                                                    const liveCourse = courses.find(course => course.id === c.id);
+                                                    return (
+                                                        <div key={idx} className="flex items-center justify-between text-sm bg-slate-50 dark:bg-slate-800 p-2 rounded">
+                                                            <span className="text-slate-700 dark:text-slate-300">
+                                                                {liveCourse ? liveCourse.name : c.name}
+                                                            </span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    confirmDropCourse(c.id);
+                                                                }}
+                                                                className="text-red-500 hover:text-red-700 text-xs font-medium"
+                                                            >
+                                                                Dropout
+                                                            </button>
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         )}
                                     </div>

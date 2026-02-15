@@ -51,7 +51,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                     <h3 className="text-4xl sm:text-5xl print:text-4xl font-serif font-bold text-slate-900 mb-6 print:mb-4 border-b-2 border-slate-200 inline-block px-10 pb-2 self-center">
                         {data.studentName}
                     </h3>
-                    <p className="text-slate-500 text-lg mb-2 font-serif italic">has successfully completed the training course in</p>
+                    <p className="text-slate-500 text-lg mb-2 font-serif italic">has successfully completed the {data.courseDuration || "6 Months"} training course in</p>
                     <h4 className="text-2xl font-bold text-primary mb-8 print:mb-4 uppercase tracking-wide">
                         {data.courseName}
                     </h4>

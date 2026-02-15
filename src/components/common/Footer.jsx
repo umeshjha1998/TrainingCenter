@@ -157,18 +157,18 @@ export default function Footer() {
                                     location_on
                                 </span>
                                 <span>
-                                    Rambhadrapur, Darbhanga,
+                                    Rambhadrapur, Bahadurpur, Darbhanga,
                                     <br />
-                                    Bihar, India - 846004
+                                    Bihar, India - 847101
                                 </span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <span className="material-icons text-primary text-base">phone</span>
-                                <span>+91 98765 43210</span>
+                                <span>+91 9470241901</span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <span className="material-icons text-primary text-base">email</span>
-                                <span>info@acdctech.edu</span>
+                                <span>nandan.bbc@gmail.com</span>
                             </li>
                         </ul>
                         <div className="mt-6 w-full h-32 bg-slate-800 rounded-lg overflow-hidden relative group cursor-pointer border border-slate-700">

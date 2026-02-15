@@ -125,7 +125,7 @@ export default function Home() {
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                                 <p className="text-white font-medium flex items-center gap-2">
                                     <span className="material-icons text-primary">location_on</span>{" "}
-                                    Rambhadrapur, Darbhanga
+                                    Rambhadrapur, Bahadurpur, Darbhanga
                                 </p>
                             </div>
                         </div>

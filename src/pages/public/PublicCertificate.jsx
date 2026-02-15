@@ -22,6 +22,36 @@ export default function PublicCertificate() {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
 
+                    let studentName = data.student;
+                    let courseName = data.course;
+                    let courseDuration = data.duration; // Fallback if stored directly
+
+                    // Fetch latest names and duration if IDs exist
+                    try {
+                        if (data.studentId) {
+                            const studentRef = doc(db, "users", data.studentId);
+                            const studentSnap = await getDoc(studentRef);
+                            if (studentSnap.exists()) {
+                                const sData = studentSnap.data();
+                                studentName = sData.fullName || sData.name || studentName;
+                            }
+                        }
+                        if (data.courseId) {
+                            const courseRef = doc(db, "courses", data.courseId);
+                            const courseSnap = await getDoc(courseRef);
+                            if (courseSnap.exists()) {
+                                const cData = courseSnap.data();
+                                courseName = cData.name || courseName;
+                                // Fetch duration from Course
+                                if (cData.duration) {
+                                    courseDuration = cData.duration;
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Failed to fetch referenced entities", e);
+                    }
+
                     // Transform marks object to array for template
                     let marksArray = [];
                     if (data.marks && !Array.isArray(data.marks)) {
@@ -35,8 +65,9 @@ export default function PublicCertificate() {
                     }
 
                     setCertificateData({
-                        studentName: data.student,
-                        courseName: data.course,
+                        studentName: studentName,
+                        courseName: courseName,
+                        courseDuration: courseDuration, // Add duration
                         certificateId: data.displayId || id,
                         issueDate: data.date,
                         marks: marksArray
