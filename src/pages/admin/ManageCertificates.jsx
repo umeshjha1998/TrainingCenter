@@ -125,7 +125,11 @@ export default function ManageCertificates() {
                                             <button
                                                 className="text-slate-400 hover:text-red-500 transition-colors"
                                                 title="Delete"
-                                                onClick={() => setCertificates(certificates.filter(c => c.id !== cert.id))}
+                                                onClick={() => {
+                                                    if (window.confirm("Are you sure you want to delete this certificate?")) {
+                                                        setCertificates(certificates.filter(c => c.id !== cert.id));
+                                                    }
+                                                }}
                                             >
                                                 <span className="material-icons text-xl">delete</span>
                                             </button>

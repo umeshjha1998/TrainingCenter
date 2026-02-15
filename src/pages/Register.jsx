@@ -49,7 +49,8 @@ export default function Register() {
                 passport: formData.passport,
                 role: "student", // Default role
                 email: formData.email,
-                createdAt: new Date()
+                createdAt: new Date(),
+                enrolledCourses: []
             });
 
             await sendEmailVerification(user);

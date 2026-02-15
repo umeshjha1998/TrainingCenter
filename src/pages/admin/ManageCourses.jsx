@@ -1,30 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { collection, onSnapshot, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function ManageCourses() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newCourse, setNewCourse] = useState({ name: "", duration: "", subjects: "", nextExam: "" });
-    const [courses, setCourses] = useState(() => {
-        const saved = localStorage.getItem('courses');
-        if (saved) return JSON.parse(saved);
-        return [
-            { id: "CR-001", name: "Inverter Refrigerator Repair", duration: "6 Months", subjects: 8, nextExam: "Oct 12, 2023" },
-            { id: "CR-002", name: "3-Phase Motor Winding", duration: "3 Months", subjects: 4, nextExam: "Nov 01, 2023" },
-            { id: "CR-003", name: "PCB Circuit Design", duration: "4 Months", subjects: 6, nextExam: "Not Scheduled" },
-            { id: "CR-004", name: "Advanced HVAC Systems", duration: "6 Months", subjects: 10, nextExam: "Dec 15, 2023" },
-        ];
-    });
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Update localStorage whenever courses change
-    React.useEffect(() => {
-        localStorage.setItem('courses', JSON.stringify(courses));
-    }, [courses]);
+    // Fetch courses from Firestore with real-time updates
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(db, "courses"), (snapshot) => {
+            const coursesList = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setCourses(coursesList);
+            setLoading(false);
+        }, (error) => {
+            console.error("Error fetching courses: ", error);
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewCourse(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleAddCourse = (e) => {
+    const handleAddCourse = async (e) => {
         e.preventDefault();
 
         if (!newCourse.name || !newCourse.duration || !newCourse.subjects || !newCourse.nextExam) {
@@ -32,29 +38,41 @@ export default function ManageCourses() {
             return;
         }
 
-        // Safer ID generation to avoid duplicates locally
-        const maxId = courses.reduce((max, c) => {
-            const num = parseInt(c.id.split('-')[1]);
-            return isNaN(num) ? max : (num > max ? num : max);
-        }, 0);
+        try {
+            const docRef = await addDoc(collection(db, "courses"), {
+                ...newCourse,
+                subjects: parseInt(newCourse.subjects) || 0,
+                createdAt: new Date()
+            });
 
-        const nextId = maxId + 1;
-        // Pad with zeros to 3 digits
-        const idString = `CR-${String(nextId).padStart(3, '0')}`;
+            const addedCourse = {
+                id: docRef.id,
+                ...newCourse,
+                subjects: parseInt(newCourse.subjects) || 0
+            };
 
-        const course = {
-            id: idString,
-            ...newCourse,
-            subjects: parseInt(newCourse.subjects) || 0
-        };
-        setCourses([...courses, course]);
-        setNewCourse({ name: "", duration: "", subjects: "", nextExam: "" });
-        setIsModalOpen(false);
+            setNewCourse({ name: "", duration: "", subjects: "", nextExam: "" });
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Error adding course: ", error);
+            alert("Failed to add course");
+        }
     };
 
-    const handleDeleteCourse = (id) => {
-        setCourses(courses.filter(course => course.id !== id));
+    const handleDeleteCourse = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this course?")) return;
+
+        try {
+            await deleteDoc(doc(db, "courses", id));
+        } catch (error) {
+            console.error("Error deleting course: ", error);
+            alert("Failed to delete course");
+        }
     };
+
+    if (loading) {
+        return <div className="text-center p-10">Loading courses...</div>;
+    }
 
     return (
         <div className="space-y-6">
@@ -101,46 +119,51 @@ export default function ManageCourses() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
-                        {courses.map((course) => (
-                            <tr key={course.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
-                                    <div className="flex items-center">
-                                        <div className="h-9 w-9 flex-shrink-0 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mr-3">
-                                            <span className="material-icons text-lg">school</span>
-                                        </div>
-                                        <div>
-                                            <div className="font-semibold">{course.name}</div>
-                                            <div className="text-xs text-slate-500 dark:text-slate-400">ID: {course.id}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                    <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/10">
-                                        {course.duration}
-                                    </span>
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                    <div className="text-slate-900 dark:text-white font-medium">{course.subjects} Subjects</div>
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                    <span className="text-slate-900 dark:text-white">{course.nextExam}</span>
-                                </td>
-                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                    <div className="flex items-center justify-end gap-2">
-                                        <button className="text-slate-400 hover:text-primary p-1.5 hover:bg-primary/10 rounded transition-colors" title="Edit">
-                                            <span className="material-icons text-lg">edit</span>
-                                        </button>
-                                        <button
-                                            className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-500/10 rounded transition-colors"
-                                            title="Delete"
-                                            onClick={() => handleDeleteCourse(course.id)}
-                                        >
-                                            <span className="material-icons text-lg">delete</span>
-                                        </button>
-                                    </div>
+                        {courses.length === 0 ? (
+                            <tr>
+                                <td colSpan="5" className="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                                    No courses found. Add a new course to get started.
                                 </td>
                             </tr>
-                        ))}
+                        ) : (
+                            courses.map((course) => (
+                                <tr key={course.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
+                                        <div className="flex items-center">
+                                            <div className="h-9 w-9 flex-shrink-0 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mr-3">
+                                                <span className="material-icons text-lg">school</span>
+                                            </div>
+                                            <div>
+                                                <div className="font-semibold">{course.name}</div>
+                                                <div className="text-xs text-slate-500 dark:text-slate-400">ID: {course.id.substring(0, 8)}...</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                        <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/10">
+                                            {course.duration}
+                                        </span>
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                        <div className="text-slate-900 dark:text-white font-medium">{course.subjects} Subjects</div>
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                        <span className="text-slate-900 dark:text-white">{course.nextExam}</span>
+                                    </td>
+                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                        <div className="flex items-center justify-end gap-2">
+                                            <button
+                                                className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-500/10 rounded transition-colors"
+                                                title="Delete"
+                                                onClick={() => handleDeleteCourse(course.id)}
+                                            >
+                                                <span className="material-icons text-lg">delete</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
