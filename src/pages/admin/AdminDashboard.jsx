@@ -1,33 +1,58 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 import GenerateCertificateModal from "../../components/admin/GenerateCertificateModal";
 import AssignCourseModal from "../../components/admin/AssignCourseModal";
 import RegisterStudentModal from "../../components/admin/RegisterStudentModal";
+import useDashboardStats from "../../hooks/useDashboardStats";
 
 export default function AdminDashboard() {
+    const {
+        totalStudents,
+        totalCertificates,
+        newRegistrations,
+        recentCertificates,
+        recentActivity,
+        loading
+    } = useDashboardStats();
+
     const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
     const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
     const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
-    // Dummy handler for certificate generation (just to close modal)
-    // In a real app, this would save to DB. ManageCertificates page uses localStorage though.
-    // For now, we just close the modal to satisfy the UI requirement.
-    const handleGenerateCertificate = (data) => {
-        console.log("Generating certificate for:", data);
-        // Ideally we should save this to localStorage or Firestore to persist it
-        const saved = localStorage.getItem('certificates');
-        const certificates = saved ? JSON.parse(saved) : [];
-        const newCert = {
-            id: `CERT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
-            student: data.studentName,
-            course: data.courseName,
-            date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
-            status: "Issued"
-        };
-        localStorage.setItem('certificates', JSON.stringify([newCert, ...certificates]));
-        setIsGenerateModalOpen(false);
-        alert("Certificate Generated Successfully!");
+    const handleGenerateCertificate = async (data) => {
+        try {
+            const certData = {
+                student: data.studentName,
+                studentId: data.studentId || "unknown",
+                course: data.courseName,
+                courseId: data.courseId || "unknown",
+                marks: data.marks,
+                date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+                isoDate: data.issueDate,
+                status: "Issued",
+                updatedAt: new Date(),
+                createdAt: new Date()
+            };
+
+            const displayId = `CERT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+            await addDoc(collection(db, "certificates"), {
+                ...certData,
+                displayId: displayId
+            });
+            setIsGenerateModalOpen(false);
+            alert("Certificate Generated Successfully!");
+        } catch (error) {
+            console.error("Error saving certificate:", error);
+            alert("Failed to generate certificate.");
+        }
     };
+
+    if (loading) {
+        return <div className="text-center p-10 text-slate-500">Loading dashboard data...</div>;
+    }
 
     return (
         <div className="max-w-7xl mx-auto space-y-8">
@@ -65,15 +90,15 @@ export default function AdminDashboard() {
                         </p>
                         <div className="mt-2 flex items-baseline gap-3">
                             <h3 className="text-4xl font-bold text-slate-900 dark:text-white">
-                                1,240
+                                {totalStudents}
                             </h3>
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                                 <span className="material-icons text-xs mr-1">trending_up</span>
-                                12%
+                                Live
                             </span>
                         </div>
                         <p className="text-xs text-slate-400 mt-2">
-                            Active enrollments this semester
+                            Active enrollments
                         </p>
                     </div>
                     <div className="absolute bottom-0 left-0 h-1 bg-primary w-full transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
@@ -89,15 +114,15 @@ export default function AdminDashboard() {
                         </p>
                         <div className="mt-2 flex items-baseline gap-3">
                             <h3 className="text-4xl font-bold text-slate-900 dark:text-white">
-                                856
+                                {totalCertificates}
                             </h3>
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                                 <span className="material-icons text-xs mr-1">trending_up</span>
-                                5%
+                                Live
                             </span>
                         </div>
                         <p className="text-xs text-slate-400 mt-2">
-                            Total certified graduates to date
+                            Total certified graduates
                         </p>
                     </div>
                     <div className="absolute bottom-0 left-0 h-1 bg-primary w-full transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
@@ -113,13 +138,13 @@ export default function AdminDashboard() {
                         </p>
                         <div className="mt-2 flex items-baseline gap-3">
                             <h3 className="text-4xl font-bold text-slate-900 dark:text-white">
-                                45
+                                {newRegistrations}
                             </h3>
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-green-800 dark:text-green-300">
-                                This Month
+                                Last 30 Days
                             </span>
                         </div>
-                        <p className="text-xs text-slate-400 mt-2">Waiting for approval</p>
+                        <p className="text-xs text-slate-400 mt-2">Recently joined students</p>
                     </div>
                     <div className="absolute bottom-0 left-0 h-1 bg-primary w-full transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
                 </div>
@@ -200,7 +225,7 @@ export default function AdminDashboard() {
                                                 ID Number
                                             </th>
                                             <th className="px-6 py-4 font-semibold text-slate-900 dark:text-white">
-                                                Certificate Type
+                                                Course
                                             </th>
                                             <th className="px-6 py-4 font-semibold text-slate-900 dark:text-white">
                                                 Status
@@ -208,22 +233,33 @@ export default function AdminDashboard() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                        {/* Placeholder rows */}
-                                        <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">JD</div>
-                                                    <span className="font-medium text-slate-900 dark:text-white">John Doe</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono">AC-2023-891</td>
-                                            <td className="px-6 py-4 text-slate-600 dark:text-slate-300">Electrical Engineering</td>
-                                            <td className="px-6 py-4">
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                                    Issued
-                                                </span>
-                                            </td>
-                                        </tr>
+                                        {recentCertificates.length === 0 ? (
+                                            <tr>
+                                                <td colSpan="4" className="px-6 py-4 text-center text-slate-500">No certificates issued yet.</td>
+                                            </tr>
+                                        ) : (
+                                            recentCertificates.map((cert) => (
+                                                <tr key={cert.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                                    <td className="px-6 py-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs uppercase">
+                                                                {cert.student ? cert.student.charAt(0) : '?'}
+                                                            </div>
+                                                            <span className="font-medium text-slate-900 dark:text-white">{cert.student}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono">
+                                                        {cert.displayId || cert.id.substring(0, 8)}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-slate-600 dark:text-slate-300">{cert.course}</td>
+                                                    <td className="px-6 py-4">
+                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                                            {cert.status || 'Issued'}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
@@ -231,13 +267,31 @@ export default function AdminDashboard() {
                     </div>
                 </div>
 
-                {/* Recent Activity Section - Placeholder */}
+                {/* Recent Activity Section */}
                 <div className="xl:col-span-1 space-y-6">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <span className="material-icons text-primary">history</span> Recent Activity
                     </h3>
-                    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm h-full">
-                        <p className="text-sm text-slate-500">No recent activity.</p>
+                    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm h-full max-h-[500px] overflow-y-auto">
+                        {recentActivity.length === 0 ? (
+                            <p className="text-sm text-slate-500">No recent activity.</p>
+                        ) : (
+                            <ul className="space-y-6">
+                                {recentActivity.map((activity, index) => (
+                                    <li key={index} className="flex gap-4 items-start">
+                                        <div className={`mt-1 h-3 w-3 rounded-full flex-shrink-0 ${activity.type === 'student' ? 'bg-blue-500' : 'bg-green-500'}`}></div>
+                                        <div>
+                                            <p className="text-sm font-medium text-slate-900 dark:text-white leading-tight">
+                                                {activity.title}
+                                            </p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                                {activity.date.toLocaleString()}
+                                            </p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 </div>
             </div>
