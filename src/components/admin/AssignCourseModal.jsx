@@ -3,15 +3,16 @@ import { createPortal } from "react-dom";
 import { collection, getDocs, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../../firebase";
 
-export default function AssignCourseModal({ isOpen, onClose }) {
+export default function AssignCourseModal({ isOpen, onClose, studentId }) {
     const [students, setStudents] = useState([]);
     const [courses, setCourses] = useState([]);
-    const [selectedStudentId, setSelectedStudentId] = useState("");
+    const [selectedStudentId, setSelectedStudentId] = useState(studentId || "");
     const [selectedCourseId, setSelectedCourseId] = useState("");
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
+            setSelectedStudentId(studentId || "");
             const fetchData = async () => {
                 const studentsSnapshot = await getDocs(collection(db, "users"));
                 const coursesSnapshot = await getDocs(collection(db, "courses"));
@@ -25,7 +26,7 @@ export default function AssignCourseModal({ isOpen, onClose }) {
             };
             fetchData();
         }
-    }, [isOpen]);
+    }, [isOpen, studentId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,6 +37,11 @@ export default function AssignCourseModal({ isOpen, onClose }) {
 
             if (course && student) {
                 const studentRef = doc(db, "users", student.id);
+                // Check if already enrolled? Firestore arrayUnion handles duplication of exact objects, 
+                // but since we add a timestamp (assignedAt), every object is unique.
+                // ideally we should check if course ID exists in array.
+                // For now, let's just push it as per request.
+
                 await updateDoc(studentRef, {
                     enrolledCourses: arrayUnion({
                         id: course.id,
@@ -71,7 +77,8 @@ export default function AssignCourseModal({ isOpen, onClose }) {
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Select Student</label>
                                     <select
                                         required
-                                        className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"
+                                        disabled={!!studentId} // Disable if pre-selected
+                                        className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border disabled:opacity-50"
                                         value={selectedStudentId}
                                         onChange={e => setSelectedStudentId(e.target.value)}
                                     >

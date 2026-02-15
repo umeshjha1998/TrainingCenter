@@ -1,12 +1,40 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
 
-export default function GenerateCertificateModal({ isOpen, onClose, onGenerate }) {
+export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, initialData }) {
     const [formData, setFormData] = useState({
         studentName: "",
         courseName: "",
         issueDate: new Date().toISOString().split('T')[0],
     });
+
+    React.useEffect(() => {
+        if (isOpen && initialData) {
+            // Parse date from "Oct 12, 2023" to "YYYY-MM-DD" for input[type="date"]
+            // Or if storage format varies, handle accordingly.
+            // Current format in ManageCertificates is "Oct 12, 2023".
+            let dateVal = new Date().toISOString().split('T')[0];
+            if (initialData.date) {
+                const d = new Date(initialData.date);
+                if (!isNaN(d.getTime())) {
+                    dateVal = d.toISOString().split('T')[0];
+                }
+            }
+
+            setFormData({
+                id: initialData.id,
+                studentName: initialData.student || "",
+                courseName: initialData.course || "",
+                issueDate: dateVal,
+            });
+        } else if (isOpen) {
+            setFormData({
+                studentName: "",
+                courseName: "",
+                issueDate: new Date().toISOString().split('T')[0],
+            });
+        }
+    }, [isOpen, initialData]);
 
     if (!isOpen) return null;
 
@@ -41,7 +69,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate }
                                 </div>
                                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                     <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white" id="modal-title">
-                                        Generate New Certificate
+                                        {initialData ? "Edit Certificate" : "Generate New Certificate"}
                                     </h3>
                                     <div className="mt-4 space-y-4">
                                         <div>
@@ -100,7 +128,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate }
                                 type="submit"
                                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm"
                             >
-                                Generate
+                                {initialData ? "Save Changes" : "Generate"}
                             </button>
                             <button
                                 type="button"

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-
 import GenerateCertificateModal from "../../components/admin/GenerateCertificateModal";
 
 export default function ManageCertificates() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedCert, setSelectedCert] = useState(null);
 
     // Initialize from localStorage or use default data
     const [certificates, setCertificates] = useState(() => {
@@ -23,14 +23,40 @@ export default function ManageCertificates() {
     }, [certificates]);
 
     const handleGenerate = (data) => {
-        const newCert = {
-            id: `CERT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
-            student: data.studentName,
-            course: data.courseName,
-            date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
-            status: "Issued"
-        };
-        setCertificates([newCert, ...certificates]);
+        if (data.id) {
+            // Update existing
+            const updatedCerts = certificates.map(c =>
+                c.id === data.id
+                    ? {
+                        ...c,
+                        student: data.studentName,
+                        course: data.courseName,
+                        date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+                    }
+                    : c
+            );
+            setCertificates(updatedCerts);
+        } else {
+            // Create new
+            const newCert = {
+                id: `CERT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+                student: data.studentName,
+                course: data.courseName,
+                date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+                status: "Issued"
+            };
+            setCertificates([newCert, ...certificates]);
+        }
+    };
+
+    const handleEdit = (cert) => {
+        setSelectedCert(cert);
+        setIsModalOpen(true);
+    };
+
+    const handleCreate = () => {
+        setSelectedCert(null);
+        setIsModalOpen(true);
     };
 
     return (
@@ -39,6 +65,7 @@ export default function ManageCertificates() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onGenerate={handleGenerate}
+                initialData={selectedCert}
             />
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
@@ -46,11 +73,11 @@ export default function ManageCertificates() {
                         Manage Generated Certificates
                     </h1>
                     <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                        View, verify, and manage all issued training certificates.
+                        View, edit, and verify all issued training certificates.
                     </p>
                 </div>
                 <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={handleCreate}
                     className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-md hover:shadow-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all active:scale-95">
                     <span className="material-icons text-base mr-2">add_circle</span>
                     Generate New Certificate
@@ -121,6 +148,13 @@ export default function ManageCertificates() {
                                                 onClick={() => window.open(`#/c/${cert.id}`, '_blank')}
                                             >
                                                 <span className="material-icons text-xl">visibility</span>
+                                            </button>
+                                            <button
+                                                className="text-slate-400 hover:text-primary transition-colors"
+                                                title="Edit"
+                                                onClick={() => handleEdit(cert)}
+                                            >
+                                                <span className="material-icons text-xl">edit</span>
                                             </button>
                                             <button
                                                 className="text-slate-400 hover:text-red-500 transition-colors"

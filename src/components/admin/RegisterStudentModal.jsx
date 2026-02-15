@@ -8,16 +8,40 @@ import { createPortal } from "react-dom";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
-export default function RegisterStudentModal({ isOpen, onClose }) {
+import { doc, updateDoc } from "firebase/firestore";
+
+export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
     const [formData, setFormData] = useState({
         fullName: "",
         email: "",
         phone: "",
         address: "",
         gender: "male",
-        password: "" // In a real admin scenario, we might set a temporary password or just create the record
+        password: ""
     });
     const [loading, setLoading] = useState(false);
+
+    React.useEffect(() => {
+        if (isOpen && initialData) {
+            setFormData({
+                fullName: initialData.fullName || initialData.name || "",
+                email: initialData.email || "",
+                phone: initialData.phone || "",
+                address: initialData.address || "",
+                gender: initialData.gender || "male",
+                password: "" // Don't pre-fill password
+            });
+        } else if (isOpen) {
+            setFormData({
+                fullName: "",
+                email: "",
+                phone: "",
+                address: "",
+                gender: "male",
+                password: ""
+            });
+        }
+    }, [isOpen, initialData]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,20 +51,29 @@ export default function RegisterStudentModal({ isOpen, onClose }) {
         e.preventDefault();
         setLoading(true);
         try {
-            // Attempt to create a Firestore document.
-            // Note: This won't create the Auth user. Use Firebase Admin SDK for that in a real backend.
-            await addDoc(collection(db, "users"), {
-                ...formData,
-                role: "student",
-                createdAt: new Date(),
-                enrolledCourses: [],
-                status: "Pending Auth" // Mark as pending since no Auth UID yet
-            });
-            alert("Student record created. Note: Student must still register via the public page to enable login, or use Admin SDK to provision auth.");
+            if (initialData?.id) {
+                // Update existing user
+                const userRef = doc(db, "users", initialData.id);
+                const updates = { ...formData };
+                if (!updates.password) delete updates.password; // Don't update password if empty
+
+                await updateDoc(userRef, updates);
+                alert("Student updated successfully.");
+            } else {
+                // Create new user
+                await addDoc(collection(db, "users"), {
+                    ...formData,
+                    role: "student",
+                    createdAt: new Date(),
+                    enrolledCourses: [],
+                    status: "Pending Auth"
+                });
+                alert("Student record created.");
+            }
             onClose();
         } catch (error) {
-            console.error("Error creating student:", error);
-            alert("Failed to create student record");
+            console.error("Error saving student:", error);
+            alert("Failed to save student record");
         }
         setLoading(false);
     };
@@ -56,7 +89,7 @@ export default function RegisterStudentModal({ isOpen, onClose }) {
                     <form onSubmit={handleSubmit}>
                         <div className="bg-white dark:bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white mb-4">
-                                Register New Student
+                                {initialData ? "Edit Student" : "Register New Student"}
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="col-span-1 md:col-span-2">
@@ -84,14 +117,14 @@ export default function RegisterStudentModal({ isOpen, onClose }) {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Initial Password</label>
-                                    <input name="password" type="text" placeholder="Set temporary password" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.password} onChange={handleChange} />
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">{initialData ? "New Password (Optional)" : "Initial Password"}</label>
+                                    <input name="password" type="text" placeholder={initialData ? "Leave empty to keep current" : "Set temporary password"} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.password} onChange={handleChange} />
                                 </div>
                             </div>
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button type="submit" disabled={loading} className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
-                                {loading ? "Registering..." : "Register Student"}
+                                {loading ? "Saving..." : (initialData ? "Update Student" : "Register Student")}
                             </button>
                             <button type="button" onClick={onClose} className="mt-3 w-full inline-flex justify-center rounded-md border border-slate-300 dark:border-slate-700 shadow-sm px-4 py-2 bg-white dark:bg-slate-800 text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Cancel
