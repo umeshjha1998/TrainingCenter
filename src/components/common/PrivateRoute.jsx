@@ -6,7 +6,7 @@ export default function PrivateRoute({ children, adminOnly = false }) {
     const { currentUser, isAdmin } = useAuth();
 
     if (!currentUser) {
-        return <Navigate to="/login" />;
+        return <Navigate to={adminOnly ? "/admin-login" : "/login"} />;
     }
 
     if (adminOnly && !isAdmin) {
