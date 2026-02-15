@@ -4,6 +4,7 @@ import React, { useState } from "react";
 // However, the user wants to SEE the fields. So we show the fields.
 // We can try to add to Firestore directly as a "Pre-registered" user.
 
+import { createPortal } from "react-dom";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -46,12 +47,12 @@ export default function RegisterStudentModal({ isOpen, onClose }) {
 
     if (!isOpen) return null;
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-[100] overflow-y-auto" role="dialog">
             <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div className="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity" onClick={onClose}></div>
                 <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-                <div className="inline-block align-bottom bg-white dark:bg-slate-900 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-slate-200 dark:border-slate-800">
+                <div className="relative z-50 inline-block align-bottom bg-white dark:bg-slate-900 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-slate-200 dark:border-slate-800">
                     <form onSubmit={handleSubmit}>
                         <div className="bg-white dark:bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white mb-4">
@@ -99,6 +100,7 @@ export default function RegisterStudentModal({ isOpen, onClose }) {
                     </form>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
