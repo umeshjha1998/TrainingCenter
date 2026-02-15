@@ -47,7 +47,7 @@ export default function Register() {
                 aadhar: formData.aadhar,
                 pan: formData.pan,
                 passport: formData.passport,
-                role: "student", // Default role
+                role: "admin", // Default role
                 email: formData.email,
                 createdAt: new Date(),
                 enrolledCourses: []
