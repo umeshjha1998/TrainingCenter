@@ -118,8 +118,9 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
             setMarks(prev => {
                 const newMarks = { ...prev };
                 course.subjects.forEach(sub => {
-                    if (!newMarks[sub.name]) {
-                        newMarks[sub.name] = { obtained: "", total: 100 };
+                    const subjectName = typeof sub === 'string' ? sub : sub.name;
+                    if (!newMarks[subjectName]) {
+                        newMarks[subjectName] = { obtained: "", total: 100 };
                     }
                 });
                 return newMarks;
@@ -175,13 +176,14 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
         // Validate marks
         if (course.subjects) {
             for (let sub of course.subjects) {
-                const m = marks[sub.name];
+                const subjectName = typeof sub === 'string' ? sub : sub.name;
+                const m = marks[subjectName];
                 if (!m || m.obtained === "" || m.total === "") {
-                    alert(`Please enter marks for ${sub.name}`);
+                    alert(`Please enter marks for ${subjectName}`);
                     return;
                 }
                 if (parseFloat(m.obtained) > parseFloat(m.total)) {
-                    alert(`Marks obtained for ${sub.name} cannot be greater than total marks.`);
+                    alert(`Marks obtained for ${subjectName} cannot be greater than total marks.`);
                     return;
                 }
             }
@@ -310,38 +312,41 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
                                     <div className="border-t border-slate-200 dark:border-slate-700 pt-4 mt-4">
                                         <h4 className="text-sm font-medium text-slate-900 dark:text-white mb-3">Subject Marks</h4>
                                         <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
-                                            {fullSelectedCourse.subjects.map((sub, idx) => (
-                                                <div key={idx} className="flex gap-4 items-center bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg">
-                                                    <div className="flex-1 font-medium text-sm text-slate-700 dark:text-slate-300">
-                                                        {sub.name}
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="w-20">
-                                                            <label className="sr-only">Obtained</label>
-                                                            <input
-                                                                type="number"
-                                                                placeholder="Score"
-                                                                required
-                                                                className="w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1 border text-center"
-                                                                value={marks[sub.name]?.obtained || ""}
-                                                                onChange={e => handleMarkChange(sub.name, 'obtained', e.target.value)}
-                                                            />
+                                            {fullSelectedCourse.subjects.map((sub, idx) => {
+                                                const subjectName = typeof sub === 'string' ? sub : sub.name;
+                                                return (
+                                                    <div key={idx} className="flex gap-4 items-center bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg">
+                                                        <div className="flex-1 font-medium text-sm text-slate-700 dark:text-slate-300">
+                                                            {subjectName}
                                                         </div>
-                                                        <span className="text-slate-400">/</span>
-                                                        <div className="w-20">
-                                                            <label className="sr-only">Total</label>
-                                                            <input
-                                                                type="number"
-                                                                placeholder="Total"
-                                                                required
-                                                                className="w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1 border text-center"
-                                                                value={marks[sub.name]?.total || 100}
-                                                                onChange={e => handleMarkChange(sub.name, 'total', e.target.value)}
-                                                            />
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-20">
+                                                                <label className="sr-only">Obtained</label>
+                                                                <input
+                                                                    type="number"
+                                                                    placeholder="Score"
+                                                                    required
+                                                                    className="w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1 border text-center"
+                                                                    value={marks[subjectName]?.obtained || ""}
+                                                                    onChange={e => handleMarkChange(subjectName, 'obtained', e.target.value)}
+                                                                />
+                                                            </div>
+                                                            <span className="text-slate-400">/</span>
+                                                            <div className="w-20">
+                                                                <label className="sr-only">Total</label>
+                                                                <input
+                                                                    type="number"
+                                                                    placeholder="Total"
+                                                                    required
+                                                                    className="w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1 border text-center"
+                                                                    value={marks[subjectName]?.total || 100}
+                                                                    onChange={e => handleMarkChange(subjectName, 'total', e.target.value)}
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                )
+                                            })}
                                         </div>
                                     </div>
                                 )}
