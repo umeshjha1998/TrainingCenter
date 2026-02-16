@@ -67,6 +67,20 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
                     enrolledCourses: arrayUnion(newEnrollment)
                 });
 
+                // Notification
+                try {
+                    const { addDoc, collection } = await import("firebase/firestore");
+                    await addDoc(collection(db, "notifications"), {
+                        title: "Course Assigned",
+                        message: `${student.fullName || student.name} has been enrolled in ${course.name}.`,
+                        type: "info",
+                        read: false,
+                        createdAt: new Date()
+                    });
+                } catch (error) {
+                    console.error("Error creating notification", error);
+                }
+
                 // No need to manual update local state 'students' because parent uses onSnapshot 
                 // and passes updated list via props.
 

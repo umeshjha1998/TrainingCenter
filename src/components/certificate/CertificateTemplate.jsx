@@ -81,22 +81,32 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
 
                 {/* Footer */}
                 <div className="flex flex-col sm:flex-row justify-between items-end mt-auto pt-8 print:pt-4 border-t border-slate-100 relative">
+                    {/* Left: QR Code & ID */}
                     <div className="text-left mb-6 sm:mb-0 w-full sm:w-auto">
                         <div className="flex items-center gap-4">
-                            {/* QR Code */}
                             <div className="bg-white p-2 border border-slate-200 rounded shadow-sm">
-                                <QRCodeSVG value={window.location.href} size={96} />
+                                <QRCodeSVG value={window.location.href} size={80} />
                             </div>
                             <div>
                                 <p className="text-xs text-slate-500 uppercase tracking-wide mb-1 font-semibold">Certificate ID</p>
-                                <p className="text-lg font-mono font-bold text-slate-800">{data.certificateId}</p>
+                                <p className="text-base font-mono font-bold text-slate-800">{data.certificateId}</p>
                                 <p className="text-xs text-slate-500 mt-1">Issued: <span className="font-bold text-slate-700">{data.issueDate}</span></p>
                             </div>
                         </div>
                     </div>
 
+                    {/* Center: Instructor */}
+                    <div className="text-center w-full sm:w-auto pb-1 mx-auto">
+                        <div className="font-serif text-2xl text-slate-600 mb-2 transform -rotate-1 font-semibold" style={{ fontFamily: "'Great Vibes', cursive" }}>
+                            {data.instructorName || "Start Instructor"}
+                        </div>
+                        <div className="h-0.5 w-40 bg-slate-800 mx-auto mb-2"></div>
+                        <p className="text-xs font-bold text-slate-900 uppercase tracking-wide">Course Instructor</p>
+                    </div>
+
+                    {/* Right: Director */}
                     <div className="text-center sm:text-right w-full sm:w-auto relative">
-                        <div className="font-serif text-4xl text-primary mb-2 transform -rotate-2">
+                        <div className="font-serif text-3xl text-primary mb-2 transform -rotate-2">
                             Nandan Jha
                         </div>
                         <div className="h-0.5 w-48 bg-slate-800 ml-auto mr-auto sm:mr-0 mb-2"></div>

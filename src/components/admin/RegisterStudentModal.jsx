@@ -68,7 +68,8 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                 // Create new user using Secondary App
                 const { initializeApp } = await import("firebase/app");
                 const { getAuth, createUserWithEmailAndPassword, signOut } = await import("firebase/auth");
-                const { setDoc } = await import("firebase/firestore");
+                // Removed duplicate setDoc import
+
 
                 const firebaseConfig = {
                     apiKey: "AIzaSyBoouVB5yrmkgZeFTzBadj7XpzbBGNlz7s",
@@ -88,6 +89,7 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
 
                 // 3. Save to Firestore (using main app's db instance)
                 // 3. Save to Firestore (using main app's db instance)
+                const { setDoc, addDoc, collection } = await import("firebase/firestore"); // Need setDoc to specify ID matches Auth UID
 
                 await setDoc(doc(db, "users", newUser.uid), {
                     ...formData,
@@ -98,13 +100,18 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                     status: "Active"
                 });
 
-                // 4. Cleanup
-                await signOut(secondaryAuth); // Sign out from secondary app
-                // Ideally delete the app instance to free resources, but JS SDK deletes are async/complex. 
-                // Leaving it named 'SecondaryApp' means reuse might error if not handled.
-                // Re-using the same name calls checks in SDK. 
-                // A better pattern is to try-catch the init or use a unique name.
-                // Let's use a unique name via timestamp.
+                // Notification
+                try {
+                    await addDoc(collection(db, "notifications"), {
+                        title: "New Student Registered",
+                        message: `${formData.fullName} has been registered.`,
+                        type: "info",
+                        read: false,
+                        createdAt: new Date()
+                    });
+                } catch (error) {
+                    console.error("Error creating notification", error);
+                }
 
                 alert("Student registered successfully with access enabled.");
             }

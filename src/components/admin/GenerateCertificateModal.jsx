@@ -143,7 +143,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
         }
     }, [selectedStudentId, selectedCourseId, initialData]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const student = students.find(s => s.id === selectedStudentId);
@@ -175,11 +175,27 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
             studentId: student.id,
             courseName: course.name,
             courseId: course.id,
+            instructorName: course.instructor || "Principal",
             issueDate: issueDate,
             marks: marks
         };
 
         onGenerate(dataToSave);
+
+        // Trigger Notification
+        try {
+            const { addDoc, collection } = await import("firebase/firestore");
+            await addDoc(collection(db, "notifications"), {
+                title: "Certificate Generated",
+                message: `Certificate generated for ${student.fullName || student.name} in ${course.name}`,
+                type: "success",
+                read: false,
+                createdAt: new Date()
+            });
+        } catch (error) {
+            console.error("Error sending notification:", error);
+        }
+
         onClose();
     };
 
