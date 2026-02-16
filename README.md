@@ -1,29 +1,36 @@
 # AC & DC Technical Institute Training Center
 
-A comprehensive web platform for managing a technical training institute, featuring student enrollment, course management, and a secure certificate verification system.
+A comprehensive web platform for managing a technical training institute, featuring student enrollment, course management, detailed reporting, and a secure certificate verification system.
 
 ## Live Demo
-Check out the live application here: [AC & DC Technical Institute Training Center](https://acdcinstitute.vercel.app/#/)
+- **Vercel**: [AC & DC Technical Institute Training Center](https://acdcinstitute.vercel.app/#/)
+- **GitHub Pages**: [AC & DC Technical Institute Training Center](https://umeshjha1998.github.io/TrainingCenter)
 
 ## Features
 
 ### Public Portal
-- **Home**: Landing page showcasing available courses and institute details.
+- **Home**: Landing page showcasing available courses, institute details, and contact information.
 - **Login/Register**: Secure authentication for students and administrators.
-- **Certificate Verification**: Anyone can verify issued certificates using a unique Certificate ID or by scanning a QR code.
+- **Certificate Verification**: Publicly accessible verification system. Verify issued certificates using a unique Certificate ID or by scanning a QR code.
 
 ### Student Portal
 - **Dashboard**: Overview of enrolled courses and profile.
 - **My Courses**: Access course materials and progress.
+    - **Dropout Functionality**: Students can drop courses they are no longer interested in, with a confirmation prompt.
 - **Schedule**: View upcoming classes and events (Placeholder).
 - **Support**: Contact support for assistance (Placeholder).
 
 ### Admin Portal
 - **Dashboard**: High-level overview of total students, courses, and certificates issued.
-- **Manage Students**: Full CRUD operations for student records.
+- **Manage Students**: Full CRUD (Create, Read, Update, Delete) operations for student records.
 - **Manage Courses**: Create, edit, and delete courses.
-- **Manage Certificates**: Generate new certificates, view issued certificates, and revoke certificates if necessary. include QR code generation.
-- **Reports**: View system reports and analytics.
+    - **Course Duration**: Added support for specifying course duration.
+- **Manage Certificates**:
+    - **Generation**: Generate new certificates for students. Select student/course, input marks for subjects, and set a custom issue date and time.
+    - **Management**: View all issued certificates, revoke invalid ones.
+    - **QR Code**: Automatic generation of QR codes for easy verification.
+- **Reports**: Visual analytics and system reports.
+    - **Charts**: View "Course Popularity" and other metrics using interactive charts.
 
 ## Technologies Used
 
@@ -32,6 +39,7 @@ Check out the live application here: [AC & DC Technical Institute Training Cente
 - **Build Tool**: [Vite](https://vitejs.dev/)
 - **Router**: [React Router v7](https://reactrouter.com/)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Visualization**: [Recharts](https://recharts.org/) (for Admin Reports)
 
 ### Backend & Services
 - **Backend-as-a-Service**: [Firebase](https://firebase.google.com/)
@@ -67,7 +75,6 @@ Follow these steps to set up the project locally on your machine.
     - Enable **Authentication** (Email/Password).
     - Enable **Firestore Database** (Start in Test Mode).
     - Register a web app in your Firebase project and copy the configuration object.
-    - Ideally, create a `.env` file in the root directory and update `src/firebase.js` to use environment variables.
     - Update `src/firebase.js` with your configuration keys:
     ```javascript
     const firebaseConfig = {
@@ -90,8 +97,15 @@ Follow these steps to set up the project locally on your machine.
 
 ## Deployment
 
-This project is configured for deployment on platforms like Vercel or Netlify.
-The live demo is hosted on Vercel.
+This project is configured for deployment on platforms like Vercel or GitHub Pages.
+
+### Deploying to GitHub Pages
+1.  Update `vite.config.js` with the correct base path (e.g., `/TrainingCenter/`).
+2.  Run the build command:
+    ```bash
+    npm run build
+    ```
+3.  Deploy the `dist` folder to the `gh-pages` branch.
 
 ## License
 
