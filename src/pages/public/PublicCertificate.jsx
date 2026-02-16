@@ -78,10 +78,13 @@ export default function PublicCertificate() {
                         marksArray = data.marks;
                     }
 
+                    console.log("Certificate source data:", data);
+
                     setCertificateData({
                         studentName: studentName,
                         courseName: courseName,
                         courseDuration: courseDuration, // Add duration
+                        instructorName: data.instructorName || data.instructor,
                         certificateId: data.displayId || id,
                         issueDate: data.date,
                         marks: marksArray

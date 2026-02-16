@@ -193,7 +193,7 @@ export default function AdminLayout() {
                                     <div className="max-h-[300px] overflow-y-auto">
                                         {notifications.length === 0 ? (
                                             <div className="px-4 py-6 text-center text-slate-500 text-sm">
-                                                No notifications yet.
+                                                No system notifications.
                                             </div>
                                         ) : (
                                             notifications.map((note) => (
