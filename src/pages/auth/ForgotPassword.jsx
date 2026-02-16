@@ -123,7 +123,7 @@ export default function ForgotPassword() {
 
                 {/* Copyright / Footer */}
                 <p className="text-center text-xs text-gray-400 dark:text-gray-600 mt-8 font-mono">
-                    © 2024 AC & DC Technical Institute.
+                    © 2026 AC & DC Technical Institute.
                 </p>
             </main>
         </div>

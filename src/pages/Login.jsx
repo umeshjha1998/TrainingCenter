@@ -202,13 +202,22 @@ export default function Login() {
                                     Create an Account
                                 </Link>
                             </div>
+                            <div className="mt-6 border-t border-slate-100 dark:border-slate-800 pt-4 text-center">
+                                <Link
+                                    to="/"
+                                    className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-primary transition-colors group"
+                                >
+                                    <span className="material-icons text-base mr-1 transform group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                                    Back to Home
+                                </Link>
+                            </div>
                         </div>
                     </div>
                     <div className="h-1.5 w-full bg-gradient-to-r from-primary/40 via-primary to-primary/40"></div>
                 </div>
             </main>
             <footer className="py-6 text-center text-xs text-slate-400 dark:text-slate-600">
-                <p>© 2024 AC &amp; DC Technical Institute. All rights reserved.</p>
+                <p>© 2026 AC &amp; DC Technical Institute. All rights reserved.</p>
             </footer>
         </div>
     );

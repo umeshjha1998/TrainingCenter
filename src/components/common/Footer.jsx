@@ -187,7 +187,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-                    <p>© 2024 AC &amp; DC Technical Institute. All rights reserved.</p>
+                    <p>© 2026 AC &amp; DC Technical Institute. All rights reserved.</p>
                     <div className="flex gap-6">
                         <a className="hover:text-white transition-colors" href="#">
                             Privacy Policy

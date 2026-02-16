@@ -53,7 +53,7 @@ export default function Home() {
                     <div className="lg:w-2/3">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-green-200 text-xs font-semibold uppercase tracking-wider mb-6">
                             <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>{" "}
-                            Admissions Open 2024
+                            Admissions Open 2026
                         </div>
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                             Master Technical Skills for a{" "}
