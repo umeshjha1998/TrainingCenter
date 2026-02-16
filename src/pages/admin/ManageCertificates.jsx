@@ -76,6 +76,7 @@ export default function ManageCertificates() {
                 studentId: data.studentId, // Store ID
                 course: data.courseName,
                 courseId: data.courseId,   // Store ID
+                instructorName: data.instructorName, // Store Instructor Name
                 marks: data.marks,         // Store Marks
                 date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
                 isoDate: data.issueDate, // Store ISO date for sorting/input
@@ -120,7 +121,7 @@ export default function ManageCertificates() {
                     return max;
                 }, 0);
 
-                const displayId = `${prefix}${maxSeq + 1}`;
+                const displayId = `${prefix}${String(maxSeq + 1).padStart(4, '0')}`;
 
                 await addDoc(collection(db, "certificates"), {
                     ...certData,
@@ -250,8 +251,15 @@ export default function ManageCertificates() {
                                         return group;
                                     });
 
-                                    // Sort groups by the date of their latest certificate
-                                    groupedList.sort((a, b) => new Date(b[0].isoDate) - new Date(a[0].isoDate));
+                                    // Sort groups by the highest version's displayId (descending) to keep sequence
+                                    groupedList.sort((a, b) => {
+                                        const idA = a[0].displayId || "";
+                                        const idB = b[0].displayId || "";
+                                        // Extract sequence number for numeric sort
+                                        const seqA = parseInt(idA.split('-').pop(), 10) || 0;
+                                        const seqB = parseInt(idB.split('-').pop(), 10) || 0;
+                                        return seqB - seqA;
+                                    });
 
                                     return groupedList.map(group => {
                                         const latestCert = group[0];

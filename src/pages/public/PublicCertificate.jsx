@@ -39,6 +39,7 @@ export default function PublicCertificate() {
                     let studentName = data.student;
                     let courseName = data.course;
                     let courseDuration = data.duration; // Fallback if stored directly
+                    let instructorName = data.instructorName || data.instructor; // Snapshot or fallback
 
                     // Fetch latest names and duration if IDs exist
                     try {
@@ -59,6 +60,10 @@ export default function PublicCertificate() {
                                 // Fetch duration from Course
                                 if (cData.duration) {
                                     courseDuration = cData.duration;
+                                }
+                                // If instructor missing in cert, use current course instructor
+                                if (!instructorName && cData.instructor) {
+                                    instructorName = cData.instructor;
                                 }
                             }
                         }
@@ -84,7 +89,7 @@ export default function PublicCertificate() {
                         studentName: studentName,
                         courseName: courseName,
                         courseDuration: courseDuration, // Add duration
-                        instructorName: data.instructorName || data.instructor,
+                        instructorName: instructorName,
                         certificateId: data.displayId || id,
                         issueDate: data.date,
                         marks: marksArray
