@@ -14,7 +14,14 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
     // Marks state: { [subjectName]: { obtained: "", total: 100 } }
     const [marks, setMarks] = useState({});
 
-    const [issueDate, setIssueDate] = useState(new Date().toISOString().split('T')[0]);
+    // Helper to get local ISO string for datetime-local input
+    const getLocalISOString = (date = new Date()) => {
+        const offset = date.getTimezoneOffset() * 60000; // offset in milliseconds
+        const localDate = new Date(date.getTime() - offset);
+        return localDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
+    };
+
+    const [issueDate, setIssueDate] = useState(getLocalISOString());
 
     // Fetch Students and Courses
     useEffect(() => {
@@ -70,7 +77,18 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
             if (findStudent) setSelectedStudentId(findStudent.id);
             if (findCourse) setSelectedCourseId(findCourse.id);
 
-            setIssueDate(initialData.isoDate || initialData.date || new Date().toISOString().split('T')[0]);
+            // Handle date conversion for datetime-local input
+            let initialDateStr = initialData.isoDate || initialData.date;
+            if (initialDateStr) {
+                const d = new Date(initialDateStr);
+                if (!isNaN(d.getTime())) {
+                    setIssueDate(getLocalISOString(d));
+                } else {
+                    setIssueDate(getLocalISOString());
+                }
+            } else {
+                setIssueDate(getLocalISOString());
+            }
 
             if (initialData.marks) {
                 setMarks(initialData.marks);
@@ -82,7 +100,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
             setSelectedStudentId("");
             setSelectedCourseId("");
             setMarks({});
-            setIssueDate(new Date().toISOString().split('T')[0]);
+            setIssueDate(getLocalISOString());
         }
     }, [isOpen, initialData, students, courses]);
 
@@ -334,7 +352,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
                                         Issue Date
                                     </label>
                                     <input
-                                        type="date"
+                                        type="datetime-local"
                                         id="issueDate"
                                         required
                                         className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"

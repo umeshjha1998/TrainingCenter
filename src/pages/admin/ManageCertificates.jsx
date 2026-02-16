@@ -78,7 +78,7 @@ export default function ManageCertificates() {
                 courseId: data.courseId,   // Store ID
                 instructorName: data.instructorName, // Store Instructor Name
                 marks: data.marks,         // Store Marks
-                date: new Date(data.issueDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+                date: new Date(data.issueDate).toLocaleString('en-US', { month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }),
                 isoDate: data.issueDate, // Store ISO date for sorting/input
                 status: "Issued", // Default status
                 version: version, // Store version
@@ -143,7 +143,7 @@ export default function ManageCertificates() {
             ...cert,
             student: cert.student,
             course: cert.course,
-            date: cert.isoDate || new Date().toISOString().split('T')[0] // Fallback if missing
+            date: cert.isoDate || cert.date || new Date().toISOString() // Fallback logic updated
         };
         setSelectedCert(preparedCert);
         setIsModalOpen(true);
