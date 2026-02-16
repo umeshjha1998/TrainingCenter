@@ -306,12 +306,12 @@ export default function Home() {
                             </div>
                         </div>
                         <div className="md:w-5/12 flex justify-center">
-                            <div className="relative w-48 h-48 bg-white p-4 rounded-xl shadow-inner border border-slate-100 flex items-center justify-center">
-                                <span className="material-icons text-9xl text-slate-800">
+                            <div className="relative w-full max-w-[400px] aspect-square bg-white p-8 rounded-3xl shadow-inner border border-slate-100 flex items-center justify-center">
+                                <span className="material-icons text-slate-800" style={{ fontSize: 'min(300px, 70vw)' }}>
                                     qr_code_2
                                 </span>
-                                <div className="absolute -bottom-4 -right-4 bg-green-500 text-white p-2 rounded-full shadow-lg border-4 border-white dark:border-slate-900">
-                                    <span className="material-icons">check</span>
+                                <div className="absolute -bottom-6 -right-6 bg-green-500 text-white p-4 rounded-full shadow-lg border-8 border-white dark:border-slate-900">
+                                    <span className="material-icons text-5xl">check</span>
                                 </div>
                             </div>
                         </div>
