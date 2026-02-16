@@ -95,6 +95,9 @@ export default function ManageCourses() {
                                 Duration
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                Instructor
+                            </th>
+                            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                 Subject Count
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -130,6 +133,9 @@ export default function ManageCourses() {
                                         <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/10">
                                             {course.duration}
                                         </span>
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                        {course.instructor || "-"}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
                                         <div className="text-slate-900 dark:text-white font-medium">

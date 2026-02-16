@@ -13,14 +13,28 @@ export default function PublicCertificate() {
             if (!id) return;
 
             try {
-                const { doc, getDoc } = await import("firebase/firestore");
+                // Dynamic import to keep bundle size small if this is a standalone page
+                const { doc, getDoc, collection, query, where, getDocs } = await import("firebase/firestore");
                 const { db } = await import("../../firebase");
 
+                // 1. Try fetching by Document ID (direct match)
+                let certDataRaw = null;
                 const docRef = doc(db, "certificates", id);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
-                    const data = docSnap.data();
+                    certDataRaw = docSnap.data();
+                } else {
+                    // 2. Try fetching by Display ID (field match)
+                    const q = query(collection(db, "certificates"), where("displayId", "==", id));
+                    const querySnapshot = await getDocs(q);
+                    if (!querySnapshot.empty) {
+                        certDataRaw = querySnapshot.docs[0].data();
+                    }
+                }
+
+                if (certDataRaw) {
+                    const data = certDataRaw;
 
                     let studentName = data.student;
                     let courseName = data.course;

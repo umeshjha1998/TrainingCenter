@@ -19,15 +19,23 @@ export function AuthProvider({ children }) {
         return sessionStorage.getItem('adminSession') === 'true';
     });
 
+    // Immediate check on mount/update of adminOverride
+    useEffect(() => {
+        if (adminOverride) {
+            // Force set admin user immediately if not set
+            if (!currentUser || currentUser.uid !== "admin") {
+                setCurrentUser({ uid: "admin", email: "admin@console.local", displayName: "Administrator" });
+                setUserRole("admin");
+            }
+            // Ensure loading is false
+            setLoading(false);
+        }
+    }, [adminOverride, currentUser]);
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            // If admin is active, ignore Firebase Auth updates (forces admin state persistence)
             if (adminOverride) {
-                // Determine if we need to set the admin user state (e.g. on page reload)
-                if (!currentUser || currentUser.uid !== "admin") {
-                    setCurrentUser({ uid: "admin", email: "admin@console.local", displayName: "Administrator" });
-                    setUserRole("admin");
-                }
-                setLoading(false);
                 return;
             }
 

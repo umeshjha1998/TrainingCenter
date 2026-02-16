@@ -7,6 +7,7 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
     const [formData, setFormData] = useState({
         name: "",
         duration: "",
+        instructor: "", // Added instructor field
         subjects: [], // Now an array of subject objects { id, name }
         nextExam: ""
     });
@@ -19,7 +20,7 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
                 subjects: Array.isArray(initialData.subjects) ? initialData.subjects : []
             });
         } else {
-            setFormData({ name: "", duration: "", subjects: [], nextExam: "" });
+            setFormData({ name: "", duration: "", instructor: "", subjects: [], nextExam: "" });
         }
     }, [initialData, isOpen]);
 
@@ -105,6 +106,10 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
                                 <div>
                                     <label htmlFor="duration" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Duration</label>
                                     <input type="text" id="duration" name="duration" required placeholder="e.g. 6 Months" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.duration} onChange={handleInputChange} />
+                                </div>
+                                <div>
+                                    <label htmlFor="instructor" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Instructor Name</label>
+                                    <input type="text" id="instructor" name="instructor" placeholder="e.g. Eng. Sarah Connor" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.instructor} onChange={handleInputChange} />
                                 </div>
 
                                 {/* Subjects Section */}

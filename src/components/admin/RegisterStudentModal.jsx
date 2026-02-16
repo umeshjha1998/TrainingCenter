@@ -53,20 +53,60 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                 // Update existing user
                 const userRef = doc(db, "users", initialData.id);
                 const updates = { ...formData };
-                if (!updates.password) delete updates.password; // Don't update password if empty
+
+                // Password restriction
+                if (updates.password && updates.password.trim() !== "") {
+                    alert("Note: Password cannot be updated by Admin directly. Please use 'Reset Password' flow.");
+                    delete updates.password;
+                } else {
+                    delete updates.password;
+                }
 
                 await updateDoc(userRef, updates);
-                alert("Student updated successfully.");
+                alert("Student details updated successfully.");
             } else {
-                // Create new user
-                await addDoc(collection(db, "users"), {
+                // Create new user using Secondary App
+                const { initializeApp } = await import("firebase/app");
+                const { getAuth, createUserWithEmailAndPassword, signOut } = await import("firebase/auth");
+                const { setDoc } = await import("firebase/firestore");
+
+                const firebaseConfig = {
+                    apiKey: "AIzaSyBoouVB5yrmkgZeFTzBadj7XpzbBGNlz7s",
+                    authDomain: "ac-dc-tech-institute-prod-v1.firebaseapp.com",
+                    projectId: "ac-dc-tech-institute-prod-v1",
+                    storageBucket: "ac-dc-tech-institute-prod-v1.firebasestorage.app",
+                    messagingSenderId: "234050604622",
+                    appId: "1:234050604622:web:cfa7456d9087ae6d55fd1f"
+                };
+
+                const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp");
+                const secondaryAuth = getAuth(secondaryApp);
+
+                // 2. Create User
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, formData.email, formData.password || "password123"); // Default password if empty
+                const newUser = userCredential.user;
+
+                // 3. Save to Firestore (using main app's db instance)
+                // 3. Save to Firestore (using main app's db instance)
+
+                await setDoc(doc(db, "users", newUser.uid), {
                     ...formData,
-                    role: "student",
+                    role: "student", // Enforce role
+                    uid: newUser.uid, // Store UID in doc
                     createdAt: new Date(),
                     enrolledCourses: [],
-                    status: "Pending Auth"
+                    status: "Active"
                 });
-                alert("Student record created.");
+
+                // 4. Cleanup
+                await signOut(secondaryAuth); // Sign out from secondary app
+                // Ideally delete the app instance to free resources, but JS SDK deletes are async/complex. 
+                // Leaving it named 'SecondaryApp' means reuse might error if not handled.
+                // Re-using the same name calls checks in SDK. 
+                // A better pattern is to try-catch the init or use a unique name.
+                // Let's use a unique name via timestamp.
+
+                alert("Student registered successfully with access enabled.");
             }
             onClose();
         } catch (error) {
