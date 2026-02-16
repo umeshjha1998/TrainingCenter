@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function Home() {
     const [certId, setCertId] = useState("");
+    const [courses, setCourses] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -20,6 +23,18 @@ export default function Home() {
             if (element) element.scrollIntoView({ behavior: 'smooth' });
         }
     }, [location]);
+
+    useEffect(() => {
+        const q = query(collection(db, "courses"));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const coursesList = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setCourses(coursesList);
+        });
+        return () => unsubscribe();
+    }, []);
 
     const handleVerify = () => {
         if (certId.trim()) {
@@ -188,110 +203,65 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-                            Popular Technical Courses
+                            Technical Training Programs
                         </h2>
                         <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                            Choose from our wide range of certificate programs designed to get
+                            Choose from our comprehensive range of certificate programs designed to get
                             you hired immediately.
                         </p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-slate-200 dark:border-slate-700 group flex flex-col h-full">
-                            <div className="h-48 overflow-hidden relative">
-                                <img
-                                    alt="Close up of refrigerator repair tools"
-                                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2NBGb_wkFZdnpIVDLiyJBRmwFPXfGf9HssEf5kR0f59Tm6Ks9UcWdT83UWAU6sGUoB0C23PN3NKubdv3EPNbKrTBj_keSbgYbsBVvudQnSH01z7LWXq6xmx5IabHFvRML-l1EH_J5KgA8N4sqj9KH9J1ApNuuqh-Le47CEqd3qehmOdCxu0PAqe19lCSP1ZEqXnY5kS4PQrOVaJ7irIJ_3zaatdPyDy92nU15Lj2g00zfcJ2aZ0kiIdiluvVnczZRHhtUwmQjF0U"
-                                />
-                                <div className="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 shadow-sm">
-                                    3 Months
-                                </div>
+
+                    {courses.length === 0 ? (
+                        <div className="text-center p-12 bg-white dark:bg-slate-900 rounded-xl shadow border border-slate-200 dark:border-slate-800">
+                            <div className="text-slate-400 dark:text-slate-500 mb-4">
+                                <span className="material-icons text-5xl">inventory_2</span>
                             </div>
-                            <div className="p-6 flex-1 flex flex-col">
-                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
-                                    Inverter Refrigerator Repair
-                                </h3>
-                                <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                                    Comprehensive training on modern inverter technology fridges.
-                                    Learn PCB diagnosis, gas charging, and compressor repair.
-                                </p>
-                                <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                                    <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-                                        Certificate Course
-                                    </span>
-                                    <button className="text-primary hover:text-primary-dark font-semibold text-sm flex items-center gap-1">
-                                        Details <span className="material-icons text-sm">chevron_right</span>
-                                    </button>
-                                </div>
-                            </div>
+                            <h3 className="text-xl font-medium text-slate-900 dark:text-white">Loading Courses...</h3>
+                            <p className="text-slate-500 mt-2">Please wait while we fetch the latest course list.</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-slate-200 dark:border-slate-700 group flex flex-col h-full">
-                            <div className="h-48 overflow-hidden relative">
-                                <img
-                                    alt="Copper wire motor winding close up"
-                                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVKiKWaCANhM3HFBJz3-bEGlhkMvHB_55c3XlS5dTO7F7mcyLvnYxYcI3jApjtNzvg1ibqF6RNxN4M_7X4znPu678CN_1bJ4QPn4yA9Wy7W5b-Aq4F0jtWvUU0E8P6-Dxkc_fpzVsjssdrZSHeIXEhj_TLloJq41zk95-yXmyycn54VmlFS0w7NpWr7nhZdO7r9s33rwREtUPsfo3XwC__2NYIQkx14XRU244biaFeSAb-wtcuE0BqCOhE2p_JCy1gihP8bB5XZqY"
-                                />
-                                <div className="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 shadow-sm">
-                                    2 Months
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {courses.map((course) => (
+                                <div key={course.id} className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-slate-200 dark:border-slate-700 group flex flex-col h-full">
+                                    <div className="h-48 overflow-hidden relative">
+                                        <img
+                                            alt={course.name}
+                                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                                            src={course.image || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"}
+                                        />
+                                        {course.duration && (
+                                            <div className="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 shadow-sm">
+                                                {course.duration}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="p-6 flex-1 flex flex-col">
+                                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
+                                            {course.name}
+                                        </h3>
+                                        {course.description && (
+                                            <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
+                                                {course.description}
+                                            </p>
+                                        )}
+                                        <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                            <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+                                                {course.level || "Certificate Course"}
+                                            </span>
+                                            <button className="text-primary hover:text-primary-dark font-semibold text-sm flex items-center gap-1">
+                                                Details <span className="material-icons text-sm">chevron_right</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="p-6 flex-1 flex flex-col">
-                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
-                                    Motor Winding Masterclass
-                                </h3>
-                                <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                                    Master the art of rewinding AC and DC motors. Covers ceiling
-                                    fans, cooler motors, and industrial pump motors.
-                                </p>
-                                <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                                    <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-                                        Skill Workshop
-                                    </span>
-                                    <button className="text-primary hover:text-primary-dark font-semibold text-sm flex items-center gap-1">
-                                        Details <span className="material-icons text-sm">chevron_right</span>
-                                    </button>
-                                </div>
-                            </div>
+                            ))}
                         </div>
-                        <div className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-slate-200 dark:border-slate-700 group flex flex-col h-full">
-                            <div className="h-48 overflow-hidden relative">
-                                <img
-                                    alt="Electronic circuit board repair soldering"
-                                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOYCjPZH4RURtlcX-XWGnraRa_2cieOUevXT7-lEvJoGYwnNdMP4gwS5DjLeh09JO9vJvRPkiRhvyBWi_BdybrxdWsqiysKTCxJsjD66ZJSG-3HX3KWWVcSEVn9vcKbIua5B673XjwRnpK7m5N0c2lJMxgPi131zMk53cNxIfHAcpqLiszYOlFNAp5KgS_EkAiPE_wyDeg3EyyuRZJFyTIhbrz1dBIKH-PlpoBdgcfeJG_TQ3IWv7VttIYKdh6Z2fzMrHEMvXUQK4"
-                                />
-                                <div className="absolute top-4 right-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-slate-800 dark:text-white border border-slate-200 dark:border-slate-700 shadow-sm">
-                                    6 Months
-                                </div>
-                            </div>
-                            <div className="p-6 flex-1 flex flex-col">
-                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
-                                    Advanced PCB Repair
-                                </h3>
-                                <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-                                    Deep dive into electronics. Learn to troubleshoot and repair
-                                    complex PCBs for air conditioners, washing machines, and
-                                    inverters.
-                                </p>
-                                <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                                    <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-                                        Diploma
-                                    </span>
-                                    <button className="text-primary hover:text-primary-dark font-semibold text-sm flex items-center gap-1">
-                                        Details <span className="material-icons text-sm">chevron_right</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    )}
+
                     <div className="mt-12 text-center">
-                        <Link
-                            className="inline-flex items-center justify-center px-6 py-3 border border-slate-300 dark:border-slate-600 shadow-sm text-base font-medium rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-                            to="/courses"
-                        >
-                            View All Courses
-                        </Link>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm">
+                            * Course duration and fees may vary. Contact the admin office for details.
+                        </p>
                     </div>
                 </div>
             </section>

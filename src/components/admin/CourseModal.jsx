@@ -15,9 +15,21 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
 
     useEffect(() => {
         if (initialData) {
+            let processedSubjects = [];
+            if (Array.isArray(initialData.subjects)) {
+                processedSubjects = initialData.subjects.map((sub, index) => {
+                    // Check if subject is a string or object
+                    if (typeof sub === 'string') {
+                        return { id: Date.now() + index, name: sub };
+                    }
+                    return sub; // Assume it's already {id, name}
+                });
+            }
+
             setFormData({
                 ...initialData,
-                subjects: Array.isArray(initialData.subjects) ? initialData.subjects : []
+                subjects: processedSubjects,
+                nextExam: initialData.nextExam || ""
             });
         } else {
             setFormData({ name: "", duration: "", instructor: "", subjects: [], nextExam: "" });
@@ -56,10 +68,23 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
         e.preventDefault();
         setLoading(true);
 
+        // Filter valid subjects (non-empty)
+        const validSubjectObjs = formData.subjects.filter(s => s.name.trim() !== "");
+
+        // Validation: At least one subject required
+        if (validSubjectObjs.length === 0) {
+            alert("A course must have at least one subject.");
+            setLoading(false);
+            return;
+        }
+
         try {
+            // Convert subjects back to strings for storage to be consistent with INITIAL_COURSES
+            const subjectsForDb = validSubjectObjs.map(s => s.name.trim());
+
             const courseData = {
                 ...formData,
-                subjects: formData.subjects.filter(s => s.name.trim() !== ""), // Filter empty subjects
+                subjects: subjectsForDb,
                 updatedAt: new Date()
             };
 
@@ -149,7 +174,14 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
 
                                 <div>
                                     <label htmlFor="nextExam" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Next Exam Date</label>
-                                    <input type="text" id="nextExam" name="nextExam" placeholder="e.g. Oct 12, 2023" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.nextExam} onChange={handleInputChange} />
+                                    <input
+                                        type="datetime-local"
+                                        id="nextExam"
+                                        name="nextExam"
+                                        className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"
+                                        value={formData.nextExam}
+                                        onChange={handleInputChange}
+                                    />
                                 </div>
                             </div>
                         </div>

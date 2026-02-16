@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { collection, onSnapshot, deleteDoc, doc, getDocs, addDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import CourseModal from "../../components/admin/CourseModal";
+import ResetConfirmationModal from "../../components/admin/ResetConfirmationModal";
 import ConfirmationModal from "../../components/admin/ConfirmationModal";
+import { INITIAL_COURSES } from "../../data/courses";
 
 export default function ManageCourses() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isResetModalOpen, setIsResetModalOpen] = useState(false); // NEW state
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -28,6 +31,53 @@ export default function ManageCourses() {
 
         return () => unsubscribe();
     }, []);
+
+    const handleResetCourses = async () => {
+        setLoading(true);
+
+        // Validation: Check if INITIAL_COURSES are valid
+        const invalidCourses = INITIAL_COURSES.filter(course =>
+            !course.subjects ||
+            course.subjects.length === 0 ||
+            course.subjects.some(sub => typeof sub === 'string' && sub.trim() === "")
+        );
+
+        if (invalidCourses.length > 0) {
+            alert(`Error: Cannot reset. The following default courses have missing or empty subjects: ${invalidCourses.map(c => c.name).join(", ")}`);
+            setLoading(false);
+            return;
+        }
+
+        try {
+            // 1. Delete all existing courses
+            const coursesSnapshot = await getDocs(collection(db, "courses"));
+            const deleteCoursePromises = coursesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+            await Promise.all(deleteCoursePromises);
+
+            // 2. Delete all existing certificates (as requested)
+            const certsSnapshot = await getDocs(collection(db, "certificates"));
+            const deleteCertPromises = certsSnapshot.docs.map(doc => deleteDoc(doc.ref));
+            await Promise.all(deleteCertPromises);
+
+            // 3. Add initial courses
+            const addCoursePromises = INITIAL_COURSES.map(course => {
+                return addDoc(collection(db, "courses"), {
+                    ...course,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                });
+            });
+            await Promise.all(addCoursePromises);
+
+            alert("Courses and certificates have been reset successfully.");
+            setIsResetModalOpen(false); // Close modal
+        } catch (error) {
+            console.error("Error resetting data: ", error);
+            alert("Failed to reset data: " + error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleAddClick = () => {
         setSelectedCourse(null);
@@ -81,6 +131,14 @@ export default function ManageCourses() {
                         <span className="material-icons text-lg mr-2">add</span>
                         Add New Course
                     </button>
+                    <button
+                        type="button"
+                        onClick={() => setIsResetModalOpen(true)} // Open modal instead of function
+                        className="ml-4 inline-flex items-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all active:scale-95"
+                    >
+                        <span className="material-icons text-lg mr-2">refresh</span>
+                        Reset Default Courses
+                    </button>
                 </div>
             </div>
 
@@ -120,11 +178,17 @@ export default function ManageCourses() {
                                 <tr key={course.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
                                         <div className="flex items-center">
-                                            <div className="h-9 w-9 flex-shrink-0 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mr-3">
-                                                <span className="material-icons text-lg">school</span>
+                                            <div className="h-10 w-10 flex-shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden mr-3 border border-slate-200 dark:border-slate-700">
+                                                {course.image ? (
+                                                    <img src={course.image} alt={course.name} className="h-full w-full object-cover" />
+                                                ) : (
+                                                    <div className="h-full w-full flex items-center justify-center text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30">
+                                                        <span className="material-icons text-lg">school</span>
+                                                    </div>
+                                                )}
                                             </div>
                                             <div>
-                                                <div className="font-semibold">{course.name}</div>
+                                                <div className="font-semibold text-slate-900 dark:text-white">{course.name}</div>
                                                 <div className="text-xs text-slate-500 dark:text-slate-400">ID: {course.id.substring(0, 8)}...</div>
                                             </div>
                                         </div>
@@ -143,7 +207,27 @@ export default function ManageCourses() {
                                         </div>
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                        <span className="text-slate-900 dark:text-white">{course.nextExam}</span>
+                                        <span className="text-slate-900 dark:text-white">
+                                            {(() => {
+                                                if (!course.nextExam) return "-";
+                                                try {
+                                                    // Check if it's a valid date string (e.g. from datetime-local which sends YYYY-MM-DDTHH:mm)
+                                                    const date = new Date(course.nextExam);
+                                                    if (isNaN(date.getTime())) return course.nextExam; // Return original if not a valid date
+                                                    // Format: 16/02/2026 11:30 PM
+                                                    return date.toLocaleString('en-GB', {
+                                                        day: '2-digit',
+                                                        month: '2-digit',
+                                                        year: 'numeric',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        hour12: true
+                                                    }).toUpperCase();
+                                                } catch (e) {
+                                                    return course.nextExam;
+                                                }
+                                            })()}
+                                        </span>
                                     </td>
                                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                         <div className="flex items-center justify-end gap-2">
@@ -174,6 +258,12 @@ export default function ManageCourses() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 initialData={selectedCourse}
+            />
+
+            <ResetConfirmationModal
+                isOpen={isResetModalOpen}
+                onClose={() => setIsResetModalOpen(false)}
+                onConfirm={handleResetCourses}
             />
 
             <ConfirmationModal
