@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "../../contexts/AuthContext";
+import { signOut, useSession } from "next-auth/react";
 import { collection, query, where, orderBy, limit, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export default function StudentLayout({ children }) {
-    const { logout, currentUser } = useAuth();
+    const { data: session } = useSession();
+    const currentUser = session?.user;
+
     const router = useRouter();
     const pathname = usePathname();
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -63,8 +65,7 @@ export default function StudentLayout({ children }) {
 
     const handleLogout = async () => {
         try {
-            await logout();
-            router.push("/login");
+            await signOut({ callbackUrl: "/login" });
         } catch {
             console.error("Failed to log out");
         }

@@ -21,6 +21,7 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
     const [otpSent, setOtpSent] = useState(false);
     const [generatedOtp, setGeneratedOtp] = useState("");
     const [userOtp, setUserOtp] = useState("");
+    const [devOtpMsg, setDevOtpMsg] = useState("");
 
     React.useEffect(() => {
         if (isOpen && initialData) {
@@ -45,6 +46,7 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
         setOtpSent(false);
         setGeneratedOtp("");
         setUserOtp("");
+        setDevOtpMsg("");
     }, [isOpen, initialData]);
 
     const handleChange = (e) => {
@@ -72,7 +74,7 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                 if (result.success) {
                     setOtpSent(true);
                     if (result.devMode) {
-                        alert("[DEV MODE] Your OTP is: " + otp);
+                        setDevOtpMsg(`[DEV MODE] Your OTP is: ${otp}`);
                     }
                 } else {
                     alert(result.error || "Failed to send OTP email.");
@@ -234,6 +236,12 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                                         value={userOtp}
                                         onChange={(e) => setUserOtp(e.target.value)}
                                     />
+                                    {devOtpMsg && (
+                                        <div className="mt-3 p-3 bg-amber-50 border-l-4 border-amber-500 rounded-md">
+                                            <p className="text-xs font-medium text-amber-800">For testing/development:</p>
+                                            <p className="text-lg font-bold tracking-wider text-amber-900 mt-1">{devOtpMsg}</p>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

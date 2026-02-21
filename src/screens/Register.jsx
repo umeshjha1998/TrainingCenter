@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { signIn } from "next-auth/react";
 import { auth, db } from "../firebase";
 
 export default function Register() {
@@ -24,6 +25,7 @@ export default function Register() {
     const [otpSent, setOtpSent] = useState(false);
     const [generatedOtp, setGeneratedOtp] = useState("");
     const [userOtp, setUserOtp] = useState("");
+    const [devOtpMsg, setDevOtpMsg] = useState("");
     const router = useRouter();
 
     const handleChange = (e) => {
@@ -54,7 +56,7 @@ export default function Register() {
                 if (result.success) {
                     setOtpSent(true);
                     if (result.devMode) {
-                        alert("[DEV MODE] Your OTP is: " + otp);
+                        setDevOtpMsg(`[DEV MODE] Your OTP is: ${otp}`);
                     }
                 } else {
                     setError(result.error || "Failed to send OTP email.");
@@ -90,8 +92,20 @@ export default function Register() {
                 enrolledCourses: []
             });
 
-            // We do not need sendEmailVerification because OTP acts as verification
-            router.push("/login");
+            // Log the user in with NextAuth automatically
+            const result = await signIn("credentials", {
+                redirect: false,
+                email: formData.email,
+                password: formData.password,
+                role: "student"
+            });
+
+            if (result?.error) {
+                setError("Account created, but failed to automatically log in. Please try logging in manually.");
+                setTimeout(() => router.push("/login"), 3000);
+            } else {
+                router.push("/student-dashboard");
+            }
 
         } catch (err) {
             setError("Failed to create account: " + err.message);
@@ -184,6 +198,12 @@ export default function Register() {
                                     value={userOtp}
                                     onChange={(e) => setUserOtp(e.target.value)}
                                 />
+                                {devOtpMsg && (
+                                    <div className="mt-4 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-md">
+                                        <p className="text-sm font-medium text-amber-800">For testing/development:</p>
+                                        <p className="text-xl font-bold tracking-wider text-amber-900 mt-1">{devOtpMsg}</p>
+                                    </div>
+                                )}
                             </div>
                         )}
 

@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../contexts/AuthContext";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default function AdminLogin() {
     const [username, setUsername] = useState("");
@@ -10,19 +11,30 @@ export default function AdminLogin() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const { loginAsAdmin } = useAuth();
+    const { data: session } = useSession();
+
+    useEffect(() => {
+        if (session?.user?.role === "admin") {
+            router.push("/admin");
+        }
+    }, [session, router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
         setLoading(true);
 
-        const success = loginAsAdmin(username, password);
+        const result = await signIn("credentials", {
+            redirect: false,
+            email: username, // Our API route checks email === 'admin'
+            password: password,
+            role: "admin"
+        });
 
-        if (success) {
-            router.push("/admin");
-        } else {
+        if (result?.error) {
             setError("Invalid admin credentials");
+        } else {
+            router.push("/admin");
         }
         setLoading(false);
     };

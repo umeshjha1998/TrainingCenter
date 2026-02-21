@@ -1,6 +1,6 @@
 import "./globals.css";
 import React from 'react';
-import { AuthProvider } from '../contexts/AuthContext';
+import { AuthProvider } from '../components/providers/AuthProvider';
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 

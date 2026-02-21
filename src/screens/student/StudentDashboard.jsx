@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useSession } from "next-auth/react";
 import { db } from "../../firebase";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 export default function StudentDashboard() {
-    const { currentUser } = useAuth();
+    const { data: session } = useSession();
+    const currentUser = session?.user;
+
     const [userData, setUserData] = useState(null);
     const [enrolledCoursesDetails, setEnrolledCoursesDetails] = useState([]);
     const [myCertificates, setMyCertificates] = useState([]);
@@ -101,76 +103,104 @@ export default function StudentDashboard() {
                 <div className="lg:col-span-8 space-y-6">
                     {/* 1. My Enrolled Courses Cards */}
                     {enrolledCoursesDetails.length > 0 ? (
-                        enrolledCoursesDetails.map(course => (
-                            <div key={course.id} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative group mb-6">
-                                <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: "radial-gradient(#13ec5b 1px, transparent 1px)", backgroundSize: "20px 20px" }}></div>
-                                <div className="p-6 md:p-8 relative z-10 flex flex-col md:flex-row gap-6 md:items-center">
-                                    {/* Thumbnail Placeholder */}
-                                    <div className="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-lg overflow-hidden relative shadow-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
-                                        <span className="material-icons text-6xl text-slate-400">school</span>
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                                        <span className="absolute bottom-3 left-3 bg-primary text-black text-xs font-bold px-2 py-1 rounded">
-                                            ENROLLED
-                                        </span>
-                                    </div>
-                                    {/* Course Details */}
-                                    <div className="flex-1">
-                                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-                                            {course.name}
-                                        </h3>
-                                        <div className="grid grid-cols-2 gap-4 mb-6">
-                                            <div className="flex items-center gap-2">
-                                                <span className="material-icons text-slate-400 text-lg">schedule</span>
-                                                <div className="flex flex-col">
-                                                    <span className="text-xs text-slate-500 dark:text-slate-400">Duration</span>
-                                                    <span className="text-sm font-medium text-slate-900 dark:text-white">{course.duration || "N/A"}</span>
+                        enrolledCoursesDetails.map(course => {
+                            const courseCerts = myCertificates.filter(c => c.courseId === course.id || c.course === course.name);
+                            const relatedCert = courseCerts.sort((a, b) => {
+                                const vDiff = (b.version || 1) - (a.version || 1);
+                                if (vDiff !== 0) return vDiff;
+                                return new Date(b.isoDate || b.date || 0) - new Date(a.isoDate || a.date || 0);
+                            })[0];
+                            return (
+                                <div key={course.id} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative group mb-6">
+                                    <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: "radial-gradient(#13ec5b 1px, transparent 1px)", backgroundSize: "20px 20px" }}></div>
+                                    <div className="p-6 md:p-8 relative z-10 flex flex-col md:flex-row gap-6 md:items-center">
+                                        {/* Course Image */}
+                                        <div className="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-lg overflow-hidden relative shadow-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                                            {course.image ? (
+                                                <img src={course.image} alt={course.name} className="absolute inset-0 w-full h-full object-cover" />
+                                            ) : (
+                                                <span className="material-icons text-6xl text-slate-400">school</span>
+                                            )}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                                            <span className="absolute bottom-3 left-3 bg-primary text-black text-xs font-bold px-2 py-1 rounded shadow">
+                                                ENROLLED
+                                            </span>
+                                        </div>
+                                        {/* Course Details */}
+                                        <div className="flex-1">
+                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+                                                {course.name}
+                                            </h3>
+                                            <div className="grid grid-cols-2 gap-4 mb-6">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="material-icons text-slate-400 text-lg">schedule</span>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-xs text-slate-500 dark:text-slate-400">Duration</span>
+                                                        <span className="text-sm font-medium text-slate-900 dark:text-white">{course.duration || "N/A"}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="material-icons text-slate-400 text-lg">person</span>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-xs text-slate-500 dark:text-slate-400">Instructor</span>
+                                                        <span className="text-sm font-medium text-slate-900 dark:text-white">
+                                                            {course.instructor || "Not Assigned"}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="material-icons text-slate-400 text-lg">person</span>
-                                                <div className="flex flex-col">
-                                                    <span className="text-xs text-slate-500 dark:text-slate-400">Instructor</span>
-                                                    <span className="text-sm font-medium text-slate-900 dark:text-white">
-                                                        {course.instructor || "Not Assigned"}
-                                                    </span>
-                                                </div>
+                                            <div className="flex items-center gap-4">
+                                                <button className="flex-1 bg-primary hover:bg-primary-dark text-black font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                                    <span>View Content</span>
+                                                    <span className="material-icons text-lg">arrow_forward</span>
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-4">
-                                            <button className="flex-1 bg-primary hover:bg-primary-dark text-black font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
-                                                <span>View Content</span>
-                                                <span className="material-icons text-lg">arrow_forward</span>
-                                            </button>
-                                        </div>
                                     </div>
-                                </div>
-                                {/* Subjects List within Course */}
-                                {course.subjects && course.subjects.length > 0 && (
-                                    <div className="px-6 pb-4 md:px-8 md:pb-6 border-t border-slate-100 dark:border-slate-800 pt-4">
-                                        <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Subjects</h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {course.subjects.map((sub, idx) => (
-                                                <span key={idx} className="bg-slate-100 dark:bg-slate-800 text-xs px-2 py-1 rounded text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-                                                    {sub.name}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
+                                    {/* Subjects List within Course */}
+                                    {course.subjects && course.subjects.length > 0 && (
+                                        <div className="px-6 pb-4 md:px-8 md:pb-6 border-t border-slate-100 dark:border-slate-800 pt-4">
+                                            <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Subjects & Marks</h4>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                {course.subjects.map((sub, idx) => {
+                                                    const subjectName = typeof sub === 'string' ? sub : sub.name;
+                                                    const subjectMarks = relatedCert?.marks?.[subjectName];
 
-                                {/* Progress Bar */}
-                                <div className="px-6 pb-6 md:px-8 md:pb-8 border-t border-slate-100 dark:border-slate-800 pt-4">
-                                    <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Course Progress</h4>
-                                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 mb-1 overflow-hidden">
-                                        <div className="bg-primary h-2.5 rounded-full transition-all duration-500" style={{ width: `${calculateProgressPercentage(course.assignedAt, course.duration)}%` }}></div>
-                                    </div>
-                                    <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-                                        <span>Enrolled: {course.assignedAt ? (course.assignedAt.toDate ? course.assignedAt.toDate().toLocaleDateString() : new Date(course.assignedAt).toLocaleDateString()) : 'N/A'}</span>
-                                        <span>{calculateProgressPercentage(course.assignedAt, course.duration)}% Completed</span>
+                                                    return (
+                                                        <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                                                            <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate pr-2">
+                                                                {subjectName}
+                                                            </span>
+                                                            <div className="text-xs font-semibold bg-white dark:bg-slate-900 px-2 py-1 rounded border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+                                                                {subjectMarks && subjectMarks.obtained !== "" ? (
+                                                                    <span className={parseFloat(subjectMarks.obtained) >= parseFloat(subjectMarks.total) * 0.4 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}>
+                                                                        {subjectMarks.obtained} / {subjectMarks.total}
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="text-slate-400">Not Graded</span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Progress Bar */}
+                                    <div className="px-6 pb-6 md:px-8 md:pb-8 border-t border-slate-100 dark:border-slate-800 pt-4">
+                                        <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Course Progress</h4>
+                                        <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 mb-1 overflow-hidden">
+                                            <div className="bg-primary h-2.5 rounded-full transition-all duration-500" style={{ width: `${calculateProgressPercentage(course.assignedAt, course.duration)}%` }}></div>
+                                        </div>
+                                        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                                            <span>Enrolled: {course.assignedAt ? (course.assignedAt.toDate ? course.assignedAt.toDate().toLocaleDateString() : new Date(course.assignedAt).toLocaleDateString()) : 'N/A'}</span>
+                                            <span>{calculateProgressPercentage(course.assignedAt, course.duration)}% Completed</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            );
+                        })
                     ) : (
                         <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 text-center">
                             <p className="text-slate-500">You are not enrolled in any courses yet.</p>

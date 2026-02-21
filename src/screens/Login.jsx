@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -11,16 +11,30 @@ export default function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const { data: session } = useSession();
+
+    useEffect(() => {
+        if (session?.user) {
+            router.push(session.user.role === "admin" ? "/admin" : "/student-dashboard");
+        }
+    }, [session, router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
         setLoading(true);
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            router.push("/");
-        } catch (err) {
-            setError("Failed to log in: " + err.message);
+
+        const result = await signIn("credentials", {
+            redirect: false,
+            email: email,
+            password: password,
+            role: "student"
+        });
+
+        if (result?.error) {
+            setError("Failed to log in: " + result.error);
+        } else {
+            router.push("/student-dashboard");
         }
         setLoading(false);
     };

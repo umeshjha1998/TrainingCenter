@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useAuth } from "../../contexts/AuthContext";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { currentUser, isAdmin } = useAuth();
+    const { data: session } = useSession();
+
+    const currentUser = session?.user;
+    const isAdmin = currentUser?.role === "admin";
 
     return (
         <nav className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">

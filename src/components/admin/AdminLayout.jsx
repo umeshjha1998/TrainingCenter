@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "../../contexts/AuthContext";
+import { signOut, useSession } from "next-auth/react";
 import { collection, query, orderBy, limit, onSnapshot, writeBatch, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export default function AdminLayout({ children }) {
-    const { logout, currentUser } = useAuth();
+    const { data: session } = useSession();
+    const currentUser = session?.user;
+
     const router = useRouter();
     const pathname = usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,7 +29,12 @@ export default function AdminLayout({ children }) {
     useEffect(() => {
         if (!currentUser) return;
 
-        const q = query(collection(db, "notifications"), orderBy("createdAt", "desc"), limit(20));
+        const q = query(
+            collection(db, "notifications"),
+            where("userId", "in", ["admin", "global", "all"]),
+            orderBy("createdAt", "desc"),
+            limit(20)
+        );
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const list = snapshot.docs.map(doc => ({
                 id: doc.id,
@@ -54,7 +61,11 @@ export default function AdminLayout({ children }) {
             // Or just update the ones we loaded. Let's update loaded ones for now.
             // Actually, let's just fetch all unread and batch update them to be safe.
 
-            const qUnread = query(collection(db, "notifications"), where("read", "==", false));
+            const qUnread = query(
+                collection(db, "notifications"),
+                where("userId", "in", ["admin", "global", "all"]),
+                where("read", "==", false)
+            );
             const snapshot = await getDocs(qUnread);
 
             snapshot.docs.forEach(doc => {
@@ -70,8 +81,7 @@ export default function AdminLayout({ children }) {
 
     const handleLogout = async () => {
         try {
-            await logout();
-            router.push("/login");
+            await signOut({ callbackUrl: "/login" });
         } catch {
             console.error("Failed to log out");
         }
