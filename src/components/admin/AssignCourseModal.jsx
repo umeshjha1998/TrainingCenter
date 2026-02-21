@@ -108,6 +108,7 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
         setLoading(true);
         try {
             const student = parentStudents.find(s => s.id === selectedStudentId);
+            const course = courses.find(c => c.id === courseId);
             if (student) {
                 const studentRef = doc(db, "users", student.id);
                 // Ensure we filter correctly
@@ -116,6 +117,22 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
                 await updateDoc(studentRef, {
                     enrolledCourses: updatedEnrolledCourses
                 });
+
+                // Notification for dropped course
+                try {
+                    const { addDoc, collection } = await import("firebase/firestore");
+                    await addDoc(collection(db, "notifications"), {
+                        title: "Course Dropped",
+                        message: `You have been removed from the course: ${course ? course.name : "Unknown Course"}.`,
+                        userId: student.id,
+                        isGlobal: false,
+                        type: "warning",
+                        read: false,
+                        createdAt: new Date()
+                    });
+                } catch (error) {
+                    console.error("Error creating drop notification", error);
+                }
 
                 // No need to manually update local state since parent wrapper handles real-time updates
                 alert("Course dropped successfully.");

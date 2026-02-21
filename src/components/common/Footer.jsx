@@ -75,20 +75,29 @@ export default function Footer() {
                         </p>
                         <div className="flex gap-4">
                             <a
-                                className="w-8 h-8 rounded bg-slate-800 hover:bg-primary hover:text-white flex items-center justify-center transition-colors text-slate-400"
-                                href="#"
+                                className="w-8 h-8 rounded bg-slate-800 hover:bg-[#ff0000] hover:text-white flex items-center justify-center transition-colors text-slate-400"
+                                href="https://www.youtube.com/c/ACDCbynandan"
+                                target="_blank"
+                                rel="noopener noreferrer"
                             >
-                                <span className="material-icons text-sm">facebook</span>
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.376.55 9.376.55s7.505 0 9.377-.55a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                </svg>
+                            </a>
+                            <a
+                                className="w-8 h-8 rounded bg-slate-800 hover:bg-[#25D366] hover:text-white flex items-center justify-center transition-colors text-slate-400"
+                                href="https://wa.me/919470241901"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.132.556 4.191 1.611 6l-1.928 7.031 7.185-1.889a12 12 0 0 0 5.163 1.166 12.03 12.03 0 0 0 12.031-12.031C24 5.385 18.615 0 12.031 0zm0 20.217a10.057 10.057 0 0 1-5.111-1.39l-.367-.216-3.793.996 1.01-3.69-.239-.383a10 10 0 0 1-1.536-5.467C2 4.542 6.542 0 12.031 0S22.06 4.542 22.06 10.035c0 5.495-4.542 10.182-10.029 10.182z" />
+                                    <path d="M17.525 14.508c-.274-.137-1.618-.8-1.868-.893-.248-.09-.43-.137-.611.137-.183.275-.705.892-.865 1.076-.16.183-.321.206-.595.069-.274-.138-1.155-.425-2.199-1.356-.812-.724-1.36-1.619-1.517-1.894-.16-.275-.017-.424.12-.562.123-.122.274-.321.411-.482.137-.16.183-.275.275-.458.09-.183.046-.344-.023-.482-.069-.137-.611-1.474-.836-2.016-.22-.53-.442-.458-.611-.466H8.62c-.229 0-.612.091-.933.435-.321.344-1.222 1.192-1.222 2.903 0 1.711 1.253 3.367 1.428 3.596.176.229 2.454 3.744 5.944 5.253.83.359 1.478.574 1.986.735.834.263 1.594.225 2.19.137.666-.1 2.05-.838 2.34-1.648.29-.811.29-1.503.203-1.649-.09-.145-.319-.237-.594-.374z" />
+                                </svg>
                             </a>
                             <a
                                 className="w-8 h-8 rounded bg-slate-800 hover:bg-primary hover:text-white flex items-center justify-center transition-colors text-slate-400"
-                                href="#"
-                            >
-                                <span className="material-icons text-sm">call</span>
-                            </a>
-                            <a
-                                className="w-8 h-8 rounded bg-slate-800 hover:bg-primary hover:text-white flex items-center justify-center transition-colors text-slate-400"
-                                href="#"
+                                href="mailto:nandan.bbc@gmail.com"
                             >
                                 <span className="material-icons text-sm">mail</span>
                             </a>
