@@ -72,7 +72,9 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
                     const { addDoc, collection } = await import("firebase/firestore");
                     await addDoc(collection(db, "notifications"), {
                         title: "Course Assigned",
-                        message: `${student.fullName || student.name} has been enrolled in ${course.name}.`,
+                        message: `You have been enrolled in ${course.name}.`,
+                        userId: student.id,
+                        isGlobal: false,
                         type: "info",
                         read: false,
                         createdAt: new Date()

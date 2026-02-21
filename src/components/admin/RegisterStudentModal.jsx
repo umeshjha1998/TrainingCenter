@@ -141,11 +141,24 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                     status: "Active"
                 });
 
-                // Notification
+                // Notification for Student
                 try {
                     await addDoc(collection(db, "notifications"), {
+                        title: "Welcome to AC & DC",
+                        message: `Welcome ${formData.fullName}! Your registration is complete. You can now access your dashboard.`,
+                        userId: newUser.uid,
+                        isGlobal: false,
+                        type: "success",
+                        read: false,
+                        createdAt: new Date()
+                    });
+
+                    // Keep the admin notification too
+                    await addDoc(collection(db, "notifications"), {
                         title: "New Student Registered",
-                        message: `${formData.fullName} has been registered.`,
+                        message: `${formData.fullName} has been registered successfully.`,
+                        userId: "admin", // Target admin specifically
+                        isGlobal: false,
                         type: "info",
                         read: false,
                         createdAt: new Date()

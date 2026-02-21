@@ -207,7 +207,9 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
             const { addDoc, collection } = await import("firebase/firestore");
             await addDoc(collection(db, "notifications"), {
                 title: "Certificate Generated",
-                message: `Certificate generated for ${student.fullName || student.name} in ${course.name}`,
+                message: `Your certificate for ${course.name} has been issued.`,
+                userId: student.id,
+                isGlobal: false,
                 type: "success",
                 read: false,
                 createdAt: new Date()

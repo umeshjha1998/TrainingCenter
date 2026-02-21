@@ -1,14 +1,65 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
+import { collection, query, where, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase";
 
 export default function StudentLayout({ children }) {
     const { logout, currentUser } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    // Fetch Notifications
+    React.useEffect(() => {
+        if (!currentUser) return;
+
+        // Query for notifications directed at this student OR global ones
+        const q = query(
+            collection(db, "notifications"),
+            where("userId", "in", [currentUser.uid, "global", "all"]),
+            orderBy("createdAt", "desc"),
+            limit(15)
+        );
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const list = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                createdAt: doc.data().createdAt?.toDate() || new Date()
+            }));
+            setNotifications(list);
+            setUnreadCount(list.filter(n => !n.read).length);
+        }, (error) => {
+            console.error("Error fetching notifications:", error);
+            // Fallback for missing index or other errors
+        });
+
+        return () => unsubscribe();
+    }, [currentUser]);
+
+    const handleMarkAllRead = async () => {
+        try {
+            const { writeBatch, getDocs, where } = await import("firebase/firestore");
+            const batch = writeBatch(db);
+            const q = query(
+                collection(db, "notifications"),
+                where("userId", "==", currentUser.uid),
+                where("read", "==", false)
+            );
+            const snapshot = await getDocs(q);
+            snapshot.docs.forEach(doc => {
+                batch.update(doc.ref, { read: true });
+            });
+            await batch.commit();
+        } catch (error) {
+            console.error("Error marking all read:", error);
+        }
+    };
 
     const handleLogout = async () => {
         try {
@@ -22,6 +73,17 @@ export default function StudentLayout({ children }) {
     const isActive = (path) => {
         return pathname === path ? "text-primary dark:text-primary" : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary";
     }
+
+    // Helper to format time
+    const formatTime = (date) => {
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        if (diffInSeconds < 60) return "Just now";
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+        return `${Math.floor(diffInSeconds / 86400)}d ago`;
+    };
 
     return (
         <div className="bg-background-light dark:bg-background-dark text-slate-800 dark:text-white min-h-screen flex flex-col font-display">
@@ -58,50 +120,56 @@ export default function StudentLayout({ children }) {
                                     className="relative p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
                                 >
                                     <span className="material-icons">notifications</span>
-                                    <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+                                    {unreadCount > 0 && (
+                                        <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+                                    )}
                                 </button>
 
                                 {/* Notification Dropdown */}
                                 {isNotificationsOpen && (
                                     <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                                         <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                                            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Notifications</h3>
-                                            <span className="text-xs text-primary font-medium cursor-pointer hover:underline">Mark all read</span>
+                                            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Notifications ({unreadCount})</h3>
+                                            <button
+                                                onClick={handleMarkAllRead}
+                                                className="text-xs text-primary font-medium cursor-pointer hover:underline disabled:opacity-50"
+                                                disabled={unreadCount === 0}
+                                            >
+                                                Mark all read
+                                            </button>
                                         </div>
                                         <div className="max-h-[300px] overflow-y-auto">
-                                            <div className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/40 border-b border-slate-50 dark:border-slate-700/50 cursor-pointer transition-colors">
-                                                <div className="flex gap-3">
-                                                    <div className="mt-1 w-2 h-2 rounded-full bg-green-500 shrink-0"></div>
-                                                    <div>
-                                                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">Exam Schedule Released</p>
-                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">The schedule for the upcoming semester exams has been published.</p>
-                                                        <p className="text-[10px] text-slate-400 mt-1">2 hours ago</p>
-                                                    </div>
+                                            {notifications.length === 0 ? (
+                                                <div className="px-4 py-8 text-center text-slate-500 dark:text-slate-400">
+                                                    <span className="material-icons text-3xl opacity-20 block mb-2">notifications_off</span>
+                                                    <p className="text-sm">No new notifications</p>
                                                 </div>
-                                            </div>
-                                            <div className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/40 border-b border-slate-50 dark:border-slate-700/50 cursor-pointer transition-colors">
-                                                <div className="flex gap-3">
-                                                    <div className="mt-1 w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
-                                                    <div>
-                                                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">New Course Material</p>
-                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">New lecture notes added to Web Development course.</p>
-                                                        <p className="text-[10px] text-slate-400 mt-1">Yesterday</p>
+                                            ) : (
+                                                notifications.map((note) => (
+                                                    <div
+                                                        key={note.id}
+                                                        className={`px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/40 border-b border-slate-50 dark:border-slate-700/50 cursor-pointer transition-colors ${!note.read ? 'bg-primary/5' : ''}`}
+                                                    >
+                                                        <div className="flex gap-3">
+                                                            <div className={`mt-1 w-2 h-2 rounded-full shrink-0 ${note.type === 'success' ? 'bg-green-500' : (note.type === 'warning' ? 'bg-yellow-500' : 'bg-primary')}`}></div>
+                                                            <div>
+                                                                <p className={`text-sm font-medium ${!note.read ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400'}`}>
+                                                                    {note.title}
+                                                                </p>
+                                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 lines-clamp-2">
+                                                                    {note.message}
+                                                                </p>
+                                                                <p className="text-[10px] text-slate-400 mt-1">
+                                                                    {formatTime(note.createdAt)}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/40 cursor-pointer transition-colors">
-                                                <div className="flex gap-3">
-                                                    <div className="mt-1 w-2 h-2 rounded-full bg-yellow-500 shrink-0"></div>
-                                                    <div>
-                                                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">Fee Payment Reminder</p>
-                                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Reminder to pay your semester fees by the end of the week.</p>
-                                                        <p className="text-[10px] text-slate-400 mt-1">2 days ago</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                ))
+                                            )}
                                         </div>
                                         <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-700 text-center">
-                                            <Link href="/student-dashboard/notifications" className="text-xs font-medium text-primary hover:text-primary-dark transition-colors">View all notifications</Link>
+                                            <Link href="/student-dashboard" className="text-xs font-medium text-primary hover:text-primary-dark transition-colors">Close Overview</Link>
                                         </div>
                                     </div>
                                 )}

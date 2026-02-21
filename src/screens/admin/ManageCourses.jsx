@@ -143,115 +143,117 @@ export default function ManageCourses() {
             </div>
 
             <div className="bg-white dark:bg-slate-900 shadow-sm ring-1 ring-slate-900/5 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-                <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
-                    <thead className="bg-slate-50 dark:bg-slate-800/50">
-                        <tr>
-                            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:pl-6">
-                                Course Name
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                Duration
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                Instructor
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                Subject Count
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                Next Exam
-                            </th>
-                            <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                <span className="sr-only">Actions</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
-                        {courses.length === 0 ? (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50">
                             <tr>
-                                <td colSpan="5" className="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
-                                    No courses found. Add a new course to get started.
-                                </td>
+                                <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:pl-6">
+                                    Course Name
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Duration
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Instructor
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Subject Count
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Next Exam
+                                </th>
+                                <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                    <span className="sr-only">Actions</span>
+                                </th>
                             </tr>
-                        ) : (
-                            courses.map((course) => (
-                                <tr key={course.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
-                                        <div className="flex items-center">
-                                            <div className="h-10 w-10 flex-shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden mr-3 border border-slate-200 dark:border-slate-700">
-                                                {course.image ? (
-                                                    <img src={course.image} alt={course.name} className="h-full w-full object-cover" />
-                                                ) : (
-                                                    <div className="h-full w-full flex items-center justify-center text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30">
-                                                        <span className="material-icons text-lg">school</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div>
-                                                <div className="font-semibold text-slate-900 dark:text-white">{course.name}</div>
-                                                <div className="text-xs text-slate-500 dark:text-slate-400">ID: {course.id.substring(0, 8)}...</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                        <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/10">
-                                            {course.duration}
-                                        </span>
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                        {course.instructor || "-"}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                        <div className="text-slate-900 dark:text-white font-medium">
-                                            {Array.isArray(course.subjects) ? course.subjects.length : (course.subjects || 0)} Subjects
-                                        </div>
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                        <span className="text-slate-900 dark:text-white">
-                                            {(() => {
-                                                if (!course.nextExam) return "-";
-                                                try {
-                                                    // Check if it's a valid date string (e.g. from datetime-local which sends YYYY-MM-DDTHH:mm)
-                                                    const date = new Date(course.nextExam);
-                                                    if (isNaN(date.getTime())) return course.nextExam; // Return original if not a valid date
-                                                    // Format: 16/02/2026 11:30 PM
-                                                    return date.toLocaleString('en-GB', {
-                                                        day: '2-digit',
-                                                        month: '2-digit',
-                                                        year: 'numeric',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit',
-                                                        hour12: true
-                                                    }).toUpperCase();
-                                                } catch (e) {
-                                                    return course.nextExam;
-                                                }
-                                            })()}
-                                        </span>
-                                    </td>
-                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <button
-                                                className="text-slate-400 hover:text-primary p-1.5 hover:bg-primary/10 rounded transition-colors"
-                                                title="Edit"
-                                                onClick={() => handleEditClick(course)}
-                                            >
-                                                <span className="material-icons text-lg">edit</span>
-                                            </button>
-                                            <button
-                                                className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-500/10 rounded transition-colors"
-                                                title="Delete"
-                                                onClick={() => confirmDelete(course.id)}
-                                            >
-                                                <span className="material-icons text-lg">delete</span>
-                                            </button>
-                                        </div>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+                            {courses.length === 0 ? (
+                                <tr>
+                                    <td colSpan="5" className="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                                        No courses found. Add a new course to get started.
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : (
+                                courses.map((course) => (
+                                    <tr key={course.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
+                                            <div className="flex items-center">
+                                                <div className="h-10 w-10 flex-shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden mr-3 border border-slate-200 dark:border-slate-700">
+                                                    {course.image ? (
+                                                        <img src={course.image} alt={course.name} className="h-full w-full object-cover" />
+                                                    ) : (
+                                                        <div className="h-full w-full flex items-center justify-center text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30">
+                                                            <span className="material-icons text-lg">school</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <div className="font-semibold text-slate-900 dark:text-white">{course.name}</div>
+                                                    <div className="text-xs text-slate-500 dark:text-slate-400">ID: {course.id.substring(0, 8)}...</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                            <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/10">
+                                                {course.duration}
+                                            </span>
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                            {course.instructor || "-"}
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                            <div className="text-slate-900 dark:text-white font-medium">
+                                                {Array.isArray(course.subjects) ? course.subjects.length : (course.subjects || 0)} Subjects
+                                            </div>
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                            <span className="text-slate-900 dark:text-white">
+                                                {(() => {
+                                                    if (!course.nextExam) return "-";
+                                                    try {
+                                                        // Check if it's a valid date string (e.g. from datetime-local which sends YYYY-MM-DDTHH:mm)
+                                                        const date = new Date(course.nextExam);
+                                                        if (isNaN(date.getTime())) return course.nextExam; // Return original if not a valid date
+                                                        // Format: 16/02/2026 11:30 PM
+                                                        return date.toLocaleString('en-GB', {
+                                                            day: '2-digit',
+                                                            month: '2-digit',
+                                                            year: 'numeric',
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                            hour12: true
+                                                        }).toUpperCase();
+                                                    } catch (e) {
+                                                        return course.nextExam;
+                                                    }
+                                                })()}
+                                            </span>
+                                        </td>
+                                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    className="text-slate-400 hover:text-primary p-1.5 hover:bg-primary/10 rounded transition-colors"
+                                                    title="Edit"
+                                                    onClick={() => handleEditClick(course)}
+                                                >
+                                                    <span className="material-icons text-lg">edit</span>
+                                                </button>
+                                                <button
+                                                    className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-500/10 rounded transition-colors"
+                                                    title="Delete"
+                                                    onClick={() => confirmDelete(course.id)}
+                                                >
+                                                    <span className="material-icons text-lg">delete</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <CourseModal

@@ -104,90 +104,92 @@ export default function ManageStudents() {
             </div>
 
             <div className="bg-white dark:bg-slate-900 shadow-sm ring-1 ring-slate-900/5 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-                <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
-                    <thead className="bg-slate-50 dark:bg-slate-800/50">
-                        <tr>
-                            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:pl-6">
-                                Name
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                Contact
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                Enrolled Courses
-                            </th>
-                            <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                <span className="sr-only">Actions</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
-                        {students.length === 0 ? (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50">
                             <tr>
-                                <td colSpan="4" className="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
-                                    No students registered yet.
-                                </td>
+                                <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:pl-6">
+                                    Name
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Contact
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Enrolled Courses
+                                </th>
+                                <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                    <span className="sr-only">Actions</span>
+                                </th>
                             </tr>
-                        ) : (
-                            students.map((student) => (
-                                <tr key={student.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
-                                        {student.fullName || student.name}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                        <div className="flex flex-col">
-                                            <span>{student.email}</span>
-                                            <span className="text-xs text-slate-400">{student.phone}</span>
-                                        </div>
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
-                                        {student.enrolledCourses && student.enrolledCourses.length > 0 ? (
-                                            <div className="flex flex-wrap gap-1">
-                                                {student.enrolledCourses.map((c, idx) => {
-                                                    const liveCourse = courses.find(course => course.id === c.id);
-                                                    return (
-                                                        <span key={idx} className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/30 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
-                                                            {liveCourse ? liveCourse.name : c.name}
-                                                        </span>
-                                                    );
-                                                })}
-                                            </div>
-                                        ) : (
-                                            <span className="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/30 px-2 py-1 text-xs font-medium text-yellow-800 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">
-                                                Not Assigned
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                        <div className="flex items-center justify-end gap-3">
-                                            <button
-                                                onClick={() => openAssignModal(student)}
-                                                className="text-primary hover:text-primary-dark transition-colors font-semibold flex items-center gap-1"
-                                                title="Assign Course"
-                                            >
-                                                <span className="material-icons text-base">add_circle_outline</span>
-                                            </button>
-                                            <button
-                                                className="text-slate-400 hover:text-primary transition-colors"
-                                                title="Edit Student"
-                                                onClick={() => openRegisterModal(student)}
-                                            >
-                                                <span className="material-icons">edit</span>
-                                            </button>
-                                            <button
-                                                className="text-slate-400 hover:text-red-500 transition-colors"
-                                                title="Delete Student"
-                                                onClick={() => confirmDelete(student.id)}
-                                            >
-                                                <span className="material-icons">delete</span>
-                                            </button>
-                                        </div>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+                            {students.length === 0 ? (
+                                <tr>
+                                    <td colSpan="4" className="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                                        No students registered yet.
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : (
+                                students.map((student) => (
+                                    <tr key={student.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
+                                            {student.fullName || student.name}
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                            <div className="flex flex-col">
+                                                <span>{student.email}</span>
+                                                <span className="text-xs text-slate-400">{student.phone}</span>
+                                            </div>
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                                            {student.enrolledCourses && student.enrolledCourses.length > 0 ? (
+                                                <div className="flex flex-wrap gap-1">
+                                                    {student.enrolledCourses.map((c, idx) => {
+                                                        const liveCourse = courses.find(course => course.id === c.id);
+                                                        return (
+                                                            <span key={idx} className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/30 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
+                                                                {liveCourse ? liveCourse.name : c.name}
+                                                            </span>
+                                                        );
+                                                    })}
+                                                </div>
+                                            ) : (
+                                                <span className="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/30 px-2 py-1 text-xs font-medium text-yellow-800 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">
+                                                    Not Assigned
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                            <div className="flex items-center justify-end gap-3">
+                                                <button
+                                                    onClick={() => openAssignModal(student)}
+                                                    className="text-primary hover:text-primary-dark transition-colors font-semibold flex items-center gap-1"
+                                                    title="Assign Course"
+                                                >
+                                                    <span className="material-icons text-base">add_circle_outline</span>
+                                                </button>
+                                                <button
+                                                    className="text-slate-400 hover:text-primary transition-colors"
+                                                    title="Edit Student"
+                                                    onClick={() => openRegisterModal(student)}
+                                                >
+                                                    <span className="material-icons">edit</span>
+                                                </button>
+                                                <button
+                                                    className="text-slate-400 hover:text-red-500 transition-colors"
+                                                    title="Delete Student"
+                                                    onClick={() => confirmDelete(student.id)}
+                                                >
+                                                    <span className="material-icons">delete</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Modals with Portals */}
