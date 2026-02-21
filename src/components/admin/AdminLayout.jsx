@@ -1,15 +1,23 @@
+"use client";
 import React, { useState, useEffect } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 import { collection, query, orderBy, limit, onSnapshot, writeBatch, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 
-export default function AdminLayout() {
+export default function AdminLayout({ children }) {
     const { logout, currentUser } = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
+    const router = useRouter();
+    const pathname = usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
+    // Search State
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchData, setSearchData] = useState(null);
+    const [searchResults, setSearchResults] = useState({ students: [], courses: [], certificates: [] });
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     // Notifications State
     const [notifications, setNotifications] = useState([]);
@@ -63,14 +71,14 @@ export default function AdminLayout() {
     const handleLogout = async () => {
         try {
             await logout();
-            navigate("/login");
+            router.push("/login");
         } catch {
             console.error("Failed to log out");
         }
     };
 
     const isActive = (path) => {
-        return location.pathname === path ? "bg-primary text-black shadow-sm shadow-primary/30" : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800";
+        return pathname === path ? "bg-primary text-black shadow-sm shadow-primary/30" : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800";
     }
 
     // Helper to format time
@@ -83,6 +91,58 @@ export default function AdminLayout() {
         if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
         return `${Math.floor(diffInSeconds / 86400)} days ago`;
     };
+
+    const handleSearchFocus = async () => {
+        if (!searchData) {
+            try {
+                const studentsSnap = await getDocs(query(collection(db, "users"), where("role", "==", "student")));
+                const coursesSnap = await getDocs(collection(db, "courses"));
+                const certsSnap = await getDocs(collection(db, "certificates"));
+
+                setSearchData({
+                    students: studentsSnap.docs.map(d => ({ id: d.id, ...d.data() })),
+                    courses: coursesSnap.docs.map(d => ({ id: d.id, ...d.data() })),
+                    certificates: certsSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+                });
+            } catch (error) {
+                console.error("Error fetching search data:", error);
+            }
+        }
+        if (searchQuery.length >= 2) setIsSearchOpen(true);
+    };
+
+    useEffect(() => {
+        if (searchQuery.length < 2 || !searchData) {
+            setSearchResults({ students: [], courses: [], certificates: [] });
+            setIsSearchOpen(false);
+            return;
+        }
+
+        const queryLower = searchQuery.toLowerCase();
+
+        const filteredStudents = searchData.students.filter(s =>
+            (s.fullName || s.name || "").toLowerCase().includes(queryLower) ||
+            (s.email || "").toLowerCase().includes(queryLower)
+        ).slice(0, 5);
+
+        const filteredCourses = searchData.courses.filter(c =>
+            (c.name || "").toLowerCase().includes(queryLower) ||
+            (c.instructor || "").toLowerCase().includes(queryLower)
+        ).slice(0, 5);
+
+        const filteredCerts = searchData.certificates.filter(c =>
+            (c.displayId || "").toLowerCase().includes(queryLower) ||
+            (c.student || "").toLowerCase().includes(queryLower) ||
+            (c.course || "").toLowerCase().includes(queryLower)
+        ).slice(0, 5);
+
+        setSearchResults({
+            students: filteredStudents,
+            courses: filteredCourses,
+            certificates: filteredCerts
+        });
+        setIsSearchOpen(true);
+    }, [searchQuery, searchData]);
 
     return (
         <div className="bg-background-light dark:bg-background-dark font-display min-h-screen flex overflow-hidden text-slate-900 dark:text-slate-100">
@@ -104,23 +164,23 @@ export default function AdminLayout() {
                         </button>
                     </div>
                     <nav className="mt-6 px-4 space-y-2">
-                        <Link to="/admin" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${isActive('/admin')}`}>
+                        <Link href="/admin" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${isActive('/admin')}`}>
                             <span className="material-icons">dashboard</span>
                             <span>Dashboard</span>
                         </Link>
-                        <Link to="/admin/students" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/students')}`}>
+                        <Link href="/admin/students" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/students')}`}>
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">people</span>
                             <span>Manage Students</span>
                         </Link>
-                        <Link to="/admin/courses" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/courses')}`}>
+                        <Link href="/admin/courses" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/courses')}`}>
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">library_books</span>
                             <span>Manage Courses</span>
                         </Link>
-                        <Link to="/admin/certificates" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/certificates')}`}>
+                        <Link href="/admin/certificates" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/certificates')}`}>
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">workspace_premium</span>
                             <span>Generated Certs</span>
                         </Link>
-                        <Link to="/admin/reports" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/reports')}`}>
+                        <Link href="/admin/reports" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/reports')}`}>
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">analytics</span>
                             <span>Reports</span>
                         </Link>
@@ -152,7 +212,7 @@ export default function AdminLayout() {
                             <span className="material-icons">menu</span>
                         </button>
                         <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                            <Link to="/" className="hover:text-primary transition-colors cursor-pointer">Home</Link>
+                            <Link href="/" className="hover:text-primary transition-colors cursor-pointer">Home</Link>
                             <span className="material-icons text-xs">chevron_right</span>
                             <span className="text-slate-900 dark:text-white font-medium">Dashboard</span>
                         </div>
@@ -162,9 +222,70 @@ export default function AdminLayout() {
                             <span className="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
                             <input
                                 className="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64 text-slate-900 dark:text-white placeholder-slate-500"
-                                placeholder="Search..."
+                                placeholder="Search students, courses..."
                                 type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onFocus={handleSearchFocus}
+                                onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
                             />
+
+                            {/* Search Dropdown */}
+                            {isSearchOpen && (searchResults.students.length > 0 || searchResults.courses.length > 0 || searchResults.certificates.length > 0) && (
+                                <div className="absolute top-12 left-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-2 z-50 max-h-[80vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+
+                                    {searchResults.students.length > 0 && (
+                                        <div className="px-3">
+                                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2 mt-2">Students</h4>
+                                            {searchResults.students.map(s => (
+                                                <Link href="/admin/students" key={s.id} className="flex items-center gap-2 px-2 py-2 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-lg group">
+                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0">person</span>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{s.fullName || s.name}</p>
+                                                        <p className="text-xs text-slate-500 truncate">{s.email}</p>
+                                                    </div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {searchResults.courses.length > 0 && (
+                                        <div className={`px-3 ${searchResults.students.length > 0 ? "mt-2 border-t border-slate-100 dark:border-slate-700 pt-2" : "mt-2"}`}>
+                                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">Courses</h4>
+                                            {searchResults.courses.map(c => (
+                                                <Link href="/admin/courses" key={c.id} className="flex items-center gap-2 px-2 py-2 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-lg group">
+                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0">library_books</span>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{c.name}</p>
+                                                    </div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {searchResults.certificates.length > 0 && (
+                                        <div className={`px-3 ${(searchResults.students.length > 0 || searchResults.courses.length > 0) ? "mt-2 border-t border-slate-100 dark:border-slate-700 pt-2" : "mt-2"}`}>
+                                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">Certificates</h4>
+                                            {searchResults.certificates.map(c => (
+                                                <Link href="/admin/certificates" key={c.id} className="flex items-center gap-2 px-2 py-2 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-lg group">
+                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0">workspace_premium</span>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{c.displayId}</p>
+                                                        <p className="text-xs text-slate-500 truncate">{c.student} - {c.course}</p>
+                                                    </div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                </div>
+                            )}
+
+                            {isSearchOpen && searchResults.students.length === 0 && searchResults.courses.length === 0 && searchResults.certificates.length === 0 && (
+                                <div className="absolute top-12 left-0 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-4 px-4 z-50 text-center text-sm text-slate-500">
+                                    No results found for "{searchQuery}"
+                                </div>
+                            )}
                         </div>
                         <div className="relative">
                             <button
@@ -220,7 +341,7 @@ export default function AdminLayout() {
                                         )}
                                     </div>
                                     <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-700 text-center">
-                                        <Link to="/admin/reports" className="text-xs font-medium text-primary hover:text-primary-dark transition-colors">
+                                        <Link href="/admin/reports" className="text-xs font-medium text-primary hover:text-primary-dark transition-colors">
                                             View Reports
                                         </Link>
                                     </div>
@@ -232,7 +353,7 @@ export default function AdminLayout() {
 
                 {/* content */}
                 <div className="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
-                    <Outlet />
+                    {children}
                 </div>
             </main>
 

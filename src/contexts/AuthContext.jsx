@@ -1,9 +1,16 @@
+"use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth, db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-const AuthContext = createContext();
+const AuthContext = createContext({
+    currentUser: null,
+    userRole: null,
+    isAdmin: false,
+    loginAsAdmin: () => false,
+    logout: () => Promise.resolve()
+});
 
 export function useAuth() {
     return useContext(AuthContext);
@@ -15,8 +22,11 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     const [adminOverride, setAdminOverride] = useState(() => {
-        // Check session storage for admin persistence
-        return sessionStorage.getItem('adminSession') === 'true';
+        // Check session storage for admin persistence safely
+        if (typeof window !== "undefined") {
+            return sessionStorage.getItem('adminSession') === 'true';
+        }
+        return false;
     });
 
     // Immediate check on mount/update of adminOverride

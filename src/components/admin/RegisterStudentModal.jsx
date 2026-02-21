@@ -18,6 +18,9 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
         password: ""
     });
     const [loading, setLoading] = useState(false);
+    const [otpSent, setOtpSent] = useState(false);
+    const [generatedOtp, setGeneratedOtp] = useState("");
+    const [userOtp, setUserOtp] = useState("");
 
     React.useEffect(() => {
         if (isOpen && initialData) {
@@ -39,6 +42,9 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                 password: ""
             });
         }
+        setOtpSent(false);
+        setGeneratedOtp("");
+        setUserOtp("");
     }, [isOpen, initialData]);
 
     const handleChange = (e) => {
@@ -47,6 +53,41 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const emailChanged = initialData ? formData.email !== initialData.email : true;
+
+        if (emailChanged && !otpSent) {
+            setLoading(true);
+            try {
+                const otp = Math.floor(100000 + Math.random() * 900000).toString();
+                setGeneratedOtp(otp);
+
+                const response = await fetch('/api/send-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: formData.email, otp })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    setOtpSent(true);
+                    if (result.devMode) {
+                        alert("[DEV MODE] Your OTP is: " + otp);
+                    }
+                } else {
+                    alert(result.error || "Failed to send OTP email.");
+                }
+            } catch (err) {
+                alert("Error communicating with server for OTP.");
+            }
+            setLoading(false);
+            return;
+        }
+
+        if (emailChanged && userOtp !== generatedOtp) {
+            return alert("Invalid OTP code.");
+        }
+
         setLoading(true);
         try {
             if (initialData?.id) {
@@ -166,10 +207,26 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                                     <input name="password" type="text" placeholder={initialData ? "Leave empty to keep current" : "Set temporary password"} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.password} onChange={handleChange} />
                                 </div>
                             </div>
+
+                            {otpSent && (
+                                <div className="mt-6 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-primary/30">
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Enter OTP sent to {formData.email}</label>
+                                    <input
+                                        name="userOtp"
+                                        required
+                                        type="text"
+                                        maxLength="6"
+                                        placeholder="6-digit code"
+                                        className="mt-2 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-900 border text-center tracking-[0.2em] font-mono text-lg"
+                                        value={userOtp}
+                                        onChange={(e) => setUserOtp(e.target.value)}
+                                    />
+                                </div>
+                            )}
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button type="submit" disabled={loading} className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
-                                {loading ? "Saving..." : (initialData ? "Update Student" : "Register Student")}
+                                {loading ? "Processing..." : (otpSent ? "Verify & Save" : (initialData ? (formData.email !== initialData.email ? "Send OTP to Save" : "Update Student") : "Send OTP to Save"))}
                             </button>
                             <button type="button" onClick={onClose} className="mt-3 w-full inline-flex justify-center rounded-md border border-slate-300 dark:border-slate-700 shadow-sm px-4 py-2 bg-white dark:bg-slate-800 text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Cancel

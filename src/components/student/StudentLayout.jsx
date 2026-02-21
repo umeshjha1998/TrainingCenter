@@ -1,24 +1,26 @@
+"use client";
 import React, { useState } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 
-export default function StudentLayout() {
+export default function StudentLayout({ children }) {
     const { logout, currentUser } = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
+    const router = useRouter();
+    const pathname = usePathname();
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
     const handleLogout = async () => {
         try {
             await logout();
-            navigate("/login");
+            router.push("/login");
         } catch {
             console.error("Failed to log out");
         }
     };
 
     const isActive = (path) => {
-        return location.pathname === path ? "text-primary dark:text-primary" : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary";
+        return pathname === path ? "text-primary dark:text-primary" : "text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary";
     }
 
     return (
@@ -29,7 +31,7 @@ export default function StudentLayout() {
                     <div className="flex items-center justify-between h-20">
                         {/* Logo Area */}
                         <div className="flex items-center gap-4">
-                            <Link to="/" className="flex items-center gap-4 group">
+                            <Link href="/" className="flex items-center gap-4 group">
                                 <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/20 text-primary group-hover:bg-primary/30 transition-colors">
                                     <span className="material-icons text-2xl">memory</span>
                                 </div>
@@ -42,10 +44,10 @@ export default function StudentLayout() {
 
                         {/* Navigation (Desktop) */}
                         <nav className="hidden md:flex space-x-8">
-                            <Link to="/student-dashboard" className={`text-sm font-medium transition-colors ${isActive('/student-dashboard')}`}>Dashboard</Link>
-                            <Link to="/student-dashboard/courses" className={`text-sm font-medium transition-colors ${isActive('/student-dashboard/courses')}`}>Courses</Link>
-                            <Link to="/student-dashboard/schedule" className={`text-sm font-medium transition-colors ${isActive('/student-dashboard/schedule')}`}>Schedule</Link>
-                            <Link to="/student-dashboard/support" className={`text-sm font-medium transition-colors ${isActive('/student-dashboard/support')}`}>Support</Link>
+                            <Link href="/student-dashboard" className={`text-sm font-medium transition-colors ${isActive('/student-dashboard')}`}>Dashboard</Link>
+                            <Link href="/student-dashboard/courses" className={`text-sm font-medium transition-colors ${isActive('/student-dashboard/courses')}`}>Courses</Link>
+                            <Link href="/student-dashboard/schedule" className={`text-sm font-medium transition-colors ${isActive('/student-dashboard/schedule')}`}>Schedule</Link>
+                            <Link href="/student-dashboard/support" className={`text-sm font-medium transition-colors ${isActive('/student-dashboard/support')}`}>Support</Link>
                         </nav>
 
                         {/* User Profile */}
@@ -99,7 +101,7 @@ export default function StudentLayout() {
                                             </div>
                                         </div>
                                         <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-700 text-center">
-                                            <Link to="/student-dashboard/notifications" className="text-xs font-medium text-primary hover:text-primary-dark transition-colors">View all notifications</Link>
+                                            <Link href="/student-dashboard/notifications" className="text-xs font-medium text-primary hover:text-primary-dark transition-colors">View all notifications</Link>
                                         </div>
                                     </div>
                                 )}
@@ -130,7 +132,7 @@ export default function StudentLayout() {
 
             {/* Main Content */}
             <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Outlet />
+                {children}
             </main>
         </div>
     );

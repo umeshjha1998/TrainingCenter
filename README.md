@@ -10,34 +10,35 @@ A comprehensive web platform for managing a technical training institute, featur
 
 ### Public Portal
 - **Home**: Landing page showcasing available courses, institute details, and contact information.
-- **Login/Register**: Secure authentication for students and administrators.
+- **Login/Register**: Secure authentication for students and administrators, protected by real-time OTP verification.
 - **Certificate Verification**: Publicly accessible verification system. Verify issued certificates using a unique Certificate ID or by scanning a QR code.
+- **Social Sharing**: One-click sharing of certificates to Email, Facebook, X (Twitter), Reddit, and WhatsApp.
 
 ### Student Portal
-- **Dashboard**: Overview of enrolled courses and profile.
+- **Dashboard**: High-level overview of profile and enrollment progress.
+    - **Progress Tracking**: Dynamic progress bars visualizing course completion based on enrollment date and active duration.
 - **My Courses**: Access course materials and progress.
     - **Dropout Functionality**: Students can drop courses they are no longer interested in, with a confirmation prompt.
 - **Schedule**: View upcoming classes and events (Placeholder).
 - **Support**: Contact support for assistance (Placeholder).
 
 ### Admin Portal
+- **Global Search**: Unified predictive search bar enabling quick navigation to specific Students, Courses, or Certificates from anywhere in the dashboard.
 - **Dashboard**: High-level overview of total students, courses, and certificates issued.
-- **Manage Students**: Full CRUD (Create, Read, Update, Delete) operations for student records.
+- **Manage Students**: Full CRUD (Create, Read, Update, Delete) operations for student records integrated with OTP security for email modifications.
 - **Manage Courses**: Create, edit, and delete courses.
-    - **Course Duration**: Added support for specifying course duration.
+    - **Course Duration**: Added support for specifying course duration to feed progress algorithms.
 - **Manage Certificates**:
     - **Generation**: Generate new certificates for students. Select student/course, input marks for subjects, and set a custom issue date and time.
-    - **Management**: View all issued certificates, revoke invalid ones.
-    - **QR Code**: Automatic generation of QR codes for easy verification.
+    - **Management**: View all issued certificates, update existing records, revoke invalid ones.
+    - **QR Code**: Automatic generation of QR codes for easy physical verification.
 - **Reports**: Visual analytics and system reports.
     - **Charts**: View "Course Popularity" and other metrics using interactive charts.
 
 ## Technologies Used
 
-### Frontend
-- **Framework**: [React 19](https://react.dev/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Router**: [React Router v7](https://reactrouter.com/)
+### Frontend & Core
+- **Framework**: [Next.js 16](https://nextjs.org/)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
 - **Visualization**: [Recharts](https://recharts.org/) (for Admin Reports)
 
@@ -45,6 +46,7 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Backend-as-a-Service**: [Firebase](https://firebase.google.com/)
   - **Authentication**: Secure user login/registration.
   - **Firestore Database**: Real-time database for storing users, courses, and certificates.
+- **Email Delivery**: Custom internal Next.js `send-otp` Route handling NodeMailer dispatches.
 
 ### Utilities
 - **QR Code Generation**: `qrcode.react`
@@ -70,42 +72,29 @@ Follow these steps to set up the project locally on your machine.
     npm install
     ```
 
-3.  **Configure Firebase:**
+3.  **Configure Environment Variables:**
+    Create a `.env.local` file at the root to hold your mail credentials:
+    ```
+    SMTP_USER=your-email@gmail.com
+    SMTP_PASS=your-app-password
+    # SMTP_HOST=smtp.gmail.com
+    # SMTP_PORT=587
+    ```
+    *(If no ENV is supplied, the app will safely run in DEV MODE and print OTPs via browser alerts)*
+
+4.  **Configure Firebase:**
     - Create a new project in the [Firebase Console](https://console.firebase.google.com/).
     - Enable **Authentication** (Email/Password).
     - Enable **Firestore Database** (Start in Test Mode).
-    - Register a web app in your Firebase project and copy the configuration object.
-    - Update `src/firebase.js` with your configuration keys:
-    ```javascript
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-    ```
+    - Register a web app in your Firebase project and update `src/firebase.js` with your config keys.
 
-4.  **Run the development server:**
+5.  **Run the development server:**
     ```bash
     npm run dev
     ```
 
-5.  **Open in browser:**
-    Open [http://localhost:5173](http://localhost:5173) to view the application.
-
-## Deployment
-
-This project is configured for deployment on platforms like Vercel or GitHub Pages.
-
-### Deploying to GitHub Pages
-1.  Update `vite.config.js` with the correct base path (e.g., `/TrainingCenter/`).
-2.  Run the build command:
-    ```bash
-    npm run build
-    ```
-3.  Deploy the `dist` folder to the `gh-pages` branch.
+6.  **Open in browser:**
+    Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ## License
 

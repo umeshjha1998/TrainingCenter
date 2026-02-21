@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function Navbar() {
@@ -11,7 +11,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-20 items-center">
                     <div className="flex-shrink-0 flex items-center gap-3">
-                        <Link to="/" className="flex items-center gap-3">
+                        <Link href="/" className="flex items-center gap-3">
                             <div className="h-12 w-12 flex items-center justify-center text-primary">
                                 <svg
                                     className="w-full h-full"
@@ -75,24 +75,24 @@ export default function Navbar() {
                         </Link>
                     </div>
                     <div className="hidden md:flex space-x-8 items-center">
-                        <Link className="text-primary font-semibold px-3 py-2 text-sm" to="/">
+                        <Link className="text-primary font-semibold px-3 py-2 text-sm" href="/">
                             Home
                         </Link>
                         <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
-                            to="/courses"
+                            href="/#courses"
                         >
                             Courses
                         </Link>
                         <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
-                            to="/about"
+                            href="/#about"
                         >
                             About Us
                         </Link>
                         <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors flex items-center gap-1"
-                            to="/verify"
+                            href="/#verify"
                         >
                             <span className="material-icons text-sm">qr_code_scanner</span>{" "}
                             Verification
@@ -102,7 +102,7 @@ export default function Navbar() {
                         {!currentUser ? (
                             <Link
                                 className="bg-white dark:bg-slate-900 text-primary hover:text-primary-dark border border-primary/40 hover:border-primary hover:bg-green-50/50 dark:hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
-                                to="/login"
+                                href="/login"
                             >
                                 <span className="material-icons text-sm">person_outline</span> Login
                                 / Register
@@ -116,7 +116,7 @@ export default function Navbar() {
                         {isAdmin && (
                             <Link
                                 className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700"
-                                to="/admin"
+                                href="/admin"
                             >
                                 <span className="material-icons text-sm">dashboard</span> Admin
                             </Link>
@@ -124,7 +124,7 @@ export default function Navbar() {
                         {currentUser && !isAdmin && (
                             <Link
                                 className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700"
-                                to="/student-dashboard"
+                                href="/student-dashboard"
                             >
                                 <span className="material-icons text-sm">school</span> Dashboard
                             </Link>
@@ -144,19 +144,19 @@ export default function Navbar() {
             {/* Mobile menu */}
             {isMenuOpen && (
                 <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 pt-2 pb-4 space-y-1">
-                    <Link className="block text-primary font-semibold px-3 py-2 text-sm" to="/" onClick={() => setIsMenuOpen(false)}>
+                    <Link className="block text-primary font-semibold px-3 py-2 text-sm" href="/" onClick={() => setIsMenuOpen(false)}>
                         Home
                     </Link>
                     <Link
                         className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
-                        to="/courses"
+                        href="/#courses"
                         onClick={() => setIsMenuOpen(false)}
                     >
                         Courses
                     </Link>
                     <Link
                         className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
-                        to="/login"
+                        href="/login"
                         onClick={() => setIsMenuOpen(false)}
                     >
                         Login / Register
