@@ -2,6 +2,7 @@ import "./globals.css";
 import React from 'react';
 import { AuthProvider } from '../contexts/AuthContext';
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
     title: "A.C. & D.C. Technical Institute",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
                     {children}
                 </AuthProvider>
                 <Analytics />
+                <SpeedInsights />
             </body>
         </html>
     );
