@@ -154,13 +154,39 @@ export default function Navbar() {
                     >
                         Courses
                     </Link>
-                    <Link
-                        className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
-                        href="/login"
-                        onClick={() => setIsMenuOpen(false)}
-                    >
-                        Login / Register
-                    </Link>
+                    {!currentUser ? (
+                        <Link
+                            className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
+                            href="/login"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Login / Register
+                        </Link>
+                    ) : (
+                        <>
+                            <div className="block px-3 py-2 text-sm font-medium text-slate-500">
+                                Hello, {currentUser.email}
+                            </div>
+                            {isAdmin && (
+                                <Link
+                                    className="block text-primary font-semibold px-3 py-2 text-sm"
+                                    href="/admin"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Admin Dashboard
+                                </Link>
+                            )}
+                            {currentUser && !isAdmin && (
+                                <Link
+                                    className="block text-primary font-semibold px-3 py-2 text-sm"
+                                    href="/student-dashboard"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Student Dashboard
+                                </Link>
+                            )}
+                        </>
+                    )}
                 </div>
             )}
         </nav>
