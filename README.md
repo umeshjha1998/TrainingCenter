@@ -10,6 +10,7 @@ A comprehensive web platform for managing a technical training institute, featur
 
 ### Public Portal
 - **Home**: Landing page showcasing available courses, institute details, and contact information.
+- **Internationalization**: Site-wide language switching (English, Hindi, Bhojpuri, Maithili) via a custom Google Translate UI component that preserves icons.
 - **Login/Register**: Secure authentication for students and administrators, protected by real-time OTP verification.
 - **Certificate Verification**: Publicly accessible verification system. Verify issued certificates using a unique Certificate ID or by scanning a QR code.
 - **Social Sharing**: One-click sharing of certificates to Email, Facebook, X (Twitter), Reddit, and WhatsApp.

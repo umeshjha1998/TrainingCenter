@@ -25,5 +25,9 @@ Ensure all images are adequately referred to in `public/` and linked via root-re
 - Generated Certificates use QR codes via `qrcode.react`. These are intentionally scaled up (e.g., multiplier of 5) for better camera scanning functionality.
 - Include a specific, clear aesthetic hierarchy for the Student Name, Dynamic Subjects mapped out by score, Issue Dates, and digital signature approximations.
 
+## 7. Icons and Internationalization
+- When utilizing `material-icons`, you **MUST** attach `class="notranslate"` and `translate="no"` to the icon element (e.g., `<span className="material-icons notranslate" translate="no">home</span>`).
+- Failure to do this will cause the text ligature (e.g., "home") to be translated into another language by Google Translate, breaking the visual icon rendering.
+
 ---
 *Note: Ensure to update these design guidelines if introducing new component libraries or changing the fundamental themes.*

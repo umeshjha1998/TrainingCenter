@@ -28,5 +28,12 @@ Students can self-manage certain aspects of their enrollment.
 - A student logs into their portal and sees the new assignment.
 - To `Dropout`, they choose to forfeit the course via the button that prompts a `Window Verification/Confirmation Dialog`. Deletion reflects back synchronously in Firestore and updates the visual DOM state without full page refreshes.
 
+## 5. Internationalization (i18n)
+The application handles multi-language support (English, Hindi, Bhojpuri, Maithili) via a custom wrapper around the Google Translate widget (`GoogleTranslate.jsx`).
+### Workflow:
+- A user changes the language via the globe icon in the Navbar.
+- The custom UI dropdown triggers a change event on the hidden `.goog-te-combo` select element, forcing Google Translate to re-render text nodes without requiring a page reload.
+- The user's selection sets a `googtrans` cookie, which is respected across page navigation.
+
 ---
 *Note: Any new feature requests must be reflected in this file by updating their workflow definition.*
