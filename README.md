@@ -35,6 +35,15 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Reports**: Visual analytics and system reports.
     - **Charts**: View "Course Popularity" and other metrics using interactive charts.
 
+## Recent Updates
+
+- **Framework Migration**: Successfully migrated the entire application from React/Vite to Next.js for better routing, SEO, and performance.
+- **Vercel Analytics & Build Configuration**: Integrated `@vercel/analytics` and `@vercel/speed-insights` for production monitoring. Configured `.npmrc` (`legacy-peer-deps=true`) to resolve peer dependency build errors on Vercel related to NextAuth.
+- **Student Dashboard Enhancements**: Enrolled course images now display properly, and maximum/obtained marks are accurately shown per subject directly on the dashboard.
+- **Robust OTP & Email Infrastructure**: Fixed NodeMailer integration to securely handle OTP dispatch for student registration and email modifications, including fallback browser alerts for local environments.
+- **Certificate Data Engine**: Refined certificate generation to avoid marks from one subject bleeding into others and ensured timestamps correctly carry through to the final view.
+- **UI/UX Quality of Life**: Resolved broken navigation links, scaled up QR codes for reliable scanning, and fixed image directories/pathing inside the public portal.
+
 ## Technologies Used
 
 ### Frontend & Core
