@@ -1,6 +1,7 @@
 import "./globals.css";
 import React from 'react';
 import { AuthProvider } from '../contexts/AuthContext';
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
     title: "A.C. & D.C. Technical Institute",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
                 <AuthProvider>
                     {children}
                 </AuthProvider>
+                <Analytics />
             </body>
         </html>
     );
