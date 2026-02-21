@@ -134,7 +134,7 @@ export default function Register() {
                             {/* Personal Info */}
                             <div className="space-y-6">
                                 <div className="flex items-center space-x-2 mb-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                                    <span className="material-icons text-primary text-xl">badge</span>
+                                    <span className="material-icons text-primary text-xl notranslate" translate="no">badge</span>
                                     <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Personal Information</h3>
                                 </div>
                                 <div>
@@ -162,7 +162,7 @@ export default function Register() {
                             {/* Documents & Address */}
                             <div className="space-y-6">
                                 <div className="flex items-center space-x-2 mb-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                                    <span className="material-icons text-primary text-xl">folder_shared</span>
+                                    <span className="material-icons text-primary text-xl notranslate" translate="no">folder_shared</span>
                                     <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Identity & Documents</h3>
                                 </div>
                                 <input name="aadhar" placeholder="Aadhar Number (Optional)" className="block w-full rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2 mb-4 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition duration-150" value={formData.aadhar} onChange={handleChange} />

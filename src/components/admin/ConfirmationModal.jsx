@@ -13,7 +13,7 @@ export default function ConfirmationModal({ isOpen, onClose, onConfirm, title, m
                     <div className="bg-white dark:bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div className="sm:flex sm:items-start">
                             <div className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full ${isDanger ? 'bg-red-100 dark:bg-red-900/30' : 'bg-blue-100 dark:bg-blue-900/30'} sm:mx-0 sm:h-10 sm:w-10`}>
-                                <span className={`material-icons ${isDanger ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'}`}>
+                                <span className={`material-icons ${isDanger ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'} notranslate`} translate="no">
                                     {isDanger ? 'warning' : 'info'}
                                 </span>
                             </div>

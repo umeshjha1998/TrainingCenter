@@ -79,7 +79,7 @@ export default function Home() {
                                 className="inline-flex justify-center items-center px-6 py-3 border border-slate-600 text-base font-medium rounded-lg text-white bg-slate-800/50 hover:bg-slate-700 backdrop-blur-sm transition-colors"
                                 href="/#verify"
                             >
-                                <span className="material-icons text-sm mr-2">qr_code</span>{" "}
+                                <span className="material-icons text-sm mr-2 notranslate" translate="no">qr_code</span>{" "}
                                 Verify Certificate
                             </Link>
                         </div>
@@ -90,7 +90,7 @@ export default function Home() {
             <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 relative z-20 -mt-8 mx-4 md:mx-auto max-w-7xl rounded-xl shadow-xl flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-800">
                 <div className="flex-1 p-6 flex items-center gap-4">
                     <div className="p-3 rounded-full bg-primary/10 text-primary">
-                        <span className="material-icons">school</span>
+                        <span className="material-icons notranslate" translate="no">school</span>
                     </div>
                     <div>
                         <p className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -103,7 +103,7 @@ export default function Home() {
                 </div>
                 <div className="flex-1 p-6 flex items-center gap-4">
                     <div className="p-3 rounded-full bg-primary/10 text-primary">
-                        <span className="material-icons">handyman</span>
+                        <span className="material-icons notranslate" translate="no">handyman</span>
                     </div>
                     <div>
                         <p className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -116,7 +116,7 @@ export default function Home() {
                 </div>
                 <div className="flex-1 p-6 flex items-center gap-4">
                     <div className="p-3 rounded-full bg-primary/10 text-primary">
-                        <span className="material-icons">verified</span>
+                        <span className="material-icons notranslate" translate="no">verified</span>
                     </div>
                     <div>
                         <p className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -141,7 +141,7 @@ export default function Home() {
                             />
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                                 <p className="text-white font-medium flex items-center gap-2">
-                                    <span className="material-icons text-primary">location_on</span>{" "}
+                                    <span className="material-icons text-primary notranslate" translate="no">location_on</span>{" "}
                                     Rambhadrapur, Bahadurpur, Darbhanga
                                 </p>
                             </div>
@@ -161,7 +161,7 @@ export default function Home() {
                         </p>
                         <ul className="space-y-4 mb-8">
                             <li className="flex items-start gap-3">
-                                <span className="material-icons text-primary mt-1">
+                                <span className="material-icons text-primary mt-1 notranslate" translate="no">
                                     check_circle
                                 </span>
                                 <span className="text-slate-700 dark:text-slate-200">
@@ -169,7 +169,7 @@ export default function Home() {
                                 </span>
                             </li>
                             <li className="flex items-start gap-3">
-                                <span className="material-icons text-primary mt-1">
+                                <span className="material-icons text-primary mt-1 notranslate" translate="no">
                                     check_circle
                                 </span>
                                 <span className="text-slate-700 dark:text-slate-200">
@@ -177,7 +177,7 @@ export default function Home() {
                                 </span>
                             </li>
                             <li className="flex items-start gap-3">
-                                <span className="material-icons text-primary mt-1">
+                                <span className="material-icons text-primary mt-1 notranslate" translate="no">
                                     check_circle
                                 </span>
                                 <span className="text-slate-700 dark:text-slate-200">
@@ -190,7 +190,7 @@ export default function Home() {
                             href="/about"
                         >
                             Learn more about our mission{" "}
-                            <span className="material-icons text-sm transition-transform group-hover:translate-x-1">
+                            <span className="material-icons text-sm transition-transform group-hover:translate-x-1 notranslate" translate="no">
                                 arrow_forward
                             </span>
                         </Link>
@@ -216,7 +216,7 @@ export default function Home() {
                     {courses.length === 0 ? (
                         <div className="text-center p-12 bg-white dark:bg-slate-900 rounded-xl shadow border border-slate-200 dark:border-slate-800">
                             <div className="text-slate-400 dark:text-slate-500 mb-4">
-                                <span className="material-icons text-5xl">inventory_2</span>
+                                <span className="material-icons text-5xl notranslate" translate="no">inventory_2</span>
                             </div>
                             <h3 className="text-xl font-medium text-slate-900 dark:text-white">Loading Courses...</h3>
                             <p className="text-slate-500 mt-2">Please wait while we fetch the latest course list.</p>
@@ -251,7 +251,7 @@ export default function Home() {
                                                 {course.level || "Certificate Course"}
                                             </span>
                                             <button className="text-primary hover:text-primary-dark font-semibold text-sm flex items-center gap-1">
-                                                Details <span className="material-icons text-sm">chevron_right</span>
+                                                Details <span className="material-icons text-sm notranslate" translate="no">chevron_right</span>
                                             </button>
                                         </div>
                                     </div>
@@ -280,7 +280,7 @@ export default function Home() {
                     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-white/20">
                         <div className="md:w-1/2">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 dark:bg-green-900/30 text-primary text-xs font-bold uppercase tracking-wider mb-4">
-                                <span className="material-icons text-base">verified_user</span>{" "}
+                                <span className="material-icons text-base notranslate" translate="no">verified_user</span>{" "}
                                 For Employers
                             </div>
                             <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
@@ -303,17 +303,17 @@ export default function Home() {
                                 <button
                                     onClick={handleVerify}
                                     className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-medium shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2">
-                                    Verify Now <span className="material-icons text-sm">search</span>
+                                    Verify Now <span className="material-icons text-sm notranslate" translate="no">search</span>
                                 </button>
                             </div>
                         </div>
                         <div className="md:w-5/12 flex justify-center">
                             <div className="relative w-full max-w-[400px] aspect-square bg-white p-8 rounded-3xl shadow-inner border border-slate-100 flex items-center justify-center">
-                                <span className="material-icons text-slate-800" style={{ fontSize: 'min(300px, 70vw)' }}>
+                                <span className="material-icons text-slate-800 notranslate" translate="no" style={{ fontSize: 'min(300px, 70vw)' }}>
                                     qr_code_2
                                 </span>
                                 <div className="absolute -bottom-6 -right-6 bg-green-500 text-white p-4 rounded-full shadow-lg border-8 border-white dark:border-slate-900">
-                                    <span className="material-icons text-5xl">check</span>
+                                    <span className="material-icons text-5xl notranslate" translate="no">check</span>
                                 </div>
                             </div>
                         </div>
@@ -326,7 +326,7 @@ export default function Home() {
                     href="/admin-login"
                     className="inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
                 >
-                    <span className="material-icons text-sm mr-2">admin_panel_settings</span>
+                    <span className="material-icons text-sm mr-2 notranslate" translate="no">admin_panel_settings</span>
                     Admin Login
                 </Link>
             </div>

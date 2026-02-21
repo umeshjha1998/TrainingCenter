@@ -54,7 +54,7 @@ export default function ForgotPassword() {
                         {/* Logo Section */}
                         <div className="flex justify-center mb-8">
                             <div className="w-16 h-16 bg-[#13ec5b]/10 rounded-full flex items-center justify-center border border-[#13ec5b]/20 shadow-[0_0_15px_rgba(19,236,91,0.15)]">
-                                <span className="material-icons text-[#13ec5b] text-3xl">memory</span>
+                                <span className="material-icons text-[#13ec5b] text-3xl notranslate" translate="no">memory</span>
                             </div>
                         </div>
 
@@ -80,7 +80,7 @@ export default function ForgotPassword() {
                                 </label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span className="material-icons text-gray-400 dark:text-gray-500 text-lg group-focus-within:text-[#13ec5b] transition-colors">mail_outline</span>
+                                        <span className="material-icons text-gray-400 dark:text-gray-500 text-lg group-focus-within:text-[#13ec5b] transition-colors notranslate" translate="no">mail_outline</span>
                                     </div>
                                     <input
                                         className="block w-full pl-10 pr-3 py-3 bg-gray-50 dark:bg-[#0c1a11] border border-gray-200 dark:border-[#13ec5b]/20 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13ec5b]/50 focus:border-[#13ec5b]/50 transition-all text-sm font-medium font-display"
@@ -103,14 +103,14 @@ export default function ForgotPassword() {
                                 disabled={loading}
                             >
                                 {loading ? 'Sending...' : 'Send Reset Link'}
-                                {!loading && <span className="material-icons text-lg ml-2">send</span>}
+                                {!loading && <span className="material-icons text-lg ml-2 notranslate" translate="no">send</span>}
                             </button>
                         </form>
 
                         {/* Footer / Navigation */}
                         <div className="mt-8 text-center border-t border-gray-100 dark:border-white/5 pt-6">
                             <Link className="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-[#13ec5b] dark:hover:text-[#13ec5b] transition-colors group font-display" href="/admin-login">
-                                <span className="material-icons text-base mr-1 transform group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                                <span className="material-icons text-base mr-1 transform group-hover:-translate-x-1 transition-transform notranslate" translate="no">arrow_back</span>
                                 Back to Login
                             </Link>
                         </div>

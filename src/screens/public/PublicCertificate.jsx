@@ -122,7 +122,7 @@ export default function PublicCertificate() {
             <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
                 <div className="text-red-500 mb-6 text-xl font-medium">Certificate not found.</div>
                 <a href="/" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-                    <span className="material-icons text-sm">home</span>
+                    <span className="material-icons text-sm notranslate" translate="no">home</span>
                     Back to Home
                 </a>
             </div>
@@ -134,7 +134,7 @@ export default function PublicCertificate() {
             {/* Actions Bar - Hidden in Print */}
             <div className="w-full max-w-[1024px] px-4 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4 print:hidden">
                 <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm">
-                    <span className="material-icons text-lg text-green-600">verified_user</span>
+                    <span className="material-icons text-lg text-green-600 notranslate" translate="no">verified_user</span>
                     <span>Official Digital Record</span>
                 </div>
                 <div className="flex gap-3 items-center">
@@ -159,7 +159,7 @@ export default function PublicCertificate() {
                         onClick={handlePrint}
                         className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm text-sm font-medium"
                     >
-                        <span className="material-icons text-lg">print</span>
+                        <span className="material-icons text-lg notranslate" translate="no">print</span>
                         Print / Save as PDF
                     </button>
                 </div>
@@ -171,7 +171,7 @@ export default function PublicCertificate() {
             {/* Footer - Hidden in Print */}
             <div className="mt-8 text-center pb-8 print:hidden">
                 <p className="text-slate-400 dark:text-slate-500 text-sm flex items-center justify-center gap-2">
-                    <span className="material-icons text-base text-green-600">check_circle</span>
+                    <span className="material-icons text-base text-green-600 notranslate" translate="no">check_circle</span>
                     Verified by AC &amp; DC Technical Institute System
                 </p>
                 <p className="text-slate-300 dark:text-slate-600 text-xs mt-2">

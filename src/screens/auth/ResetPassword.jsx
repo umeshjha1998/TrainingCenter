@@ -57,7 +57,7 @@ function ResetPasswordContent() {
                 <div className="flex items-center gap-2">
                     {/* AC & DC Logic Gate Logo Representation */}
                     <div className="h-10 w-10 bg-[#13ec5b]/20 dark:bg-[#13ec5b]/10 rounded-lg flex items-center justify-center border border-[#13ec5b]/30">
-                        <span className="material-icons text-[#13ec5b] text-2xl">all_inclusive</span>
+                        <span className="material-icons text-[#13ec5b] text-2xl notranslate" translate="no">all_inclusive</span>
                     </div>
                     <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight font-display">LogicGate</span>
                 </div>
@@ -80,7 +80,7 @@ function ResetPasswordContent() {
                         {/* Header Section */}
                         <div className="text-center mb-8">
                             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#13ec5b]/10 mb-4 border border-[#13ec5b]/20">
-                                <span className="material-icons text-[#13ec5b] text-3xl">lock_reset</span>
+                                <span className="material-icons text-[#13ec5b] text-3xl notranslate" translate="no">lock_reset</span>
                             </div>
                             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 font-display">Set new password</h1>
                             <p className="text-gray-500 dark:text-gray-400 text-sm font-display">
@@ -107,7 +107,7 @@ function ResetPasswordContent() {
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 font-display" htmlFor="new-password">New Password</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span className="material-icons text-gray-400 text-xl">lock</span>
+                                        <span className="material-icons text-gray-400 text-xl notranslate" translate="no">lock</span>
                                     </div>
                                     <input
                                         className="block w-full pl-10 pr-10 py-3 border-gray-300 dark:border-[#13ec5b]/20 rounded-lg bg-gray-50 dark:bg-[#1a3825] text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13ec5b] focus:border-transparent transition-all duration-200 font-display"
@@ -123,7 +123,7 @@ function ResetPasswordContent() {
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
                                     >
-                                        <span className="material-icons text-xl">{showPassword ? "visibility" : "visibility_off"}</span>
+                                        <span className="material-icons text-xl notranslate" translate="no">{showPassword ? "visibility" : "visibility_off"}</span>
                                     </button>
                                 </div>
                             </div>
@@ -133,19 +133,19 @@ function ResetPasswordContent() {
                                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 font-display">Password Strength</p>
                                 <ul className="space-y-2 text-sm font-display">
                                     <li className={`flex items-center ${hasMinLength ? 'text-[#13ec5b]' : 'text-gray-500 dark:text-gray-400'}`}>
-                                        <span className={`material-icons text-sm mr-2 ${hasMinLength ? '' : 'text-gray-400 dark:text-gray-600'}`}>
+                                        <span className={`material-icons text-sm mr-2 ${hasMinLength ? '' : 'text-gray-400 dark:text-gray-600'} notranslate`} translate="no">
                                             {hasMinLength ? 'check_circle' : 'radio_button_unchecked'}
                                         </span>
                                         <span>At least 8 characters</span>
                                     </li>
                                     <li className={`flex items-center ${hasNumber ? 'text-[#13ec5b]' : 'text-gray-500 dark:text-gray-400'}`}>
-                                        <span className={`material-icons text-sm mr-2 ${hasNumber ? '' : 'text-gray-400 dark:text-gray-600'}`}>
+                                        <span className={`material-icons text-sm mr-2 ${hasNumber ? '' : 'text-gray-400 dark:text-gray-600'} notranslate`} translate="no">
                                             {hasNumber ? 'check_circle' : 'radio_button_unchecked'}
                                         </span>
                                         <span>Contains a number</span>
                                     </li>
                                     <li className={`flex items-center ${hasSpecialChar ? 'text-[#13ec5b]' : 'text-gray-500 dark:text-gray-400'}`}>
-                                        <span className={`material-icons text-sm mr-2 ${hasSpecialChar ? '' : 'text-gray-400 dark:text-gray-600'}`}>
+                                        <span className={`material-icons text-sm mr-2 ${hasSpecialChar ? '' : 'text-gray-400 dark:text-gray-600'} notranslate`} translate="no">
                                             {hasSpecialChar ? 'check_circle' : 'radio_button_unchecked'}
                                         </span>
                                         <span>Contains a special character</span>
@@ -158,7 +158,7 @@ function ResetPasswordContent() {
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 font-display" htmlFor="confirm-password">Confirm Password</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span className="material-icons text-gray-400 text-xl">verified_user</span>
+                                        <span className="material-icons text-gray-400 text-xl notranslate" translate="no">verified_user</span>
                                     </div>
                                     <input
                                         className="block w-full pl-10 pr-10 py-3 border-gray-300 dark:border-[#13ec5b]/20 rounded-lg bg-gray-50 dark:bg-[#1a3825] text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#13ec5b] focus:border-transparent transition-all duration-200 font-display"
@@ -174,7 +174,7 @@ function ResetPasswordContent() {
                                         type="button"
                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                     >
-                                        <span className="material-icons text-xl">{showConfirmPassword ? "visibility" : "visibility_off"}</span>
+                                        <span className="material-icons text-xl notranslate" translate="no">{showConfirmPassword ? "visibility" : "visibility_off"}</span>
                                     </button>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@ function ResetPasswordContent() {
 
                             <div className="text-center mt-4">
                                 <Link className="text-sm text-gray-500 dark:text-gray-400 hover:text-[#13ec5b] dark:hover:text-[#13ec5b] transition-colors flex items-center justify-center gap-1 font-display" href="/admin-login">
-                                    <span className="material-icons text-sm">arrow_back</span> Back to Login
+                                    <span className="material-icons text-sm notranslate" translate="no">arrow_back</span> Back to Login
                                 </Link>
                             </div>
                         </form>

@@ -119,7 +119,7 @@ export default function StudentDashboard() {
                                             {course.image ? (
                                                 <img src={course.image} alt={course.name} className="absolute inset-0 w-full h-full object-cover" />
                                             ) : (
-                                                <span className="material-icons text-6xl text-slate-400">school</span>
+                                                <span className="material-icons text-6xl text-slate-400 notranslate" translate="no">school</span>
                                             )}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                                             <span className="absolute bottom-3 left-3 bg-primary text-black text-xs font-bold px-2 py-1 rounded shadow">
@@ -133,14 +133,14 @@ export default function StudentDashboard() {
                                             </h3>
                                             <div className="grid grid-cols-2 gap-4 mb-6">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="material-icons text-slate-400 text-lg">schedule</span>
+                                                    <span className="material-icons text-slate-400 text-lg notranslate" translate="no">schedule</span>
                                                     <div className="flex flex-col">
                                                         <span className="text-xs text-slate-500 dark:text-slate-400">Duration</span>
                                                         <span className="text-sm font-medium text-slate-900 dark:text-white">{course.duration || "N/A"}</span>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <span className="material-icons text-slate-400 text-lg">person</span>
+                                                    <span className="material-icons text-slate-400 text-lg notranslate" translate="no">person</span>
                                                     <div className="flex flex-col">
                                                         <span className="text-xs text-slate-500 dark:text-slate-400">Instructor</span>
                                                         <span className="text-sm font-medium text-slate-900 dark:text-white">
@@ -152,7 +152,7 @@ export default function StudentDashboard() {
                                             <div className="flex items-center gap-4">
                                                 <button className="flex-1 bg-primary hover:bg-primary-dark text-black font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
                                                     <span>View Content</span>
-                                                    <span className="material-icons text-lg">arrow_forward</span>
+                                                    <span className="material-icons text-lg notranslate" translate="no">arrow_forward</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -213,7 +213,7 @@ export default function StudentDashboard() {
                     {/* 4. My Certificates */}
                     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                            <span className="material-icons text-primary">workspace_premium</span>
+                            <span className="material-icons text-primary notranslate" translate="no">workspace_premium</span>
                             My Certificates
                         </h3>
                         <div className="space-y-4">
@@ -221,7 +221,7 @@ export default function StudentDashboard() {
                                 myCertificates.map(cert => (
                                     <div key={cert.id} className="flex items-center gap-4 p-3 rounded-lg border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors">
                                         <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
-                                            <span className="material-icons">description</span>
+                                            <span className="material-icons notranslate" translate="no">description</span>
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
@@ -235,7 +235,7 @@ export default function StudentDashboard() {
                                             onClick={() => window.open(`/c/${cert.displayId || cert.id}`, '_blank')}
                                             className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-black hover:scale-110 transition-transform shadow-md shadow-primary/20"
                                             title="View Certificate">
-                                            <span className="material-icons text-sm">visibility</span>
+                                            <span className="material-icons text-sm notranslate" translate="no">visibility</span>
                                         </button>
                                     </div>
                                 ))

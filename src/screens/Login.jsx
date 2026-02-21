@@ -124,7 +124,7 @@ export default function Login() {
                                 </label>
                                 <div className="relative rounded-md shadow-sm">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span className="material-icons text-slate-400 text-lg">
+                                        <span className="material-icons text-slate-400 text-lg notranslate" translate="no">
                                             mail_outline
                                         </span>
                                     </div>
@@ -149,7 +149,7 @@ export default function Login() {
                                 </label>
                                 <div className="relative rounded-md shadow-sm">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span className="material-icons text-slate-400 text-lg">
+                                        <span className="material-icons text-slate-400 text-lg notranslate" translate="no">
                                             lock_outline
                                         </span>
                                     </div>
@@ -223,7 +223,7 @@ export default function Login() {
                                     href="/"
                                     className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-primary transition-colors group"
                                 >
-                                    <span className="material-icons text-base mr-1 transform group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                                    <span className="material-icons text-base mr-1 transform group-hover:-translate-x-1 transition-transform notranslate" translate="no">arrow_back</span>
                                     Back to Home
                                 </Link>
                             </div>

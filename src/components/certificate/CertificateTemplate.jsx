@@ -32,7 +32,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                 <div className="mb-8 print:mb-4">
                     <div className="flex justify-center mb-4 print:mb-2">
                         <div className="h-20 w-20 print:h-16 print:w-16 bg-primary/10 rounded-full flex items-center justify-center text-primary border-2 border-primary">
-                            <span className="material-icons text-4xl print:text-3xl">memory</span>
+                            <span className="material-icons text-4xl print:text-3xl notranslate" translate="no">memory</span>
                         </div>
                     </div>
                     <h1 className="text-3xl sm:text-4xl print:text-3xl font-serif font-bold text-slate-900 tracking-wide uppercase mb-2 print:mb-1">AC &amp; DC Technical Institute</h1>

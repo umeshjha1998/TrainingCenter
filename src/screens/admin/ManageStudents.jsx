@@ -97,7 +97,7 @@ export default function ManageStudents() {
                         onClick={() => openRegisterModal(null)}
                         className="inline-flex items-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all active:scale-95"
                     >
-                        <span className="material-icons text-lg mr-2">person_add</span>
+                        <span className="material-icons text-lg mr-2 notranslate" translate="no">person_add</span>
                         Register Student
                     </button>
                 </div>
@@ -166,21 +166,21 @@ export default function ManageStudents() {
                                                     className="text-primary hover:text-primary-dark transition-colors font-semibold flex items-center gap-1"
                                                     title="Assign Course"
                                                 >
-                                                    <span className="material-icons text-base">add_circle_outline</span>
+                                                    <span className="material-icons text-base notranslate" translate="no">add_circle_outline</span>
                                                 </button>
                                                 <button
                                                     className="text-slate-400 hover:text-primary transition-colors"
                                                     title="Edit Student"
                                                     onClick={() => openRegisterModal(student)}
                                                 >
-                                                    <span className="material-icons">edit</span>
+                                                    <span className="material-icons notranslate" translate="no">edit</span>
                                                 </button>
                                                 <button
                                                     className="text-slate-400 hover:text-red-500 transition-colors"
                                                     title="Delete Student"
                                                     onClick={() => confirmDelete(student.id)}
                                                 >
-                                                    <span className="material-icons">delete</span>
+                                                    <span className="material-icons notranslate" translate="no">delete</span>
                                                 </button>
                                             </div>
                                         </td>

@@ -28,7 +28,7 @@ export default function ResetConfirmationModal({ isOpen, onClose, onConfirm }) {
                     <div className="bg-white dark:bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div className="sm:flex sm:items-start">
                             <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 sm:mx-0 sm:h-10 sm:w-10">
-                                <span className="material-icons text-red-600 dark:text-red-400">warning</span>
+                                <span className="material-icons text-red-600 dark:text-red-400 notranslate" translate="no">warning</span>
                             </div>
                             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white">

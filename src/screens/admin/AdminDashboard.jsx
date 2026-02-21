@@ -82,7 +82,7 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-colors">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <span className="material-icons text-6xl text-primary">school</span>
+                        <span className="material-icons text-6xl text-primary notranslate" translate="no">school</span>
                     </div>
                     <div className="relative z-10">
                         <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -93,7 +93,7 @@ export default function AdminDashboard() {
                                 {totalStudents}
                             </h3>
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                <span className="material-icons text-xs mr-1">trending_up</span>
+                                <span className="material-icons text-xs mr-1 notranslate" translate="no">trending_up</span>
                                 Live
                             </span>
                         </div>
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-colors">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <span className="material-icons text-6xl text-primary">verified</span>
+                        <span className="material-icons text-6xl text-primary notranslate" translate="no">verified</span>
                     </div>
                     <div className="relative z-10">
                         <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
                                 {totalCertificates}
                             </h3>
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                <span className="material-icons text-xs mr-1">trending_up</span>
+                                <span className="material-icons text-xs mr-1 notranslate" translate="no">trending_up</span>
                                 Live
                             </span>
                         </div>
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group hover:border-primary/50 transition-colors">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <span className="material-icons text-6xl text-primary">person_add</span>
+                        <span className="material-icons text-6xl text-primary notranslate" translate="no">person_add</span>
                     </div>
                     <div className="relative z-10">
                         <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
                 <div className="xl:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
                     <div className="lg:col-span-1 space-y-6">
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <span className="material-icons text-primary">bolt</span> Quick
+                            <span className="material-icons text-primary notranslate" translate="no">bolt</span> Quick
                             Actions
                         </h3>
                         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm h-full flex flex-col gap-4">
@@ -168,7 +168,7 @@ export default function AdminDashboard() {
                                         Create new for graduate
                                     </span>
                                 </div>
-                                <span className="material-icons bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
+                                <span className="material-icons bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors notranslate" translate="no">
                                     add
                                 </span>
                             </button>
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
                                         Add new student record
                                     </span>
                                 </div>
-                                <span className="material-icons bg-slate-200 dark:bg-slate-700 p-2 rounded-full group-hover:bg-slate-300 dark:group-hover:bg-slate-600 transition-colors">
+                                <span className="material-icons bg-slate-200 dark:bg-slate-700 p-2 rounded-full group-hover:bg-slate-300 dark:group-hover:bg-slate-600 transition-colors notranslate" translate="no">
                                     person_add
                                 </span>
                             </button>
@@ -198,7 +198,7 @@ export default function AdminDashboard() {
                                         Link student to course
                                     </span>
                                 </div>
-                                <span className="material-icons bg-slate-200 dark:bg-slate-700 p-2 rounded-full group-hover:bg-slate-300 dark:group-hover:bg-slate-600 transition-colors">
+                                <span className="material-icons bg-slate-200 dark:bg-slate-700 p-2 rounded-full group-hover:bg-slate-300 dark:group-hover:bg-slate-600 transition-colors notranslate" translate="no">
                                     school
                                 </span>
                             </button>
@@ -270,7 +270,7 @@ export default function AdminDashboard() {
                 {/* Recent Activity Section */}
                 <div className="xl:col-span-1 space-y-6">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <span className="material-icons text-primary">history</span> Recent Activity
+                        <span className="material-icons text-primary notranslate" translate="no">history</span> Recent Activity
                     </h3>
                     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm h-full max-h-[500px] overflow-y-auto">
                         {recentActivity.length === 0 ? (

@@ -298,7 +298,7 @@ export default function GenerateCertificateModal({ isOpen, onClose, onGenerate, 
                                     <div className="bg-red-50 border-l-4 border-red-400 p-4">
                                         <div className="flex">
                                             <div className="flex-shrink-0">
-                                                <span className="material-icons text-red-400">warning</span>
+                                                <span className="material-icons text-red-400 notranslate" translate="no">warning</span>
                                             </div>
                                             <div className="ml-3">
                                                 <p className="text-sm text-red-700">

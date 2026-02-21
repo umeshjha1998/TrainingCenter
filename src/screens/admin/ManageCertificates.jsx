@@ -196,7 +196,7 @@ export default function ManageCertificates() {
                 <button
                     onClick={handleCreate}
                     className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-md hover:shadow-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all active:scale-95">
-                    <span className="material-icons text-base mr-2">add_circle</span>
+                    <span className="material-icons text-base mr-2 notranslate" translate="no">add_circle</span>
                     Generate New Certificate
                 </button>
             </div>
@@ -283,7 +283,7 @@ export default function ManageCertificates() {
                                                                         onClick={() => toggleExpand(latestCert.id)}
                                                                         className="text-slate-400 hover:text-primary transition-colors focus:outline-none"
                                                                     >
-                                                                        <span className="material-icons text-sm transform transition-transform duration-200" style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                                                                        <span className="material-icons text-sm transform transition-transform duration-200 notranslate" translate="no" style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>
                                                                             chevron_right
                                                                         </span>
                                                                     </button>
@@ -330,21 +330,21 @@ export default function ManageCertificates() {
                                                             title="View"
                                                             onClick={() => window.open(`/c/${cert.displayId || cert.id}`, '_blank')}
                                                         >
-                                                            <span className="material-icons text-xl">visibility</span>
+                                                            <span className="material-icons text-xl notranslate" translate="no">visibility</span>
                                                         </button>
                                                         <button
                                                             className="text-slate-400 hover:text-primary transition-colors"
                                                             title="Edit"
                                                             onClick={() => handleEdit(cert)}
                                                         >
-                                                            <span className="material-icons text-xl">edit</span>
+                                                            <span className="material-icons text-xl notranslate" translate="no">edit</span>
                                                         </button>
                                                         <button
                                                             className="text-slate-400 hover:text-red-500 transition-colors"
                                                             title="Delete"
                                                             onClick={() => confirmDelete(cert.id)}
                                                         >
-                                                            <span className="material-icons text-xl">delete</span>
+                                                            <span className="material-icons text-xl notranslate" translate="no">delete</span>
                                                         </button>
                                                     </div>
                                                 </td>

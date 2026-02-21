@@ -14,7 +14,7 @@ export default function VerifyEmail() {
             <main className="flex-grow flex items-center justify-center p-4">
                 <div className="w-full max-w-md bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 p-8 text-center">
                     <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                        <span className="material-icons text-primary text-3xl">mark_email_unread</span>
+                        <span className="material-icons text-primary text-3xl notranslate" translate="no">mark_email_unread</span>
                     </div>
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Verify your email</h2>
                     <p className="text-slate-500 dark:text-slate-400 mb-6">

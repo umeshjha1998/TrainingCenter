@@ -99,7 +99,7 @@ export default function Footer() {
                                 className="w-8 h-8 rounded bg-slate-800 hover:bg-primary hover:text-white flex items-center justify-center transition-colors text-slate-400"
                                 href="mailto:nandan.bbc@gmail.com"
                             >
-                                <span className="material-icons text-sm">mail</span>
+                                <span className="material-icons text-sm notranslate" translate="no">mail</span>
                             </a>
                         </div>
                     </div>
@@ -162,7 +162,7 @@ export default function Footer() {
                         <h4 className="text-white font-semibold mb-6">Contact Us</h4>
                         <ul className="space-y-4 text-sm">
                             <li className="flex items-start gap-3">
-                                <span className="material-icons text-primary text-base mt-0.5">
+                                <span className="material-icons text-primary text-base mt-0.5 notranslate" translate="no">
                                     location_on
                                 </span>
                                 <span>
@@ -172,11 +172,11 @@ export default function Footer() {
                                 </span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <span className="material-icons text-primary text-base">phone</span>
+                                <span className="material-icons text-primary text-base notranslate" translate="no">phone</span>
                                 <span>+91 9470241901</span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <span className="material-icons text-primary text-base">email</span>
+                                <span className="material-icons text-primary text-base notranslate" translate="no">email</span>
                                 <span>nandan.bbc@gmail.com</span>
                             </li>
                         </ul>

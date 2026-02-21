@@ -162,7 +162,7 @@ export default function AdminLayout({ children }) {
                     <div className="h-20 flex items-center px-6 border-b border-slate-100 dark:border-slate-800">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center text-primary-dark dark:text-primary">
-                                <span className="material-icons text-2xl">memory</span>
+                                <span className="material-icons text-2xl notranslate" translate="no">memory</span>
                             </div>
                             <div>
                                 <h1 className="font-bold text-lg leading-tight text-slate-900 dark:text-white">AC &amp; DC</h1>
@@ -170,28 +170,28 @@ export default function AdminLayout({ children }) {
                             </div>
                         </div>
                         <button className="md:hidden ml-auto text-slate-500" onClick={() => setIsSidebarOpen(false)}>
-                            <span className="material-icons">close</span>
+                            <span className="material-icons notranslate" translate="no">close</span>
                         </button>
                     </div>
                     <nav className="mt-6 px-4 space-y-2">
                         <Link href="/admin" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${isActive('/admin')}`}>
-                            <span className="material-icons">dashboard</span>
+                            <span className="material-icons notranslate" translate="no">dashboard</span>
                             <span>Dashboard</span>
                         </Link>
                         <Link href="/admin/students" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/students')}`}>
-                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">people</span>
+                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">people</span>
                             <span>Manage Students</span>
                         </Link>
                         <Link href="/admin/courses" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/courses')}`}>
-                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">library_books</span>
+                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">library_books</span>
                             <span>Manage Courses</span>
                         </Link>
                         <Link href="/admin/certificates" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/certificates')}`}>
-                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">workspace_premium</span>
+                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">workspace_premium</span>
                             <span>Generated Certs</span>
                         </Link>
                         <Link href="/admin/reports" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/reports')}`}>
-                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors">analytics</span>
+                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">analytics</span>
                             <span>Reports</span>
                         </Link>
                     </nav>
@@ -200,7 +200,7 @@ export default function AdminLayout({ children }) {
                     <button onClick={handleLogout} className="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left text-slate-700 dark:text-slate-300">
                         <div className="relative">
                             <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500">
-                                <span className="material-icons">person</span>
+                                <span className="material-icons notranslate" translate="no">person</span>
                             </div>
                             <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
                         </div>
@@ -208,7 +208,7 @@ export default function AdminLayout({ children }) {
                             <p className="text-sm font-bold text-slate-900 dark:text-white truncate">Admin</p>
                             <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{currentUser?.email}</p>
                         </div>
-                        <span className="material-icons text-slate-400">logout</span>
+                        <span className="material-icons text-slate-400 notranslate" translate="no">logout</span>
                     </button>
                 </div>
             </aside>
@@ -219,17 +219,17 @@ export default function AdminLayout({ children }) {
                 <header className="h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 z-10 shrink-0">
                     <div className="flex items-center gap-4">
                         <button className="md:hidden text-slate-500" onClick={() => setIsSidebarOpen(true)}>
-                            <span className="material-icons">menu</span>
+                            <span className="material-icons notranslate" translate="no">menu</span>
                         </button>
                         <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                             <Link href="/" className="hover:text-primary transition-colors cursor-pointer">Home</Link>
-                            <span className="material-icons text-xs">chevron_right</span>
+                            <span className="material-icons text-xs notranslate" translate="no">chevron_right</span>
                             <span className="text-slate-900 dark:text-white font-medium">Dashboard</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="relative hidden md:block">
-                            <span className="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <span className="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 notranslate" translate="no">search</span>
                             <input
                                 className="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64 text-slate-900 dark:text-white placeholder-slate-500"
                                 placeholder="Search students, courses..."
@@ -249,7 +249,7 @@ export default function AdminLayout({ children }) {
                                             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2 mt-2">Students</h4>
                                             {searchResults.students.map(s => (
                                                 <Link href="/admin/students" key={s.id} className="flex items-center gap-2 px-2 py-2 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-lg group">
-                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0">person</span>
+                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0 notranslate" translate="no">person</span>
                                                     <div className="flex-1 min-w-0">
                                                         <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{s.fullName || s.name}</p>
                                                         <p className="text-xs text-slate-500 truncate">{s.email}</p>
@@ -264,7 +264,7 @@ export default function AdminLayout({ children }) {
                                             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">Courses</h4>
                                             {searchResults.courses.map(c => (
                                                 <Link href="/admin/courses" key={c.id} className="flex items-center gap-2 px-2 py-2 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-lg group">
-                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0">library_books</span>
+                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0 notranslate" translate="no">library_books</span>
                                                     <div className="flex-1 min-w-0">
                                                         <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{c.name}</p>
                                                     </div>
@@ -278,7 +278,7 @@ export default function AdminLayout({ children }) {
                                             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">Certificates</h4>
                                             {searchResults.certificates.map(c => (
                                                 <Link href="/admin/certificates" key={c.id} className="flex items-center gap-2 px-2 py-2 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-lg group">
-                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0">workspace_premium</span>
+                                                    <span className="material-icons text-slate-400 group-hover:text-primary text-sm flex-shrink-0 notranslate" translate="no">workspace_premium</span>
                                                     <div className="flex-1 min-w-0">
                                                         <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{c.displayId}</p>
                                                         <p className="text-xs text-slate-500 truncate">{c.student} - {c.course}</p>
@@ -302,7 +302,7 @@ export default function AdminLayout({ children }) {
                                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
                                 className="relative p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
                             >
-                                <span className="material-icons">notifications</span>
+                                <span className="material-icons notranslate" translate="no">notifications</span>
                                 {unreadCount > 0 && (
                                     <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-slate-900"></span>
                                 )}

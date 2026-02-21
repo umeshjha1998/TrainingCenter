@@ -157,7 +157,7 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
                                                     className="text-slate-400 hover:text-red-500 p-2"
                                                     title="Remove Subject"
                                                 >
-                                                    <span className="material-icons text-lg">delete</span>
+                                                    <span className="material-icons text-lg notranslate" translate="no">delete</span>
                                                 </button>
                                             </div>
                                         ))}
@@ -167,7 +167,7 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
                                         onClick={handleAddSubject}
                                         className="mt-2 inline-flex items-center text-sm font-medium text-primary hover:text-primary-dark"
                                     >
-                                        <span className="material-icons text-lg mr-1">add</span>
+                                        <span className="material-icons text-lg mr-1 notranslate" translate="no">add</span>
                                         Add Subject
                                     </button>
                                 </div>

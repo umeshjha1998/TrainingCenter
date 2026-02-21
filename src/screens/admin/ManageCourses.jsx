@@ -128,7 +128,7 @@ export default function ManageCourses() {
                         onClick={handleAddClick}
                         className="inline-flex items-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all active:scale-95"
                     >
-                        <span className="material-icons text-lg mr-2">add</span>
+                        <span className="material-icons text-lg mr-2 notranslate" translate="no">add</span>
                         Add New Course
                     </button>
                     <button
@@ -136,7 +136,7 @@ export default function ManageCourses() {
                         onClick={() => setIsResetModalOpen(true)} // Open modal instead of function
                         className="ml-4 inline-flex items-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all active:scale-95"
                     >
-                        <span className="material-icons text-lg mr-2">refresh</span>
+                        <span className="material-icons text-lg mr-2 notranslate" translate="no">refresh</span>
                         Reset Default Courses
                     </button>
                 </div>
@@ -184,7 +184,7 @@ export default function ManageCourses() {
                                                         <img src={course.image} alt={course.name} className="h-full w-full object-cover" />
                                                     ) : (
                                                         <div className="h-full w-full flex items-center justify-center text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30">
-                                                            <span className="material-icons text-lg">school</span>
+                                                            <span className="material-icons text-lg notranslate" translate="no">school</span>
                                                         </div>
                                                     )}
                                                 </div>
@@ -237,14 +237,14 @@ export default function ManageCourses() {
                                                     title="Edit"
                                                     onClick={() => handleEditClick(course)}
                                                 >
-                                                    <span className="material-icons text-lg">edit</span>
+                                                    <span className="material-icons text-lg notranslate" translate="no">edit</span>
                                                 </button>
                                                 <button
                                                     className="text-slate-400 hover:text-red-500 p-1.5 hover:bg-red-500/10 rounded transition-colors"
                                                     title="Delete"
                                                     onClick={() => confirmDelete(course.id)}
                                                 >
-                                                    <span className="material-icons text-lg">delete</span>
+                                                    <span className="material-icons text-lg notranslate" translate="no">delete</span>
                                                 </button>
                                             </div>
                                         </td>

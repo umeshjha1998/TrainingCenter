@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import GoogleTranslate from "./GoogleTranslate";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -97,9 +98,12 @@ export default function Navbar() {
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors flex items-center gap-1"
                             href="/#verify"
                         >
-                            <span className="material-icons text-sm">qr_code_scanner</span>{" "}
+                            <span className="material-icons text-sm notranslate" translate="no">qr_code_scanner</span>{" "}
                             Verification
                         </Link>
+                        <div className="flex items-center">
+                            <GoogleTranslate />
+                        </div>
                     </div>
                     <div className="hidden md:flex items-center gap-3">
                         {!currentUser ? (
@@ -107,7 +111,7 @@ export default function Navbar() {
                                 className="bg-white dark:bg-slate-900 text-primary hover:text-primary-dark border border-primary/40 hover:border-primary hover:bg-green-50/50 dark:hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
                                 href="/login"
                             >
-                                <span className="material-icons text-sm">person_outline</span> Login
+                                <span className="material-icons text-sm notranslate" translate="no">person_outline</span> Login
                                 / Register
                             </Link>
                         ) : (
@@ -121,7 +125,7 @@ export default function Navbar() {
                                 className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700"
                                 href="/admin"
                             >
-                                <span className="material-icons text-sm">dashboard</span> Admin
+                                <span className="material-icons text-sm notranslate" translate="no">dashboard</span> Admin
                             </Link>
                         )}
                         {currentUser && !isAdmin && (
@@ -129,7 +133,7 @@ export default function Navbar() {
                                 className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700"
                                 href="/student-dashboard"
                             >
-                                <span className="material-icons text-sm">school</span> Dashboard
+                                <span className="material-icons text-sm notranslate" translate="no">school</span> Dashboard
                             </Link>
                         )}
                     </div>
@@ -139,7 +143,7 @@ export default function Navbar() {
                             type="button"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                         >
-                            <span className="material-icons">menu</span>
+                            <span className="material-icons notranslate" translate="no">menu</span>
                         </button>
                     </div>
                 </div>
@@ -157,6 +161,9 @@ export default function Navbar() {
                     >
                         Courses
                     </Link>
+                    <div className="px-3 py-1">
+                        <GoogleTranslate />
+                    </div>
                     {!currentUser ? (
                         <Link
                             className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"

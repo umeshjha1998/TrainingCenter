@@ -96,7 +96,7 @@ export default function StudentLayout({ children }) {
                         <div className="flex items-center gap-4">
                             <Link href="/" className="flex items-center gap-4 group">
                                 <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/20 text-primary group-hover:bg-primary/30 transition-colors">
-                                    <span className="material-icons text-2xl">memory</span>
+                                    <span className="material-icons text-2xl notranslate" translate="no">memory</span>
                                 </div>
                                 <div className="flex flex-col">
                                     <h1 className="text-xl font-bold tracking-tight uppercase leading-none text-slate-900 dark:text-white">AC &amp; DC</h1>
@@ -120,7 +120,7 @@ export default function StudentLayout({ children }) {
                                     onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
                                     className="relative p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
                                 >
-                                    <span className="material-icons">notifications</span>
+                                    <span className="material-icons notranslate" translate="no">notifications</span>
                                     {unreadCount > 0 && (
                                         <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
                                     )}
@@ -142,7 +142,7 @@ export default function StudentLayout({ children }) {
                                         <div className="max-h-[300px] overflow-y-auto">
                                             {notifications.length === 0 ? (
                                                 <div className="px-4 py-8 text-center text-slate-500 dark:text-slate-400">
-                                                    <span className="material-icons text-3xl opacity-20 block mb-2">notifications_off</span>
+                                                    <span className="material-icons text-3xl opacity-20 block mb-2 notranslate" translate="no">notifications_off</span>
                                                     <p className="text-sm">No new notifications</p>
                                                 </div>
                                             ) : (
@@ -183,7 +183,7 @@ export default function StudentLayout({ children }) {
                                 <div className="relative group">
                                     <button className="flex items-center focus:outline-none">
                                         <div className="h-10 w-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center border-2 border-primary/30 text-slate-500">
-                                            <span className="material-icons">person</span>
+                                            <span className="material-icons notranslate" translate="no">person</span>
                                         </div>
                                     </button>
                                     {/* Dropdown for logout */}
