@@ -118,7 +118,15 @@ export default function PublicCertificate() {
     }
 
     if (!certificateData) {
-        return <div className="min-h-screen flex items-center justify-center bg-slate-50 text-red-500">Certificate not found.</div>;
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+                <div className="text-red-500 mb-6 text-xl font-medium">Certificate not found.</div>
+                <a href="/" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+                    <span className="material-icons text-sm">home</span>
+                    Back to Home
+                </a>
+            </div>
+        );
     }
 
     return (
