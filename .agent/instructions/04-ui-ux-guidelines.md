@@ -1,6 +1,6 @@
 # UI/UX & Design Guidelines
 
-The AC & DC Technical Institute application maintains a modern, accessible, and intuitive interface powered primarily by Tailwind CSS v4 and Next.js. Any new pages or features built by agents should mirror these existing design patterns.
+The AC & DC Technical Institute application maintains a modern, accessible, and intuitive interface powered primarily by Tailwind CSS v4, shadcn/ui components, and Next.js. Shadcn/ui is the primary styling framework and component library across the website. Any new pages or features built by agents should mirror these existing design patterns and utilize shadcn/ui components whenever possible.
 
 ## 1. Color Palette & Typography
 - The application uses a dynamic, modern color scheme (typically with sleek dark modes or contrasting branding matching an institutional tone). Avoid generic "red", "green", "blue" unless they are semantic aliases like `bg-red-500` for delete buttons.
@@ -8,8 +8,9 @@ The AC & DC Technical Institute application maintains a modern, accessible, and 
 
 ## 2. Component Design & Reusability
 - Keep components modular. If building a new feature like 'Reports', wrap its structural parts into semantic React components (`src/components/...`).
-- **Modals**: Heavy reliance on custom Modal components (e.g., `RegisterStudentModal`, `AssignCourseModal`, `GenerateCertificateModal`) to perform CRUD without unnecessary routing overhead.
-- **Buttons / Forms**: Utilize hover, focus, and disabled states.
+- **shadcn/ui First**: Before building custom UI elements (buttons, dialogs, forms, cards, etc.), check if a shadcn/ui component exists. If it does, install and use it.
+- **Modals**: Heavy reliance on shadcn/ui Dialog/Modal components (e.g., `RegisterStudentModal`, `AssignCourseModal`, `GenerateCertificateModal`) to perform CRUD without unnecessary routing overhead.
+- **Buttons / Forms**: Utilize shadcn/ui components and leverage their built-in accessibility, hover, focus, and disabled states.
 
 ## 3. Student Progress & Visuals
 - Enrolled courses on the student dashboard dynamically display max marks and obtained marks visually.

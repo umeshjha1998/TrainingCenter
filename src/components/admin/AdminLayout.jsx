@@ -88,7 +88,7 @@ export default function AdminLayout({ children }) {
     };
 
     const isActive = (path) => {
-        return pathname === path ? "bg-primary text-black shadow-sm shadow-primary/30" : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800";
+        return pathname === path ? "bg-primary text-white shadow-sm shadow-primary/30" : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800";
     }
 
     // Helper to format time
@@ -185,6 +185,10 @@ export default function AdminLayout({ children }) {
                         <Link href="/admin/courses" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/courses')}`}>
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">library_books</span>
                             <span>Manage Courses</span>
+                        </Link>
+                        <Link href="/admin/instructors" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/instructors')}`}>
+                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">school</span>
+                            <span>Manage Instructors</span>
                         </Link>
                         <Link href="/admin/certificates" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/certificates')}`}>
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">workspace_premium</span>

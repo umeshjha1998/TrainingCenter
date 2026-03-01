@@ -4,7 +4,7 @@ This document describes the foundational technologies and architectural choices 
 
 ## Core Technologies
 - **Framework**: Next.js 16 (Migrated from React/Vite)
-- **UI & Styling**: Tailwind CSS v4, utilizing utility classes for responsive design.
+- **UI & Styling**: Tailwind CSS v4 and shadcn/ui as the primary styling framework and component library.
 - **Backend as a Service (BaaS)**: Firebase
   - **Authentication**: Firebase Auth (Email & Password, Custom claims/roles logic for Admin vs Student).
   - **Database**: Firebase Firestore (NoSQL Document database).

@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // Note: Actual registration with Firebase Auth requires being logged out or using secondary app.
 // For this Admin UI, we will mimic the form visual as requested, but maybe just log the data or show a "Feature restricted" message.
 // However, the user wants to SEE the fields. So we show the fields.
 // We can try to add to Firestore directly as a "Pre-registered" user.
 
-import { createPortal } from "react-dom";
 import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { toast } from "sonner";
 
 export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
     const [formData, setFormData] = useState({
@@ -23,7 +35,7 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
     const [userOtp, setUserOtp] = useState("");
     const [devOtpMsg, setDevOtpMsg] = useState("");
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (isOpen && initialData) {
             setFormData({
                 fullName: initialData.fullName || initialData.name || "",
@@ -53,6 +65,10 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleSelectChange = (name, value) => {
+        setFormData({ ...formData, [name]: value });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -76,18 +92,19 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                     if (result.devMode) {
                         setDevOtpMsg(`[DEV MODE] Your OTP is: ${otp}`);
                     }
+                    toast.success("OTP sent successfully to email.");
                 } else {
-                    alert(result.error || "Failed to send OTP email.");
+                    toast.error(result.error || "Failed to send OTP email.");
                 }
             } catch (err) {
-                alert("Error communicating with server for OTP.");
+                toast.error("Error communicating with server for OTP.");
             }
             setLoading(false);
             return;
         }
 
         if (emailChanged && userOtp !== generatedOtp) {
-            return alert("Invalid OTP code.");
+            return toast.error("Invalid OTP code.");
         }
 
         setLoading(true);
@@ -99,20 +116,18 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
 
                 // Password restriction
                 if (updates.password && updates.password.trim() !== "") {
-                    alert("Note: Password cannot be updated by Admin directly. Please use 'Reset Password' flow.");
+                    toast.warning("Note: Password cannot be updated by Admin directly. Please use 'Reset Password' flow.");
                     delete updates.password;
                 } else {
                     delete updates.password;
                 }
 
                 await updateDoc(userRef, updates);
-                alert("Student details updated successfully.");
+                toast.success("Student details updated successfully.");
             } else {
                 // Create new user using Secondary App
                 const { initializeApp } = await import("firebase/app");
-                const { getAuth, createUserWithEmailAndPassword, signOut } = await import("firebase/auth");
-                // Removed duplicate setDoc import
-
+                const { getAuth, createUserWithEmailAndPassword } = await import("firebase/auth");
 
                 const firebaseConfig = {
                     apiKey: "AIzaSyBoouVB5yrmkgZeFTzBadj7XpzbBGNlz7s",
@@ -127,17 +142,16 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                 const secondaryAuth = getAuth(secondaryApp);
 
                 // 2. Create User
-                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, formData.email, formData.password || "password123"); // Default password if empty
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, formData.email, formData.password || "password123");
                 const newUser = userCredential.user;
 
                 // 3. Save to Firestore (using main app's db instance)
-                // 3. Save to Firestore (using main app's db instance)
-                const { setDoc, addDoc, collection } = await import("firebase/firestore"); // Need setDoc to specify ID matches Auth UID
+                const { setDoc } = await import("firebase/firestore");
 
                 await setDoc(doc(db, "users", newUser.uid), {
                     ...formData,
-                    role: "student", // Enforce role
-                    uid: newUser.uid, // Store UID in doc
+                    role: "student",
+                    uid: newUser.uid,
                     createdAt: new Date(),
                     enrolledCourses: [],
                     status: "Active"
@@ -159,7 +173,7 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                     await addDoc(collection(db, "notifications"), {
                         title: "New Student Registered",
                         message: `${formData.fullName} has been registered successfully.`,
-                        userId: "admin", // Target admin specifically
+                        userId: "admin",
                         isGlobal: false,
                         type: "info",
                         read: false,
@@ -169,94 +183,95 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                     console.error("Error creating notification", error);
                 }
 
-                alert("Student registered successfully with access enabled.");
+                toast.success("Student registered successfully with access enabled.");
             }
             onClose();
         } catch (error) {
             console.error("Error saving student:", error);
-            alert("Failed to save student record");
+            toast.error("Failed to save student record");
         }
         setLoading(false);
     };
 
-    if (!isOpen) return null;
+    return (
+        <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+            <DialogContent className="sm:max-w-[600px] overflow-y-auto max-h-[90vh]">
+                <form onSubmit={handleSubmit}>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {initialData ? "Edit Student" : "Register New Student"}
+                        </DialogTitle>
+                    </DialogHeader>
 
-    return createPortal(
-        <div className="fixed inset-0 z-[100] overflow-y-auto" role="dialog">
-            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div className="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity" onClick={onClose}></div>
-                <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-                <div className="relative z-50 inline-block align-bottom bg-white dark:bg-slate-900 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-slate-200 dark:border-slate-800">
-                    <form onSubmit={handleSubmit}>
-                        <div className="bg-white dark:bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                            <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white mb-4">
-                                {initialData ? "Edit Student" : "Register New Student"}
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Full Name</label>
-                                    <input name="fullName" type="text" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.fullName} onChange={handleChange} />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
-                                    <input name="email" type="email" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.email} onChange={handleChange} />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Phone</label>
-                                    <input name="phone" type="tel" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.phone} onChange={handleChange} />
-                                </div>
-                                <div className="col-span-1 md:col-span-2">
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Address</label>
-                                    <textarea name="address" rows="2" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.address} onChange={handleChange}></textarea>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Gender</label>
-                                    <select name="gender" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.gender} onChange={handleChange}>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">{initialData ? "New Password (Optional)" : "Initial Password"}</label>
-                                    <input name="password" type="text" placeholder={initialData ? "Leave empty to keep current" : "Set temporary password"} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.password} onChange={handleChange} />
-                                </div>
-                            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                        <div className="col-span-1 md:col-span-2 space-y-2">
+                            <Label htmlFor="fullName">Full Name</Label>
+                            <Input id="fullName" name="fullName" type="text" required value={formData.fullName} onChange={handleChange} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" name="email" type="email" required value={formData.email} onChange={handleChange} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="phone">Phone</Label>
+                            <Input id="phone" name="phone" type="tel" required value={formData.phone} onChange={handleChange} />
+                        </div>
+                        <div className="col-span-1 md:col-span-2 space-y-2">
+                            <Label htmlFor="address">Address</Label>
+                            <Input id="address" name="address" required value={formData.address} onChange={handleChange} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="gender">Gender</Label>
+                            <Select value={formData.gender} onValueChange={(value) => handleSelectChange('gender', value)}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Gender" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="male">Male</SelectItem>
+                                    <SelectItem value="female">Female</SelectItem>
+                                    <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">{initialData ? "New Password (Optional)" : "Initial Password"}</Label>
+                            <Input id="password" name="password" type="text" placeholder={initialData ? "Leave empty to keep current" : "Set temporary password"} value={formData.password} onChange={handleChange} />
+                        </div>
+                    </div>
 
-                            {otpSent && (
-                                <div className="mt-6 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-primary/30">
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Enter OTP sent to {formData.email}</label>
-                                    <input
-                                        name="userOtp"
-                                        required
-                                        type="text"
-                                        maxLength="6"
-                                        placeholder="6-digit code"
-                                        className="mt-2 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-900 border text-center tracking-[0.2em] font-mono text-lg"
-                                        value={userOtp}
-                                        onChange={(e) => setUserOtp(e.target.value)}
-                                    />
-                                    {devOtpMsg && (
-                                        <div className="mt-3 p-3 bg-amber-50 border-l-4 border-amber-500 rounded-md">
-                                            <p className="text-xs font-medium text-amber-800">For testing/development:</p>
-                                            <p className="text-lg font-bold tracking-wider text-amber-900 mt-1">{devOtpMsg}</p>
-                                        </div>
-                                    )}
+                    {otpSent && (
+                        <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-primary/30 space-y-2">
+                            <Label htmlFor="userOtp">Enter OTP sent to {formData.email}</Label>
+                            <Input
+                                id="userOtp"
+                                name="userOtp"
+                                required
+                                type="text"
+                                maxLength="6"
+                                placeholder="6-digit code"
+                                className="text-center tracking-[0.2em] font-mono text-lg"
+                                value={userOtp}
+                                onChange={(e) => setUserOtp(e.target.value)}
+                            />
+                            {devOtpMsg && (
+                                <div className="mt-3 p-3 bg-amber-50 border-l-4 border-amber-500 rounded-md">
+                                    <p className="text-xs font-medium text-amber-800">For testing/development:</p>
+                                    <p className="text-lg font-bold tracking-wider text-amber-900 mt-1">{devOtpMsg}</p>
                                 </div>
                             )}
                         </div>
-                        <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                            <button type="submit" disabled={loading} className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
-                                {loading ? "Processing..." : (otpSent ? "Verify & Save" : (initialData ? (formData.email !== initialData.email ? "Send OTP to Save" : "Update Student") : "Send OTP to Save"))}
-                            </button>
-                            <button type="button" onClick={onClose} className="mt-3 w-full inline-flex justify-center rounded-md border border-slate-300 dark:border-slate-700 shadow-sm px-4 py-2 bg-white dark:bg-slate-800 text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>,
-        document.body
+                    )}
+
+                    <DialogFooter className="mt-6">
+                        <Button type="button" variant="outline" onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading}>
+                            {loading ? "Processing..." : (otpSent ? "Verify & Save" : (initialData ? (formData.email !== initialData.email ? "Send OTP to Save" : "Update Student") : "Send OTP to Save"))}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 }

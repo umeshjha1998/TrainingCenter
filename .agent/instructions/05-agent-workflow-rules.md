@@ -14,3 +14,9 @@ Every time you process a new prompt that implements a significant change, featur
 4. **Document Creation**: If a prompt demands an entirely new subsystem or design concept not adequately covered here, create a new instruction file (e.g., `06-api-integrations.md`) to capture those specific agent rules.
 
 By maintaining this folder, you ensure that future contexts and other assigned agents instantly understand the complexity, structure, and state of the platform without starting from scratch.
+
+## Browser Testing Workflow
+Whenever testing the application via the browser in a local development environment, you must:
+1. Stop any currently running local build or development server.
+2. Start a fresh local build or development server (e.g., `npm run dev`).
+3. Proceed with browser testing.
