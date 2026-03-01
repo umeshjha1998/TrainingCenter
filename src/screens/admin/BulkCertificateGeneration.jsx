@@ -296,7 +296,7 @@ export default function BulkCertificateGeneration() {
                             {/* Course Selection */}
                             <section className="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 p-6 shadow-sm">
                                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-black text-xs font-bold">1</span>
+                                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold">1</span>
                                     Certificate Details
                                 </h2>
                                 <div className="flex flex-col gap-4">
@@ -333,7 +333,7 @@ export default function BulkCertificateGeneration() {
                             {/* Upload Section */}
                             <section className="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 p-6 shadow-sm">
                                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-black text-xs font-bold">2</span>
+                                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold">2</span>
                                     Upload Data (Optional)
                                 </h2>
                                 <div className="flex flex-col gap-4">
@@ -353,7 +353,7 @@ export default function BulkCertificateGeneration() {
                             <button
                                 onClick={handleGenerate}
                                 disabled={isGenerating || selectedStudentIds.size === 0 || !selectedCourseId}
-                                className="w-full bg-primary hover:bg-primary-dark text-white dark:text-slate-900 font-bold text-lg py-4 px-6 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full bg-primary hover:bg-primary-dark text-primary-foreground font-bold text-lg py-4 px-6 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <span>{isGenerating ? "Generating..." : "Generate Certificates"}</span>
                                 {!isGenerating && <span className="material-icons group-hover:translate-x-1 transition-transform notranslate" translate="no">bolt</span>}
@@ -380,7 +380,7 @@ export default function BulkCertificateGeneration() {
                             <div className="rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 flex flex-col h-full shadow-sm overflow-hidden pb-4">
                                 <div className="p-6 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-center bg-white dark:bg-slate-900">
                                     <h2 className="text-xl font-bold flex items-center gap-2">
-                                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-black text-xs font-bold">3</span>
+                                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold">3</span>
                                         Select Students ({selectedStudentIds.size})
                                     </h2>
                                     <div className="relative">

@@ -108,7 +108,7 @@ export default function OurInstructors() {
                                 key={idx}
                                 onClick={() => setSelectedDepartment(dept)}
                                 className={`flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full px-6 transition-transform active:scale-95 ${isSelected
-                                    ? "bg-primary text-slate-900 shadow-md shadow-primary/20 scale-105"
+                                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-105"
                                     : "bg-slate-200 dark:bg-[#28392e] hover:bg-slate-300 dark:hover:bg-[#344a3c] border border-transparent hover:border-slate-300 dark:hover:border-[#405849]"
                                     }`}
                             >

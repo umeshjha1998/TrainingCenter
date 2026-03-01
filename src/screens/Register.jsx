@@ -212,7 +212,7 @@ export default function Register() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-medium shadow-lg transition-all disabled:opacity-50">
+                                className="bg-primary hover:bg-primary-dark text-primary-foreground px-8 py-3 rounded-lg font-medium shadow-lg transition-all disabled:opacity-50">
                                 {loading ? "Processing..." : (otpSent ? "Verify & Create Account" : "Send OTP to Register")}
                             </button>
                         </div>

@@ -185,7 +185,7 @@ export default function AdminDashboard() {
                         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm h-full flex flex-col gap-4">
                             <button
                                 onClick={() => setIsGenerateModalOpen(true)}
-                                className="group w-full bg-primary hover:bg-primary-dark text-white p-4 rounded-lg shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-1 flex items-center justify-between text-left"
+                                className="group w-full bg-primary hover:bg-primary-dark text-primary-foreground p-4 rounded-lg shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-1 flex items-center justify-between text-left"
                             >
                                 <div className="flex flex-col items-start">
                                     <span className="font-bold text-lg">Generate Certificate</span>

@@ -70,7 +70,7 @@ export default function Home() {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4">
                             <Link
-                                className="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-primary hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30"
+                                className="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-primary-foreground bg-primary hover:bg-primary-dark transition-colors shadow-lg shadow-primary/30"
                                 href="/#courses"
                             >
                                 Explore Courses
@@ -302,7 +302,7 @@ export default function Home() {
                                 />
                                 <button
                                     onClick={handleVerify}
-                                    className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-medium shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2">
+                                    className="bg-primary hover:bg-primary-dark text-primary-foreground px-6 py-3 rounded-lg font-medium shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2">
                                     Verify Now <span className="material-icons text-sm notranslate" translate="no">search</span>
                                 </button>
                             </div>

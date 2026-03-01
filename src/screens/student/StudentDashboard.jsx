@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { db } from "../../firebase";
-import { doc, getDoc, collection, query, where, getDocs, addDoc, Timestamp, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs, addDoc, Timestamp, deleteDoc, onSnapshot } from "firebase/firestore";
 
 export default function StudentDashboard() {
     const { data: session } = useSession();

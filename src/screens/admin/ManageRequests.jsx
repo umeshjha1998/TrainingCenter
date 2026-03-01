@@ -268,7 +268,7 @@ export default function ManageRequests() {
                                                             <button
                                                                 onClick={() => handleApprove(req.id, req.studentId, req.courseId, req.courseName)}
                                                                 disabled={processingId === req.id}
-                                                                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-black hover:bg-primary-dark transition-colors text-xs font-bold shadow-lg shadow-primary/20 disabled:opacity-50">
+                                                                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary-dark transition-colors text-xs font-bold shadow-lg shadow-primary/20 disabled:opacity-50">
                                                                 <span className="material-icons text-[16px] notranslate" translate="no">check</span>
                                                                 Approve
                                                             </button>

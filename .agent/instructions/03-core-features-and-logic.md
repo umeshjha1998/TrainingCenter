@@ -25,7 +25,7 @@ On the dashboard, predictive querying resolves searches against the User (Email/
 Students can self-manage certain aspects of their enrollment.
 ### Workflow:
 - Admins typically assign courses via `Assign Course Modal`, tying the course details and default metadata.
-- A student logs into their portal and sees the new assignment.
+- A student logs into their portal and sees the new assignment. These assignments propagate to the Student Dashboard instantly via Firebase `onSnapshot` real-time listeners, ensuring the student sees the updated Enrolled courses and Available courses immediately.
 - To `Dropout`, they choose to forfeit the course via the button that prompts a `Window Verification/Confirmation Dialog`. Deletion reflects back synchronously in Firestore and updates the visual DOM state without full page refreshes.
 
 ## 5. Internationalization (i18n)
@@ -78,6 +78,13 @@ When a certificate is generated for a student, it should be automatically shared
 - Certificate generation is triggered (single or bulk).
 - Upon successful generation and Firestore storage, the system retrieves the student's email.
 - An email is dispatched using NodeMailer containing a secure link to view/download the certificate, or a copy of the certificate itself.
+
+## 12. Theme Compatibility & Contrast Standards
+To ensure accessibility and visibility across both light and dark modes, all UI components must adhere to the project's semantic color system.
+### Guidelines:
+- **Primary Buttons/Badges**: Use `bg-primary` with `text-primary-foreground`. Avoid hardcoding `text-white` or `text-black` on primary backgrounds, as the `primary` color's brightness shifts between themes.
+- **Dynamic Contrast**: In Day Mode, `primary` is typically dark (requiring light text), while in Dark Mode, `primary` is typically light (requiring dark text). The `text-primary-foreground` utility handles this automatically.
+- **Icon Visibility**: Material Icons should use `text-primary-foreground` when placed inside primary-colored containers to maintain legibility.
 
 ---
 *Note: Any new feature requests must be reflected in this file by updating their workflow definition.*

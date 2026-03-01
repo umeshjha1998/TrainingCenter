@@ -126,7 +126,7 @@ export default function ManageCourses() {
                     <button
                         type="button"
                         onClick={handleAddClick}
-                        className="inline-flex items-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all active:scale-95"
+                        className="inline-flex items-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all active:scale-95"
                     >
                         <span className="material-icons text-lg mr-2 notranslate" translate="no">add</span>
                         Add New Course
