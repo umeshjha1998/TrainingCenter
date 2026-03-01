@@ -190,9 +190,17 @@ export default function AdminLayout({ children }) {
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">school</span>
                             <span>Manage Instructors</span>
                         </Link>
+                        <Link href="/admin/requests" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/requests')}`}>
+                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">content_copy</span>
+                            <span>Enrollment Requests</span>
+                        </Link>
                         <Link href="/admin/certificates" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/certificates')}`}>
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">workspace_premium</span>
                             <span>Generated Certs</span>
+                        </Link>
+                        <Link href="/admin/bulk-certificates" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/bulk-certificates')}`}>
+                            <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">library_add_check</span>
+                            <span>Bulk Generate</span>
                         </Link>
                         <Link href="/admin/reports" className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium group ${isActive('/admin/reports')}`}>
                             <span className="material-icons group-hover:text-primary-dark dark:group-hover:text-primary transition-colors notranslate" translate="no">analytics</span>

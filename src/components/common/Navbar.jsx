@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -90,6 +92,12 @@ export default function Navbar() {
                         </Link>
                         <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
+                            href="/instructors"
+                        >
+                            Instructors
+                        </Link>
+                        <Link
+                            className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
                             href="/#about"
                         >
                             About Us
@@ -161,6 +169,13 @@ export default function Navbar() {
                     >
                         Courses
                     </Link>
+                    <Link
+                        className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
+                        href="/instructors"
+                        onClick={() => setIsMenuOpen(false)}
+                    >
+                        Instructors
+                    </Link>
                     <div className="px-3 py-1">
                         <GoogleTranslate />
                     </div>
@@ -198,7 +213,8 @@ export default function Navbar() {
                         </>
                     )}
                 </div>
-            )}
-        </nav>
+            )
+            }
+        </nav >
     );
 }

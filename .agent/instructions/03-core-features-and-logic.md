@@ -35,5 +35,34 @@ The application handles multi-language support (English, Hindi, Bhojpuri, Maithi
 - The custom UI dropdown triggers a change event on the hidden `.goog-te-combo` select element, forcing Google Translate to re-render text nodes without requiring a page reload.
 - The user's selection sets a `googtrans` cookie, which is respected across page navigation.
 
+## 6. Real-time Dashboards (Student & Admin)
+Both the Student and Admin dashboards rely heavily on Firebase `onSnapshot` real-time listeners instead of one-time fetches.
+### Workflow:
+- When a user logs in, listeners attach to their `users` document, `certificates`, `courses`, and `enrollmentRequests`.
+- Any backend change (like an admin approving a request or a new certificate being issued) immediately reflects on the UI without requiring a page refresh.
+- Admin dashboards also display a real-time "Recent Activity" feed summarizing these events.
+
+## 7. Our Faculty Instructors
+The platform maintains a public directory of instructors and their assigned courses.
+### Workflow:
+- Admins manage instructors via the Admin Dashboard (CRUD operations).
+- Courses can be assigned to these instructors.
+- The public `OurInstructors` page fetches this data and provides filtering by department and text search.
+
+## 8. Bulk Certificate Generation
+Administrators can issue certificates to multiple students simultaneously.
+### Workflow:
+- Admin selects a course and uploads an Excel/CSV file containing student emails and their respective marks.
+- The system matches emails to registered users, verifies course enrollment, and calculates total scores.
+- Validated entries are then processed in bulk, generating unique certificate IDs and records in Firestore.
+
+## 9. Course Enrollment Requests
+Students can request enrollment in courses they are not currently enrolled in.
+### Workflow:
+- Students browse available courses (excluding already enrolled or pending ones) on their dashboard and click "Request Enrollment".
+- A request is created in Firestore with a "pending" status.
+- Admins view these requests in the Admin Dashboard and can "Approve" (assigns the course to the student and changes status to approved) or "Deny" them.
+- Real-time listeners update both dashboards instantly.
+
 ---
 *Note: Any new feature requests must be reflected in this file by updating their workflow definition.*

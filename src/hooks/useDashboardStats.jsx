@@ -19,12 +19,13 @@ export default function useDashboardStats() {
     useEffect(() => {
         const studentsQuery = query(collection(db, "users"), where("role", "==", "student"));
         const coursesQuery = collection(db, "courses");
-        const certificatesQuery = query(collection(db, "certificates"), orderBy("createdAt", "desc")); // Keep assuming createdAt exists
+        const certificatesQuery = query(collection(db, "certificates"), orderBy("createdAt", "desc"));
+        const requestsQuery = query(collection(db, "enrollmentRequests"), orderBy("createdAt", "desc"));
 
-        // We use a local state to hold data from different listeners before aggregating
         let studentsData = [];
         let coursesData = [];
         let certificatesData = [];
+        let requestsData = [];
 
         // Helper to update stats
         const updateStats = () => {
@@ -42,7 +43,7 @@ export default function useDashboardStats() {
             }).length;
 
             // 3. Recent Activity (Combine all)
-            // Create events from students and certificates
+            // Create events from students, certificates, and requests
             const studentEvents = studentsData.map(s => ({
                 id: s.id,
                 type: "student",
@@ -51,7 +52,6 @@ export default function useDashboardStats() {
                 rawDate: s.createdAt
             }));
 
-            // Certificates usually have createdAt, but fallback to date string if needed
             const certEvents = certificatesData.map(c => ({
                 id: c.id,
                 type: "certificate",
@@ -60,7 +60,15 @@ export default function useDashboardStats() {
                 rawDate: c.createdAt
             }));
 
-            const allActivity = [...studentEvents, ...certEvents]
+            const requestEvents = requestsData.map(r => ({
+                id: r.id,
+                type: "request",
+                title: `Course Enrollment ${r.status === 'pending' ? 'Requested' : r.status} by ${r.studentName}`,
+                date: r.createdAt?.toDate ? r.createdAt.toDate() : new Date(r.createdAt || 0),
+                rawDate: r.createdAt
+            }));
+
+            const allActivity = [...studentEvents, ...certEvents, ...requestEvents]
                 .sort((a, b) => b.date - a.date)
                 .slice(0, 5); // Top 5 recent activities
 
@@ -148,10 +156,16 @@ export default function useDashboardStats() {
             updateStats();
         });
 
+        const unsubRequests = onSnapshot(requestsQuery, (snap) => {
+            requestsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            updateStats();
+        });
+
         return () => {
             unsubStudents();
             unsubCourses();
             unsubCerts();
+            unsubRequests();
         };
     }, []);
 

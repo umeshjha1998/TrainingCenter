@@ -23,6 +23,7 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
         nextExam: ""
     });
     const [loading, setLoading] = useState(false);
+    const [instructors, setInstructors] = useState([]);
 
     useEffect(() => {
         if (initialData) {
@@ -74,6 +75,28 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
             subjects: prev.subjects.filter(sub => sub.id !== id)
         }));
     };
+
+    // Fetch instructors for dropdown
+    useEffect(() => {
+        const fetchInstructors = async () => {
+            try {
+                const { getDocs, query, collection } = await import("firebase/firestore");
+                const q = query(collection(db, "instructors"));
+                const querySnapshot = await getDocs(q);
+                const instructorsList = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setInstructors(instructorsList);
+            } catch (error) {
+                console.error("Error fetching instructors:", error);
+            }
+        };
+
+        if (isOpen) {
+            fetchInstructors();
+        }
+    }, [isOpen]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -139,8 +162,19 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
                             <Input id="duration" name="duration" type="text" required placeholder="e.g. 6 Months" value={formData.duration} onChange={handleInputChange} />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="instructor">Instructor Name</Label>
-                            <Input id="instructor" name="instructor" type="text" placeholder="e.g. Eng. Sarah Connor" value={formData.instructor} onChange={handleInputChange} />
+                            <Label htmlFor="instructor">Instructor</Label>
+                            <select
+                                id="instructor"
+                                name="instructor"
+                                value={formData.instructor}
+                                onChange={handleInputChange}
+                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                <option value="" disabled>Select an Instructor</option>
+                                {instructors.map(inst => (
+                                    <option key={inst.id} value={inst.name}>{inst.name} ({inst.expertise})</option>
+                                ))}
+                            </select>
                         </div>
 
                         {/* Subjects Section */}
