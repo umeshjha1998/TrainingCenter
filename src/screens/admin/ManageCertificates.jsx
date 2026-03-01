@@ -128,6 +128,26 @@ export default function ManageCertificates() {
                     displayId: displayId, // Store readable ID
                     createdAt: new Date()
                 });
+
+                // Auto-Email Certificate
+                const studentUser = students.find(s => s.id === certData.studentId);
+                if (studentUser && studentUser.email) {
+                    try {
+                        await fetch('/api/send-certificate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                email: studentUser.email,
+                                certificateId: displayId,
+                                studentName: certData.student,
+                                courseName: certData.course
+                            })
+                        });
+                    } catch (err) {
+                        console.error("Failed to email certificate", err);
+                    }
+                }
+
                 alert(`Certificate generated successfully! (Version ${version})`);
             }
         } catch (error) {

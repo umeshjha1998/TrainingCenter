@@ -1,6 +1,7 @@
 import "./globals.css";
 import React from 'react';
 import { AuthProvider } from '../components/providers/AuthProvider';
+import { ThemeProvider } from '../components/providers/ThemeProvider';
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -11,7 +12,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <head>
                 <link rel="icon" type="image/svg+xml" href="/vite.svg" />
 
@@ -21,10 +22,12 @@ export default function RootLayout({ children }) {
                 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
             </head>
-            <body>
-                <AuthProvider>
-                    {children}
-                </AuthProvider>
+            <body className="antialiased text-slate-900 bg-white dark:bg-slate-900 dark:text-slate-50">
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                    <AuthProvider>
+                        {children}
+                    </AuthProvider>
+                </ThemeProvider>
                 <Analytics />
                 <SpeedInsights />
             </body>

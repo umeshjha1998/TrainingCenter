@@ -64,5 +64,19 @@ Students can request enrollment in courses they are not currently enrolled in.
 - Admins view these requests in the Admin Dashboard and can "Approve" (assigns the course to the student and changes status to approved) or "Deny" them.
 - Real-time listeners update both dashboards instantly.
 
+## 10. Dark Mode
+The website supports a creative toggle to enable and disable dark mode across all pages and components.
+### Workflow:
+- A user clicks the dark mode toggle switch (typically in the Navbar).
+- A global state or context updates the theme to `dark`.
+- Tailwind's dark mode classes are applied consistently across all UI elements.
+
+## 11. Auto-Emailing Certificates
+When a certificate is generated for a student, it should be automatically shared to the student via email.
+### Workflow:
+- Certificate generation is triggered (single or bulk).
+- Upon successful generation and Firestore storage, the system retrieves the student's email.
+- An email is dispatched using NodeMailer containing a secure link to view/download the certificate, or a copy of the certificate itself.
+
 ---
 *Note: Any new feature requests must be reflected in this file by updating their workflow definition.*

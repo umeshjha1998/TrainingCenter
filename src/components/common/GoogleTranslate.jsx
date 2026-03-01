@@ -78,7 +78,7 @@ export default function GoogleTranslate() {
             </button>
 
             {isOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-40 rounded-lg shadow-xl bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden border border-slate-200 dark:border-slate-700">
+                <div className="origin-top-left md:origin-top-right absolute left-0 md:left-auto md:right-0 mt-2 w-40 rounded-lg shadow-xl bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-hidden border border-slate-200 dark:border-slate-700">
                     <div className="py-1">
                         {SUPPORTED_LANGUAGES.map((lang) => (
                             <button

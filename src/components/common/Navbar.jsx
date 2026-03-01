@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import GoogleTranslate from "./GoogleTranslate";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -109,7 +110,8 @@ export default function Navbar() {
                             <span className="material-icons text-sm notranslate" translate="no">qr_code_scanner</span>{" "}
                             Verification
                         </Link>
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-1">
+                            <ThemeToggle />
                             <GoogleTranslate />
                         </div>
                     </div>
@@ -176,7 +178,8 @@ export default function Navbar() {
                     >
                         Instructors
                     </Link>
-                    <div className="px-3 py-1">
+                    <div className="px-3 py-1 flex items-center gap-2 border-t border-slate-100 dark:border-slate-800 mt-2 pt-2">
+                        <ThemeToggle />
                         <GoogleTranslate />
                     </div>
                     {!currentUser ? (

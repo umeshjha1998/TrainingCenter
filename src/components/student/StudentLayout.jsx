@@ -13,6 +13,7 @@ export default function StudentLayout({ children }) {
     const router = useRouter();
     const pathname = usePathname();
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
 
@@ -180,18 +181,20 @@ export default function StudentLayout({ children }) {
                                     <p className="text-sm font-bold leading-none text-slate-900 dark:text-white">Student</p>
                                     <p className="text-xs text-primary mt-1">{currentUser?.email}</p>
                                 </div>
-                                <div className="relative group">
-                                    <button className="flex items-center focus:outline-none">
-                                        <div className="h-10 w-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center border-2 border-primary/30 text-slate-500">
+                                <div className="relative">
+                                    <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="flex items-center focus:outline-none">
+                                        <div className="h-10 w-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center border-2 border-primary/30 text-slate-500 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
                                             <span className="material-icons notranslate" translate="no">person</span>
                                         </div>
                                     </button>
                                     {/* Dropdown for logout */}
-                                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 ring-1 ring-black ring-opacity-5">
-                                        <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
-                                            Sign out
-                                        </button>
-                                    </div>
+                                    {isProfileOpen && (
+                                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-md shadow-lg py-1 transition-all duration-200 z-50 ring-1 ring-black ring-opacity-5">
+                                            <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                                Sign out
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

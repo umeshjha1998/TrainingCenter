@@ -205,8 +205,26 @@ export default function BulkCertificateGeneration() {
                     updatedAt: new Date(),
                     isBulkGenerated: true
                 };
-
                 await addDoc(collection(db, "certificates"), certData);
+
+                // Auto-Email Certificate
+                if (student.email) {
+                    try {
+                        await fetch('/api/send-certificate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                email: student.email,
+                                certificateId: displayId,
+                                studentName: certData.student,
+                                courseName: certData.course
+                            })
+                        });
+                    } catch (err) {
+                        console.error("Failed to email certificate", err);
+                    }
+                }
+
                 generatedCount++;
                 setProgress(Math.round((generatedCount / total) * 100));
             }

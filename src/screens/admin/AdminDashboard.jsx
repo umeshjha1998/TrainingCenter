@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import GenerateCertificateModal from "../../components/admin/GenerateCertificateModal";
 import AssignCourseModal from "../../components/admin/AssignCourseModal";
@@ -42,6 +42,31 @@ export default function AdminDashboard() {
                 ...certData,
                 displayId: displayId
             });
+
+            // Auto-Email Certificate
+            if (data.studentId && data.studentId !== "unknown") {
+                try {
+                    const studentSnap = await getDoc(doc(db, "users", data.studentId));
+                    if (studentSnap.exists()) {
+                        const studentData = studentSnap.data();
+                        if (studentData.email) {
+                            await fetch('/api/send-certificate', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: studentData.email,
+                                    certificateId: displayId,
+                                    studentName: certData.student,
+                                    courseName: certData.course
+                                })
+                            });
+                        }
+                    }
+                } catch (err) {
+                    console.error("Failed to email certificate", err);
+                }
+            }
+
             setIsGenerateModalOpen(false);
             alert("Certificate Generated Successfully!");
         } catch (error) {
