@@ -59,8 +59,9 @@ Administrators can issue certificates to multiple students simultaneously.
 ## 9. Course Enrollment Requests
 Students can request enrollment in courses they are not currently enrolled in.
 ### Workflow:
-- Students browse available courses (excluding already enrolled or pending ones) on their dashboard and click "Request Enrollment".
-- A request is created in Firestore with a "pending" status.
+- Students browse all available courses on their dashboard (excluding already enrolled).
+- Clicking "Request Enrollment" creates a pending request in Firestore.
+- Students can interactively cancel their requests while they are still in a "pending" status.
 - Admins view these requests in the Admin Dashboard and can "Approve" (assigns the course to the student and changes status to approved) or "Deny" them.
 - Real-time listeners update both dashboards instantly.
 

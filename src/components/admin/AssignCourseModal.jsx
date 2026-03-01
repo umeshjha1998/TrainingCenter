@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { collection, onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { collection, onSnapshot, doc, updateDoc, arrayUnion, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import ConfirmationModal from "../../components/admin/ConfirmationModal";
 
@@ -22,6 +22,9 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
     const [selectedCourseId, setSelectedCourseId] = useState("");
     const [loading, setLoading] = useState(false);
     const [studentEnrolledCourses, setStudentEnrolledCourses] = useState([]);
+    const [localStudents, setLocalStudents] = useState([]);
+
+    const displayStudents = parentStudents && parentStudents.length > 0 ? parentStudents : localStudents;
 
     // Confirmation Modal State
     const [isDropModalOpen, setIsDropModalOpen] = useState(false);
@@ -31,7 +34,7 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
     useEffect(() => {
         if (isOpen) {
             setSelectedStudentId(studentId || "");
-            const unsubscribe = onSnapshot(collection(db, "courses"), (snapshot) => {
+            const unsubscribeCourses = onSnapshot(collection(db, "courses"), (snapshot) => {
                 const coursesList = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
@@ -41,19 +44,34 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
                 console.error("Error fetching courses: ", error);
             });
 
-            return () => unsubscribe();
+            let unsubscribeStudents = () => { };
+            if (!parentStudents || parentStudents.length === 0) {
+                const q = query(collection(db, "users"), where("role", "==", "student"));
+                unsubscribeStudents = onSnapshot(q, (snapshot) => {
+                    const studentsList = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    setLocalStudents(studentsList);
+                });
+            }
+
+            return () => {
+                unsubscribeCourses();
+                unsubscribeStudents();
+            };
         }
-    }, [isOpen, studentId]);
+    }, [isOpen, studentId, parentStudents]);
 
     // Update enrolled courses whenever the selected student or the students list changes
     useEffect(() => {
-        if (selectedStudentId && parentStudents) {
-            const student = parentStudents.find(s => s.id === selectedStudentId);
+        if (selectedStudentId && displayStudents) {
+            const student = displayStudents.find(s => s.id === selectedStudentId);
             setStudentEnrolledCourses(student?.enrolledCourses || []);
         } else {
             setStudentEnrolledCourses([]);
         }
-    }, [selectedStudentId, parentStudents]);
+    }, [selectedStudentId, displayStudents]);
 
     const getAvailableCourses = () => {
         const enrolledIds = studentEnrolledCourses.map(c => c.id);
@@ -65,7 +83,7 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
         setLoading(true);
         try {
             const course = courses.find(c => c.id === selectedCourseId);
-            const student = parentStudents.find(s => s.id === selectedStudentId);
+            const student = displayStudents.find(s => s.id === selectedStudentId);
 
             if (course && student) {
                 const studentRef = doc(db, "users", student.id);
@@ -116,7 +134,7 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
         const courseId = courseToDrop;
         setLoading(true);
         try {
-            const student = parentStudents.find(s => s.id === selectedStudentId);
+            const student = displayStudents.find(s => s.id === selectedStudentId);
             const course = courses.find(c => c.id === courseId);
             if (student) {
                 const studentRef = doc(db, "users", student.id);
@@ -176,7 +194,7 @@ export default function AssignCourseModal({ isOpen, onClose, studentId, students
                                     <SelectValue placeholder="-- Select Student --" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {parentStudents && parentStudents.map(s => (
+                                    {displayStudents && displayStudents.map(s => (
                                         <SelectItem key={s.id} value={s.id}>
                                             {s.fullName || s.name} ({s.email})
                                         </SelectItem>

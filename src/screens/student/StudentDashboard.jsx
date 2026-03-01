@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { db } from "../../firebase";
-import { doc, getDoc, collection, query, where, getDocs, addDoc, Timestamp } from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs, addDoc, Timestamp, deleteDoc } from "firebase/firestore";
 
 export default function StudentDashboard() {
     const { data: session } = useSession();
@@ -156,10 +156,22 @@ export default function StudentDashboard() {
         }
     };
 
+    const handleCancelRequest = async (requestId) => {
+        if (!confirm("Are you sure you want to cancel this enrollment request?")) return;
+        try {
+            await deleteDoc(doc(db, "enrollmentRequests", requestId));
+            setMyRequests(myRequests.filter(req => req.id !== requestId));
+            alert("Request cancelled successfully.");
+        } catch (error) {
+            console.error("Error cancelling request:", error);
+            alert("Failed to cancel request.");
+        }
+    };
+
     // Filter available courses to those not in pending requests and not already enrolled
     const enrolledCourseIds = enrolledCoursesDetails.map(c => c.id);
     const pendingCourseIds = myRequests.filter(r => r.status === "pending" || r.status === "approved").map(r => r.courseId);
-    const availableToRequest = allCourses.filter(c => !pendingCourseIds.includes(c.id) && !enrolledCourseIds.includes(c.id));
+    const availableToRequest = allCourses;
 
     if (loading) return (
         <div className="flex justify-center items-center py-20 min-h-[50vh]">
@@ -300,30 +312,50 @@ export default function StudentDashboard() {
 
                         {availableToRequest.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {availableToRequest.map(course => (
-                                    <div key={course.id} className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/50 flex flex-col justify-between hover:border-primary/50 transition-colors">
-                                        <div className="mb-4">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <h4 className="font-bold text-slate-900 dark:text-white line-clamp-1" title={course.name}>{course.name}</h4>
+                                {availableToRequest.map(course => {
+                                    const isEnrolled = enrolledCourseIds.includes(course.id);
+                                    const pendingReq = myRequests.find(r => r.courseId === course.id && r.status === "pending");
+                                    const isApproved = myRequests.find(r => r.courseId === course.id && r.status === "approved");
+
+                                    let btnText = "Request Enrollment";
+                                    let btnDisabled = requesting;
+                                    let btnClass = "w-full py-2 px-3 bg-transparent border border-primary text-primary hover:bg-primary hover:text-black font-semibold rounded text-sm transition-colors flex items-center justify-center gap-2 group disabled:opacity-50";
+
+                                    if (isEnrolled || isApproved) {
+                                        btnText = "Enrolled";
+                                        btnDisabled = true;
+                                        btnClass = "w-full py-2 px-3 bg-green-500/10 border border-green-500/30 text-green-700 dark:text-green-400 font-semibold rounded text-sm flex items-center justify-center gap-2 opacity-70 cursor-not-allowed";
+                                    } else if (pendingReq) {
+                                        btnText = "Requested (Pending)";
+                                        btnDisabled = true;
+                                        btnClass = "w-full py-2 px-3 bg-yellow-500/10 border border-yellow-500/30 text-yellow-700 dark:text-yellow-400 font-semibold rounded text-sm flex items-center justify-center gap-2 opacity-70 cursor-not-allowed";
+                                    }
+
+                                    return (
+                                        <div key={course.id} className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/50 flex flex-col justify-between hover:border-primary/50 transition-colors">
+                                            <div className="mb-4">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <h4 className="font-bold text-slate-900 dark:text-white line-clamp-1" title={course.name}>{course.name}</h4>
+                                                </div>
+                                                <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
+                                                    {course.description || "Learn new skills with this course."}
+                                                </p>
+                                                <div className="mt-3 flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                                                    <span className="flex items-center gap-1"><span className="material-icons text-[14px] notranslate" translate="no">schedule</span> {course.duration || "N/A"}</span>
+                                                    <span className="flex items-center gap-1"><span className="material-icons text-[14px] notranslate" translate="no">person</span> {course.instructor || "TBD"}</span>
+                                                </div>
                                             </div>
-                                            <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
-                                                {course.description || "Learn new skills with this course."}
-                                            </p>
-                                            <div className="mt-3 flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
-                                                <span className="flex items-center gap-1"><span className="material-icons text-[14px] notranslate" translate="no">schedule</span> {course.duration || "N/A"}</span>
-                                                <span className="flex items-center gap-1"><span className="material-icons text-[14px] notranslate" translate="no">person</span> {course.instructor || "TBD"}</span>
-                                            </div>
+                                            <button
+                                                onClick={() => handleRequestEnrollment(course)}
+                                                disabled={btnDisabled}
+                                                className={btnClass}
+                                            >
+                                                <span>{requesting && !btnDisabled ? "Requesting..." : btnText}</span>
+                                                {!btnDisabled && <span className="material-icons text-base group-hover:ml-1 transition-all notranslate" translate="no">send</span>}
+                                            </button>
                                         </div>
-                                        <button
-                                            onClick={() => handleRequestEnrollment(course)}
-                                            disabled={requesting}
-                                            className="w-full py-2 px-3 bg-transparent border border-primary text-primary hover:bg-primary hover:text-black font-semibold rounded text-sm transition-colors flex items-center justify-center gap-2 group disabled:opacity-50"
-                                        >
-                                            <span>{requesting ? "Requesting..." : "Request Enrollment"}</span>
-                                            {!requesting && <span className="material-icons text-base group-hover:ml-1 transition-all notranslate" translate="no">send</span>}
-                                        </button>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         ) : (
                             <p className="text-sm text-slate-500 text-center py-4">No new courses available right now.</p>
@@ -343,28 +375,39 @@ export default function StudentDashboard() {
                             {myRequests.length > 0 ? (
                                 myRequests.slice(0, 5).map(req => {
                                     const dateStr = req.requestDate?.toDate ? req.requestDate.toDate().toLocaleDateString() : 'Unknown';
-                                    let statusColors = "";
+                                    let statusBg = "", statusTextCol = "", statusBorder = "";
                                     let statusText = req.status.toUpperCase();
 
                                     if (req.status === "pending") {
-                                        statusColors = "border-yellow-500/20 bg-yellow-500/5 text-yellow-600 dark:text-yellow-400";
+                                        statusBg = "bg-yellow-500/5"; statusTextCol = "text-yellow-600 dark:text-yellow-400"; statusBorder = "border-yellow-500/20";
                                     } else if (req.status === "approved") {
-                                        statusColors = "border-primary/20 bg-primary/5 text-primary-dark dark:text-primary";
+                                        statusBg = "bg-primary/5"; statusTextCol = "text-primary-dark dark:text-primary"; statusBorder = "border-primary/20";
                                     } else {
-                                        statusColors = "border-red-500/20 bg-red-500/5 text-red-600 dark:text-red-400";
+                                        statusBg = "bg-red-500/5"; statusTextCol = "text-red-600 dark:text-red-400"; statusBorder = "border-red-500/20";
                                     }
 
                                     return (
-                                        <div key={req.id} className={`flex items-center justify-between p-3 rounded-lg border ${statusColors.split(' ')[0]} ${statusColors.split(' ')[1]}`}>
+                                        <div key={req.id} className={`flex items-center justify-between p-3 rounded-lg border ${statusBorder} ${statusBg}`}>
                                             <div className={req.status === "denied" ? "opacity-75" : ""}>
                                                 <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate max-w-[150px]" title={req.courseName}>
                                                     {req.courseName}
                                                 </h4>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">Submitted: {dateStr}</p>
                                             </div>
-                                            <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${statusColors.split(' ').slice(2).join(' ')}`}>
-                                                {statusText}
-                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${statusTextCol}`}>
+                                                    {statusText}
+                                                </span>
+                                                {req.status === "pending" && (
+                                                    <button
+                                                        onClick={() => handleCancelRequest(req.id)}
+                                                        className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded p-1"
+                                                        title="Cancel Request"
+                                                    >
+                                                        <span className="material-icons text-sm notranslate" translate="no">close</span>
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                     );
                                 })

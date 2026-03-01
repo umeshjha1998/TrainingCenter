@@ -353,7 +353,7 @@ export default function BulkCertificateGeneration() {
                             <button
                                 onClick={handleGenerate}
                                 disabled={isGenerating || selectedStudentIds.size === 0 || !selectedCourseId}
-                                className="w-full bg-primary hover:bg-primary-dark text-slate-900 font-bold text-lg py-4 px-6 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full bg-primary hover:bg-primary-dark text-white dark:text-slate-900 font-bold text-lg py-4 px-6 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <span>{isGenerating ? "Generating..." : "Generate Certificates"}</span>
                                 {!isGenerating && <span className="material-icons group-hover:translate-x-1 transition-transform notranslate" translate="no">bolt</span>}

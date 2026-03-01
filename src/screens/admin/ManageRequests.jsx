@@ -180,25 +180,25 @@ export default function ManageRequests() {
                         <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
                             <button
                                 onClick={() => setFilter('all')}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filter === 'all' ? 'bg-primary text-black shadow-lg shadow-primary/20 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'}`}>
+                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filter === 'all' ? 'bg-primary text-white dark:text-black shadow-lg shadow-primary/20 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'}`}>
                                 <span className="material-icons text-[18px] notranslate" translate="no">list</span>
                                 All Requests
                             </button>
                             <button
                                 onClick={() => setFilter('pending')}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filter === 'pending' ? 'bg-primary text-black shadow-lg shadow-primary/20 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'}`}>
+                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filter === 'pending' ? 'bg-primary text-white dark:text-black shadow-lg shadow-primary/20 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'}`}>
                                 <span className="material-icons text-[18px] notranslate" translate="no">pending</span>
                                 Pending
                             </button>
                             <button
                                 onClick={() => setFilter('approved')}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filter === 'approved' ? 'bg-primary text-black shadow-lg shadow-primary/20 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'}`}>
+                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filter === 'approved' ? 'bg-primary text-white dark:text-black shadow-lg shadow-primary/20 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'}`}>
                                 <span className="material-icons text-[18px] notranslate" translate="no">check_circle</span>
                                 Approved
                             </button>
                             <button
                                 onClick={() => setFilter('denied')}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filter === 'denied' ? 'bg-primary text-black shadow-lg shadow-primary/20 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'}`}>
+                                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filter === 'denied' ? 'bg-primary text-white dark:text-black shadow-lg shadow-primary/20 font-bold' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'}`}>
                                 <span className="material-icons text-[18px] notranslate" translate="no">cancel</span>
                                 Denied
                             </button>

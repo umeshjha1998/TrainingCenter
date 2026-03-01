@@ -43,14 +43,13 @@ A comprehensive web platform for managing a technical training institute, featur
 
 ## Recent Updates
 
-- **Feature Expansions**: Implemented public Instructors Directory, Course Enrollment Requests workflow, and Bulk Certificate Generation powered by CSV/Excel parser.
-- **Real-Time Data Architecture**: Refactored Student and Admin dashboards to use Firebase `onSnapshot` listeners, resulting in immediate UI updates across portals without manual page refreshes.
+- **Feature Expansions**: Implemented public Instructors Directory, Course Enrollment Requests workflow with student cancellation, and Bulk Certificate Generation powered by CSV/Excel parser.
+- **Real-Time Data Architecture**: Refactored dashboards to use Firebase `onSnapshot` listeners, resulting in immediate UI updates across portals.
 - **Framework Migration**: Successfully migrated the entire application from React/Vite to Next.js for better routing, SEO, and performance.
-- **Vercel Analytics & Build Configuration**: Integrated `@vercel/analytics` and `@vercel/speed-insights` for production monitoring. Configured `.npmrc` (`legacy-peer-deps=true`) to resolve peer dependency build errors on Vercel related to NextAuth.
-- **Student Dashboard Enhancements**: Enrolled course images now display properly, and maximum/obtained marks are accurately shown per subject directly on the dashboard.
-- **Robust OTP & Email Infrastructure**: Fixed NodeMailer integration to securely handle OTP dispatch for student registration and email modifications, including fallback browser alerts for local environments.
-- **Certificate Data Engine**: Refined certificate generation to avoid marks from one subject bleeding into others and ensured timestamps correctly carry through to the final view.
-- **UI/UX Quality of Life**: Updated forms and Modals to align with polished Stitch designs. Resolved broken navigation links, scaled up QR codes for reliable scanning, and fixed image directories/pathing inside the public portal.
+- **Vercel Analytics**: Integrated `@vercel/analytics` and `@vercel/speed-insights` for production monitoring. Configured `.npmrc` (`legacy-peer-deps=true`) for NextAuth compatibility.
+- **Student Dashboard Enhancements**: Enrolled course images display properly with maximum/obtained marks. Assigned courses appear instantly, and students can browse, request, and cancel enrollment for available courses seamlessly.
+- **Robust OTP & Email Infrastructure**: Fixed NodeMailer integration to securely handle OTP dispatch. Certificates are now automatically shared to students via email upon generation.
+- **UI/UX Quality of Life**: Added a global dark mode toggle with cross-theme text visibility (Day Mode fixes). Fixed mobile clipping for language selectors and logout buttons. Resolved broken navigation links, and improved forms aligned with Stitch designs.
 
 ## Technologies Used
 

@@ -97,7 +97,7 @@ export default function ManageInstructors() {
                     </button>
                     <button
                         onClick={openCreateModal}
-                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-slate-900 shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all"
+                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white dark:text-slate-900 shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all"
                     >
                         <span className="material-icons text-[20px] notranslate" translate="no">person_add</span>
                         <span>Register New Instructor</span>

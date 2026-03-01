@@ -19,11 +19,12 @@ The AC & DC Technical Institute application maintains a modern, accessible, and 
 ## 4. Mobile Responsiveness
 - All views must scale from dense desktop administration tables to vertically stacked, tappable mobile layouts. Use standard breakpoints (`sm:`, `md:`, `lg:`).
 - Ensure critical action buttons, such as the Logout button on the Student Dashboard, remain fully visible and clickable without being obscured or clipped on mobile.
-- Dropdown menus (like the globe icon language selector) must render completely on mobile devices without falling off the edge of the screen.
+- Dropdown menus (like the globe icon language selector) must render completely on mobile devices without falling off the edge of the screen. Utilize padding, dynamic positioning, or responsive widths.
 
 ## 4.5 Dark Mode
 - A toggle switch should be available (e.g., in the Navbar) to flip between light and dark modes.
 - Dark mode values should contrast sufficiently and present an elevated, creative aesthetic, without degrading the visibility of important layout components.
+- **Day Mode Legibility**: Ensure that elements using an active or filled background color (`bg-primary`) in daytime have accessible text colors (like `text-white dark:text-slate-900`) so they remain legible in light mode instead of reverting to dark text on dark backgrounds.
 
 ## 5. File System References
 Ensure all images are adequately referred to in `public/` and linked via root-relative paths like `/images/...` to prevent broken links during GitHub/Vercel routing differences.
