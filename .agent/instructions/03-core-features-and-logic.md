@@ -16,7 +16,8 @@ The `Generate Certificate` engine relies heavily on accurate matching.
 - Admin selects a student and a valid, enrolled, and uncertified course.
 - Dynamic input fields spawn for each subject in the selected course to accept quantitative marks. It is prohibited for marks entered in subject X to leak into subject Y.
 - Submit final metrics to Firestore under a unique `$certificateId`. 
-- **Verification Page**: Accessible via `<URL>/verify/<$certificateId>`. Can also be accessed by scanning the dynamically generated `qrcode.react` tag on the certificate itself which includes a direct HTTP link.
+- **Verification Page & Public Certificate**: Accessible via `/c/<$certificateId>`. This view renders the `CertificateTemplate` (aligned with Stitch UI), dynamically displaying subject-wise marks in a detailed table format (Max Marks, Obtained, Grade) along with official seals.
+- The certificate can also be verified by scanning the dynamically generated `qrcode.react` tag on the certificate itself, which includes a direct HTTP link to the public certificate view.
 
 ## 3. Global Search Protocol
 On the dashboard, predictive querying resolves searches against the User (Email/Name), Course (Title), and Certificates (IDs). Ensure search performance by maintaining lightweight indexing structures. Keep logic centralized in a utility/service if expanded.
@@ -41,20 +42,23 @@ Both the Student and Admin dashboards rely heavily on Firebase `onSnapshot` real
 - When a user logs in, listeners attach to their `users` document, `certificates`, `courses`, and `enrollmentRequests`.
 - Any backend change (like an admin approving a request or a new certificate being issued) immediately reflects on the UI without requiring a page refresh.
 - Admin dashboards also display a real-time "Recent Activity" feed summarizing these events.
+- **Student Dashboard Features**:
+  - Displays a dynamically updating progress bar for each enrolled course based on `assignedAt` date and `duration`.
+  - Shows an "Upcoming Exams" section for enrolled courses, dynamically presenting the `nextExam` dates assigned by admins.
 
 ## 7. Our Faculty Instructors
 The platform maintains a public directory of instructors and their assigned courses.
 ### Workflow:
 - Admins manage instructors via the Admin Dashboard (CRUD operations).
-- Courses can be assigned to these instructors.
+- During creation/update, admins can directly assign existing courses to these instructors.
 - The public `OurInstructors` page fetches this data and provides filtering by department and text search.
 
 ## 8. Bulk Certificate Generation
 Administrators can issue certificates to multiple students simultaneously.
 ### Workflow:
-- Admin selects a course and uploads an Excel/CSV file containing student emails and their respective marks.
+- Admin selects a course and can manually define marks for each subject within that course for each selected student via the UI, or upload an Excel/CSV file containing student emails.
 - The system matches emails to registered users, verifies course enrollment, and calculates total scores.
-- Validated entries are then processed in bulk, generating unique certificate IDs and records in Firestore.
+- Validated entries are then processed in bulk, generating unique certificate IDs and recording subject-specific marks in Firestore.
 
 ## 9. Course Enrollment Requests
 Students can request enrollment in courses they are not currently enrolled in.

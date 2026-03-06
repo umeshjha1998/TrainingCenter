@@ -175,9 +175,8 @@ export default function ManageInstructors() {
                                 </tr>
                             ) : (
                                 instructors.map((instructor) => {
-                                    // Map instructor ID to assigned courses or just filter courses by instructor ID/name
-                                    // Let's assume courses have an 'instructorId' or 'instructor' string matching name
-                                    const instructorCourses = courses.filter(c => c.instructor === instructor.name || c.instructor === instructor.id);
+                                    // Use the assignedCourses array on the instructor object itself
+                                    const instructorCourses = instructor.assignedCourses || [];
 
                                     return (
                                         <tr key={instructor.id} className="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
@@ -251,6 +250,7 @@ export default function ManageInstructors() {
                 isOpen={isInstructorModalOpen}
                 onClose={() => setIsInstructorModalOpen(false)}
                 initialData={selectedInstructor}
+                courses={courses}
             />
 
             <ConfirmationModal

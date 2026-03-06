@@ -173,6 +173,10 @@ export default function StudentDashboard() {
     const pendingCourseIds = myRequests.filter(r => r.status === "pending" || r.status === "approved").map(r => r.courseId);
     const availableToRequest = allCourses;
 
+    const upcomingExams = enrolledCoursesDetails
+        .filter(c => c.nextExam && new Date(c.nextExam) >= new Date())
+        .sort((a, b) => new Date(a.nextExam) - new Date(b.nextExam));
+
     if (loading) return (
         <div className="flex justify-center items-center py-20 min-h-[50vh]">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -239,7 +243,7 @@ export default function StudentDashboard() {
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-4">
-                                                <button className="flex-1 bg-primary hover:bg-primary-dark text-black font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                                <button className="flex-1 bg-primary hover:bg-primary-dark text-primary-foreground font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
                                                     <span>Continue Learning</span>
                                                     <span className="material-icons text-lg notranslate" translate="no">arrow_forward</span>
                                                 </button>
@@ -287,8 +291,14 @@ export default function StudentDashboard() {
                                     )}
 
                                     {/* Overall Progress */}
-                                    <div className="h-1 w-full bg-slate-200 dark:bg-slate-800">
-                                        <div className="h-full bg-primary" style={{ width: `${progress}%` }}></div>
+                                    <div className="px-6 pb-6 pt-2 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Course Progress</span>
+                                            <span className="text-sm font-bold text-primary">{progress}%</span>
+                                        </div>
+                                        <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                                            <div className="h-full bg-primary transition-all duration-1000" style={{ width: `${progress}%` }}></div>
+                                        </div>
                                     </div>
                                 </div>
                             );
@@ -365,6 +375,42 @@ export default function StudentDashboard() {
 
                 {/* Right Column: Requests & Certificates */}
                 <div className="lg:col-span-4 space-y-6">
+                    {/* Upcoming Exams */}
+                    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                            <span className="material-icons text-primary notranslate" translate="no">event</span>
+                            Upcoming Exams
+                        </h3>
+                        <div className="space-y-4">
+                            {upcomingExams.length > 0 ? (
+                                upcomingExams.map(course => {
+                                    const examDate = new Date(course.nextExam);
+                                    const timeStr = examDate.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+                                    return (
+                                        <div key={course.id} className="flex items-start gap-4 p-4 rounded-lg border border-primary/20 bg-primary/5">
+                                            <div className="w-12 h-12 rounded-lg bg-primary/20 flex flex-col items-center justify-center text-primary flex-shrink-0">
+                                                <span className="text-xs font-bold uppercase">{examDate.toLocaleString('en-US', { month: 'short' })}</span>
+                                                <span className="text-lg font-bold leading-none">{examDate.getDate()}</span>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate" title={course.name}>
+                                                    {course.name}
+                                                </h4>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
+                                                    <span className="material-icons text-[14px] notranslate" translate="no">schedule</span>
+                                                    {timeStr}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <p className="text-sm text-slate-500 italic">No upcoming exams scheduled.</p>
+                            )}
+                        </div>
+                    </div>
+
                     {/* My Requests (Enrollment) */}
                     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
@@ -440,7 +486,7 @@ export default function StudentDashboard() {
                                         </div>
                                         <button
                                             onClick={() => window.open(`/c/${cert.displayId || cert.id}`, '_blank')}
-                                            className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-slate-900 hover:scale-110 transition-transform shadow-md shadow-primary/20"
+                                            className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground hover:scale-110 transition-transform shadow-md shadow-primary/20"
                                             title="View Certificate">
                                             <span className="material-icons text-sm notranslate" translate="no">visibility</span>
                                         </button>

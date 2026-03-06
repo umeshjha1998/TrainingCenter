@@ -81,8 +81,17 @@ export default function BulkCertificateGeneration() {
         setSelectedStudentIds(newSet);
     };
 
-    const handleScoreChange = (id, score) => {
-        setStudentScores(prev => ({ ...prev, [id]: score }));
+    const handleScoreChange = (id, subjectOrKey, score) => {
+        setStudentScores(prev => {
+            const currentScores = typeof prev[id] === 'object' && prev[id] !== null ? prev[id] : {};
+            return {
+                ...prev,
+                [id]: {
+                    ...currentScores,
+                    [subjectOrKey]: score
+                }
+            };
+        });
     };
 
     const handleFileUpload = async (e) => {
@@ -107,14 +116,25 @@ export default function BulkCertificateGeneration() {
                 data.forEach(row => {
                     // Try to match by email
                     const email = row.email || row.Email || row.EMAIL;
-                    const score = row.score || row.Score || row.SCORE || row.marks || row.Marks;
-
                     if (email) {
                         const student = students.find(s => s.email?.toLowerCase() === email.toLowerCase());
                         if (student) {
                             newSelection.add(student.id);
-                            if (score !== undefined) {
-                                newScores[student.id] = String(score);
+                            if (!newScores[student.id] || typeof newScores[student.id] !== 'object') {
+                                newScores[student.id] = {};
+                            }
+
+                            if (selectedCourse && Array.isArray(selectedCourse.subjects) && selectedCourse.subjects.length > 0) {
+                                selectedCourse.subjects.forEach(sub => {
+                                    if (row[sub] !== undefined) {
+                                        newScores[student.id][sub] = String(row[sub]);
+                                    }
+                                });
+                            } else {
+                                const score = row.score || row.Score || row.SCORE || row.marks || row.Marks;
+                                if (score !== undefined) {
+                                    newScores[student.id]['total'] = String(score);
+                                }
                             }
                             matches++;
                         }
@@ -155,9 +175,15 @@ export default function BulkCertificateGeneration() {
             for (let i = 0; i < total; i++) {
                 const studentId = studentsToProcess[i];
                 const student = students.find(s => s.id === studentId);
-                const score = studentScores[studentId] || "100"; // default if empty
-
                 if (!student) continue;
+
+                const marksObj = typeof studentScores[studentId] === 'object' ? studentScores[studentId] : {};
+                const isSubjectWise = selectedCourse && Array.isArray(selectedCourse.subjects) && selectedCourse.subjects.length > 0;
+
+                let scoreToSave = marksObj;
+                if (!isSubjectWise) {
+                    scoreToSave = marksObj['total'] || studentScores[studentId] || "100";
+                }
 
                 // 1. Check existing certs for versioning
                 const q = query(
@@ -194,8 +220,8 @@ export default function BulkCertificateGeneration() {
                     studentId: studentId,
                     course: selectedCourse.name,
                     courseId: selectedCourseId,
-                    instructorName: selectedCourse.instructorName || "Instructor", // Ensure course has instructor or fallback
-                    marks: score,
+                    instructorName: selectedCourse.instructor || "Instructor", // Ensure course has instructor or fallback
+                    marks: scoreToSave,
                     date: new Date(issueDate).toLocaleString('en-US', { month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }),
                     isoDate: issueDate,
                     status: "Issued",
@@ -409,7 +435,13 @@ export default function BulkCertificateGeneration() {
                                                 </th>
                                                 <th className="px-6 py-4">Student</th>
                                                 <th className="px-6 py-4">Email</th>
-                                                <th className="px-6 py-4 w-32 text-right">Score/Marks</th>
+                                                {selectedCourse && Array.isArray(selectedCourse.subjects) && selectedCourse.subjects.length > 0 ? (
+                                                    selectedCourse.subjects.map((sub, idx) => (
+                                                        <th key={idx} className="px-6 py-4 text-right min-w-[100px]">{sub}</th>
+                                                    ))
+                                                ) : (
+                                                    <th className="px-6 py-4 w-32 text-right">Score/Marks</th>
+                                                )}
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-100 dark:divide-white/5">
@@ -435,15 +467,29 @@ export default function BulkCertificateGeneration() {
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{student.email}</td>
-                                                    <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
-                                                        <input
-                                                            type="text"
-                                                            className="w-20 px-2 py-1 text-right text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:ring-1 focus:ring-primary focus:outline-none dark:text-white"
-                                                            placeholder="Score"
-                                                            value={studentScores[student.id] || ""}
-                                                            onChange={(e) => handleScoreChange(student.id, e.target.value)}
-                                                        />
-                                                    </td>
+                                                    {selectedCourse && Array.isArray(selectedCourse.subjects) && selectedCourse.subjects.length > 0 ? (
+                                                        selectedCourse.subjects.map((sub, idx) => (
+                                                            <td key={idx} className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                                                                <input
+                                                                    type="text"
+                                                                    className="w-full min-w-[80px] px-2 py-1 text-right text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:ring-1 focus:ring-primary focus:outline-none dark:text-white"
+                                                                    placeholder="0/100"
+                                                                    value={(studentScores[student.id] && typeof studentScores[student.id] === 'object' ? studentScores[student.id][sub] : "") || ""}
+                                                                    onChange={(e) => handleScoreChange(student.id, sub, e.target.value)}
+                                                                />
+                                                            </td>
+                                                        ))
+                                                    ) : (
+                                                        <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                                                            <input
+                                                                type="text"
+                                                                className="w-20 px-2 py-1 text-right text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded focus:ring-1 focus:ring-primary focus:outline-none dark:text-white"
+                                                                placeholder="Score"
+                                                                value={(studentScores[student.id] && typeof studentScores[student.id] === 'object' ? studentScores[student.id]['total'] : studentScores[student.id]) || ""}
+                                                                onChange={(e) => handleScoreChange(student.id, 'total', e.target.value)}
+                                                            />
+                                                        </td>
+                                                    )}
                                                 </tr>
                                             ))}
                                             {filteredStudents.length === 0 && (

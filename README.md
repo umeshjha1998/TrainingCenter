@@ -49,7 +49,8 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Vercel Analytics**: Integrated `@vercel/analytics` and `@vercel/speed-insights` for production monitoring. Configured `.npmrc` (`legacy-peer-deps=true`) for NextAuth compatibility.
 - **Student Dashboard Enhancements**: Enrolled course images display properly with maximum/obtained marks. Assigned courses appear instantly, and students can browse, request, and cancel enrollment for available courses seamlessly.
 - **Robust OTP & Email Infrastructure**: Fixed NodeMailer integration to securely handle OTP dispatch. Certificates are now automatically shared to students via email upon generation.
-- **UI/UX Quality of Life**: Added a global dark mode toggle with cross-theme text visibility (Day Mode fixes). Fixed mobile clipping for language selectors and logout buttons. Resolved broken navigation links, and improved forms aligned with Stitch designs.
+- **UI/UX Quality of Life**: Added a global dark mode toggle with cross-theme text visibility (Day Mode fixes). Fixed mobile clipping for language selectors and logout buttons. Resolved broken navigation links, fixed "View Certificate" visibility in Day Mode, and improved forms aligned with Stitch designs.
+- **Premium Public Certificate View**: Integrated complex marks table metrics with formal guilloche designs to correctly translate Stitch templates into dynamic React components via direct URL IDs (`/c/<certificateId>`).
 
 ## Technologies Used
 

@@ -14,12 +14,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner";
 
-export default function InstructorModal({ isOpen, onClose, initialData }) {
+export default function InstructorModal({ isOpen, onClose, initialData, courses = [] }) {
     const [formData, setFormData] = useState({
         name: "",
         expertise: "",
         email: "",
-        phone: ""
+        phone: "",
+        assignedCourses: []
     });
     const [loading, setLoading] = useState(false);
 
@@ -29,16 +30,28 @@ export default function InstructorModal({ isOpen, onClose, initialData }) {
                 name: initialData.name || "",
                 expertise: initialData.expertise || "",
                 email: initialData.email || "",
-                phone: initialData.phone || ""
+                phone: initialData.phone || "",
+                assignedCourses: initialData.assignedCourses || []
             });
         } else {
-            setFormData({ name: "", expertise: "", email: "", phone: "" });
+            setFormData({ name: "", expertise: "", email: "", phone: "", assignedCourses: [] });
         }
     }, [initialData, isOpen]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleCourseChange = (courseId, courseName, checked) => {
+        setFormData(prev => {
+            const currentCourses = prev.assignedCourses || [];
+            if (checked) {
+                return { ...prev, assignedCourses: [...currentCourses, { id: courseId, name: courseName }] };
+            } else {
+                return { ...prev, assignedCourses: currentCourses.filter(c => c.id !== courseId) };
+            }
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -60,8 +73,7 @@ export default function InstructorModal({ isOpen, onClose, initialData }) {
                 // Add new instructor
                 await addDoc(collection(db, "instructors"), {
                     ...instructorData,
-                    createdAt: new Date(),
-                    assignedCourses: []
+                    createdAt: new Date()
                 });
                 toast.success("Instructor added successfully!");
             }
@@ -98,6 +110,24 @@ export default function InstructorModal({ isOpen, onClose, initialData }) {
                         <div className="space-y-2">
                             <Label htmlFor="phone">Phone Number</Label>
                             <Input id="phone" name="phone" type="tel" placeholder="e.g. +1 (555) 123-4567" value={formData.phone} onChange={handleInputChange} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Assigned Courses</Label>
+                            <div className="mt-2 space-y-2 max-h-40 overflow-y-auto border border-slate-200 dark:border-slate-800 rounded-md p-3 bg-slate-50 dark:bg-slate-900">
+                                {courses.length > 0 ? courses.map(course => (
+                                    <Label key={course.id} className="flex items-center gap-2 font-normal cursor-pointer">
+                                        <Input
+                                            type="checkbox"
+                                            className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-primary cursor-pointer accent-primary shrink-0"
+                                            checked={(formData.assignedCourses || []).some(c => c.id === course.id)}
+                                            onChange={(e) => handleCourseChange(course.id, course.name, e.target.checked)}
+                                        />
+                                        <span className="text-slate-700 dark:text-slate-300 leading-tight block truncate ml-1">{course.name}</span>
+                                    </Label>
+                                )) : (
+                                    <div className="text-sm text-slate-500">No courses available.</div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
