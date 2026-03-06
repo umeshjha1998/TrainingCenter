@@ -50,8 +50,12 @@ Both the Student and Admin dashboards rely heavily on Firebase `onSnapshot` real
 The platform maintains a public directory of instructors and their assigned courses.
 ### Workflow:
 - Admins manage instructors via the Admin Dashboard (CRUD operations).
+- **Image Management**: During creation or update, admins can upload a professional headshot.
+    - **Validation**: Strict client-side check for 2MB file size limit.
+    - **Storage**: Photos are uploaded to Firebase Storage and the resulting URL is saved to the instructor document.
+    - **Instruction UI**: Admins see clear guidelines on photo requirements (professional, clear, high-quality) and technical limits (2MB, JPG/PNG).
 - During creation/update, admins can directly assign existing courses to these instructors.
-- The public `OurInstructors` page fetches this data and provides filtering by department and text search.
+- The public `OurInstructors` page fetches this data and provides filtering by department and text search. Images are displayed prominently in the directory.
 
 ## 8. Bulk Certificate Generation
 Administrators can issue certificates to multiple students simultaneously.

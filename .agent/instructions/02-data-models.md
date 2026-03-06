@@ -30,6 +30,16 @@ Certificates document successful completion of a course for a student.
 - **`marks`** (Object/Map): Key-value pair matching subject names to numeric scores earned by the student.
 - **`qrCodeData`** (String): Generated data payload linking the physical QR code directly back to the public `/verify` page with `certificateId`.
 
+## 4. Instructors (Collection: `instructors`)
+Faculty members profiles displayed publicly and managed by admins.
+- **`name`** (String): Full name of the instructor.
+- **`expertise`** (String): Key skills or department.
+- **`email`** (String): Contact email address.
+- **`phone`** (String): Contact phone number.
+- **`imageUrl`** (String): URL linking to a professional photo (stored in Firebase Storage). 
+- **`assignedCourses`** (Array of Objects): A list of objects referencing Course IDs and Names.
+- **`createdAt` / `updatedAt`** (Timestamp): Tracking record history.
+
 ## Operations Note
 Agents implementing new features referencing these collections must observe these implicit relationships, maintaining synchronous updates when a course or student goes missing/is deleted.
 

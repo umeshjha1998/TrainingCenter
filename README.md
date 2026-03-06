@@ -29,7 +29,9 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Global Search**: Unified predictive search bar enabling quick navigation to specific Students, Courses, or Certificates from anywhere in the dashboard.
 - **Dashboard**: High-level overview of total students, courses, certificates issued, and a real-time "Recent Activity" feed tracking system events.
 - **Manage Students**: Full CRUD operations for student records integrated with OTP security for email modifications.
-- **Manage Instructors**: comprehensive CRUD interface and course assignment allocation for faculty members.
+- **Manage Instructors**: Comprehensive CRUD interface for faculty members.
+    - **Image Upload**: Seamlessly upload and update professional instructor photos (max 2MB) stored in Firebase Storage.
+    - **Course Allocation**: Assign and manage course loads for each instructor.
 - **Manage Courses**: Create, edit, and delete courses.
     - **Course Duration**: Added support for specifying course duration to feed progress algorithms.
 - **Manage Enrollment Requests**: Review, approve, or deny course enrollment requests submitted by students.
@@ -49,8 +51,8 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Vercel Analytics**: Integrated `@vercel/analytics` and `@vercel/speed-insights` for production monitoring. Configured `.npmrc` (`legacy-peer-deps=true`) for NextAuth compatibility.
 - **Student Dashboard Enhancements**: Enrolled course images display properly with maximum/obtained marks. Assigned courses appear instantly, and students can browse, request, and cancel enrollment for available courses seamlessly.
 - **Robust OTP & Email Infrastructure**: Fixed NodeMailer integration to securely handle OTP dispatch. Certificates are now automatically shared to students via email upon generation.
-- **UI/UX Quality of Life**: Added a global dark mode toggle with cross-theme text visibility (Day Mode fixes). Fixed mobile clipping for language selectors and logout buttons. Resolved broken navigation links, fixed "View Certificate" visibility in Day Mode, and improved forms aligned with Stitch designs.
-- **Premium Public Certificate View**: Integrated complex marks table metrics with formal guilloche designs to correctly translate Stitch templates into dynamic React components via direct URL IDs (`/c/<certificateId>`).
+- **Dynamic Instructor Profiles**: Integrated professional image upload for faculty, featuring real-time previews, size validation (2MB), and automated storage in Firebase Storage.
+- **Improved Data Visibility**: Instructor photos are now displayed across the Admin Dashboard and the public Faculty Directory, enhancing the institute's professional presentation.
 
 ## Technologies Used
 
@@ -63,6 +65,7 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Backend-as-a-Service**: [Firebase](https://firebase.google.com/)
   - **Authentication**: Secure user login/registration.
   - **Firestore Database**: Real-time database for storing users, courses, and certificates.
+  - **Firebase Storage**: Secure cloud storage for instructor profile photos and other media assets.
 - **Email Delivery**: Custom internal Next.js `send-otp` Route handling NodeMailer dispatches.
 
 ### Utilities

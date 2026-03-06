@@ -182,8 +182,14 @@ export default function ManageInstructors() {
                                         <tr key={instructor.id} className="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                                             <td className="whitespace-nowrap px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="h-10 w-10 flex items-center justify-center rounded-full bg-primary/20 text-primary-dark font-bold text-lg uppercase">
-                                                        {instructor.name ? instructor.name.charAt(0) : "I"}
+                                                    <div className="h-10 w-10 flex-shrink-0 rounded-full overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+                                                        {instructor.imageUrl ? (
+                                                            <img src={instructor.imageUrl} alt={instructor.name} className="h-full w-full object-cover" />
+                                                        ) : (
+                                                            <div className="h-full w-full flex items-center justify-center bg-primary/20 text-primary-dark font-bold text-lg uppercase">
+                                                                {instructor.name ? instructor.name.charAt(0) : "I"}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <div>
                                                         <div className="font-medium text-slate-900 dark:text-white">{instructor.name}</div>
