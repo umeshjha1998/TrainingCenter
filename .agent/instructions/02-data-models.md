@@ -8,7 +8,7 @@ These are the primary entities managed by Admins and mapped out to Student/Admin
 - **`role`** (String): Distinguishes the user type, e.g., 'student', 'admin'.
 - **`email`** (String): Registered email. Modified via OTP-based confirmation.
 - **`displayName`** / **`fullName`** (String): User's full name.
-- **`profilePhotoUrl`** (String): URL linking to an image stored on Firebase Storage (max 2MB, mandatory).
+- **`profilePhotoUrl`** (String): Base64 encoded string representing the user's profile image (max 500KB, mandatory). Saved directly to Firestore.
 - **`aadhar`** (String): 12-digit student Aadhar number.
 - **`pan`** (String): 10-character code for PAN.
 - **`passport`** (String): Student Passport number.
@@ -41,7 +41,7 @@ Faculty members profiles displayed publicly and managed by admins.
 - **`expertise`** (String): Key skills or department.
 - **`email`** (String): Contact email address.
 - **`phone`** (String): Contact phone number.
-- **`imageUrl`** (String): URL linking to a professional photo (stored in Firebase Storage). 
+- **`imageUrl`** (String): Base64 encoded string representing a professional photo (stored directly in Firestore, max 500KB).
 - **`assignedCourses`** (Array of Objects): A list of objects referencing Course IDs and Names.
 - **`createdAt` / `updatedAt`** (Timestamp): Tracking record history.
 

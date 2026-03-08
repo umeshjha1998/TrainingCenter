@@ -30,7 +30,7 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Dashboard**: High-level overview of total students, courses, certificates issued, and a real-time "Recent Activity" feed tracking system events.
 - **Manage Students**: Full CRUD operations for student records integrated with OTP security for email modifications.
 - **Manage Instructors**: Comprehensive CRUD interface for faculty members.
-    - **Image Upload**: Seamlessly upload and update professional instructor photos (max 2MB) stored in Firebase Storage.
+    - **Image Upload**: Seamlessly upload and update professional instructor photos (max 500KB) stored natively as Base64 text in Firestore.
     - **Course Allocation**: Assign and manage course loads for each instructor.
 - **Manage Courses**: Create, edit, and delete courses.
     - **Course Duration**: Added support for specifying course duration to feed progress algorithms.
@@ -51,7 +51,7 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Vercel Analytics**: Integrated `@vercel/analytics` and `@vercel/speed-insights` for production monitoring. Configured `.npmrc` (`legacy-peer-deps=true`) for NextAuth compatibility.
 - **Student Dashboard Enhancements**: Enrolled course images display properly with maximum/obtained marks. Assigned courses appear instantly, and students can browse, request, and cancel enrollment for available courses seamlessly.
 - **Robust OTP & Email Infrastructure**: Fixed NodeMailer integration to securely handle OTP dispatch. Certificates are now automatically shared to students via email upon generation.
-- **Dynamic Instructor Profiles**: Integrated professional image upload for faculty, featuring real-time previews, size validation (2MB), and automated storage in Firebase Storage.
+- **Dynamic Instructor Profiles**: Integrated professional image upload for faculty, featuring real-time previews, size validation (500KB), and automated Base64 text storage directly in Firestore.
 - **Improved Data Visibility**: Instructor photos are now displayed across the Admin Dashboard and the public Faculty Directory, enhancing the institute's professional presentation.
 
 ## Technologies Used
@@ -65,7 +65,7 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Backend-as-a-Service**: [Firebase](https://firebase.google.com/)
   - **Authentication**: Secure user login/registration.
   - **Firestore Database**: Real-time database for storing users, courses, and certificates.
-  - **Firebase Storage**: Secure cloud storage for instructor profile photos and other media assets.
+  - **Firebase Storage**: Legacy/optional cloud storage for larger media assets (profile photos have been migrated to native Firestore Base64 encoding).
 - **Email Delivery**: Custom internal Next.js `send-otp` Route handling NodeMailer dispatches.
 
 ### Utilities
