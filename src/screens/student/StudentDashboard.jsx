@@ -373,8 +373,65 @@ export default function StudentDashboard() {
                     </div>
                 </div>
 
-                {/* Right Column: Requests & Certificates */}
+                {/* Right Column: Profile, Requests & Certificates */}
                 <div className="lg:col-span-4 space-y-6">
+                    {/* My Profile */}
+                    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+                        <div className="bg-primary/10 p-6 flex flex-col items-center justify-center border-b border-primary/20">
+                            {userData?.profilePhotoUrl ? (
+                                <img src={userData.profilePhotoUrl} alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-800 shadow-md mb-4" />
+                            ) : (
+                                <div className="w-24 h-24 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-400 font-bold text-3xl border-4 border-white dark:border-slate-800 shadow-md mb-4">
+                                    {(userData?.fullName || currentUser?.email || 'S').charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white text-center line-clamp-1">
+                                {userData?.fullName || currentUser?.email}
+                            </h3>
+                            <span className="text-xs font-semibold px-3 py-1 bg-primary text-primary-foreground rounded-full mt-2 uppercase tracking-wide shadow-sm">Student Account</span>
+                        </div>
+                        <div className="p-6 space-y-4">
+                            <div>
+                                <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Contact Info</h4>
+                                <ul className="space-y-3 text-sm">
+                                    <li className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
+                                        <span className="material-icons text-primary text-base mt-0.5 notranslate" translate="no">email</span>
+                                        <span className="break-all">{userData?.email || currentUser?.email || 'N/A'}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
+                                        <span className="material-icons text-primary text-base mt-0.5 notranslate" translate="no">phone</span>
+                                        <span>{userData?.phone || 'N/A'}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
+                                        <span className="material-icons text-primary text-base mt-0.5 notranslate" translate="no">location_on</span>
+                                        <span>{userData?.address || 'N/A'}</span>
+                                    </li>
+                                    <li className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
+                                        <span className="material-icons text-primary text-base mt-0.5 notranslate" translate="no">person</span>
+                                        <span>{userData?.gender ? userData.gender.charAt(0).toUpperCase() + userData.gender.slice(1) : 'N/A'}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Registration Details</h4>
+                                <ul className="space-y-2 text-sm">
+                                    <li className="flex items-center justify-between text-slate-700 dark:text-slate-300">
+                                        <span className="text-slate-500">Aadhar:</span>
+                                        <span className="font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-xs">{userData?.aadhar || 'N/A'}</span>
+                                    </li>
+                                    <li className="flex items-center justify-between text-slate-700 dark:text-slate-300">
+                                        <span className="text-slate-500">PAN:</span>
+                                        <span className="font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-xs">{userData?.pan || 'N/A'}</span>
+                                    </li>
+                                    <li className="flex items-center justify-between text-slate-700 dark:text-slate-300">
+                                        <span className="text-slate-500">Passport:</span>
+                                        <span className="font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-xs">{userData?.passport || 'N/A'}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Upcoming Exams */}
                     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">

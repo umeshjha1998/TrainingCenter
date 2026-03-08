@@ -133,7 +133,16 @@ export default function ManageStudents() {
                                 students.map((student) => (
                                     <tr key={student.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-white sm:pl-6">
-                                            {student.fullName || student.name}
+                                            <div className="flex items-center gap-3">
+                                                {student.profilePhotoUrl ? (
+                                                    <img src={student.profilePhotoUrl} alt={student.fullName || student.name || 'Student'} className="h-10 w-10 min-w-10 rounded-full object-cover border border-slate-200 dark:border-slate-700" />
+                                                ) : (
+                                                    <div className="h-10 w-10 min-w-10 flex-shrink-0 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold border border-slate-300 dark:border-slate-600">
+                                                        {(student.fullName || student.name || 'S').charAt(0).toUpperCase()}
+                                                    </div>
+                                                )}
+                                                <span>{student.fullName || student.name}</span>
+                                            </div>
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
                                             <div className="flex flex-col">

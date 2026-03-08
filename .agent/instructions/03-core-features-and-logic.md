@@ -43,6 +43,7 @@ Both the Student and Admin dashboards rely heavily on Firebase `onSnapshot` real
 - Any backend change (like an admin approving a request or a new certificate being issued) immediately reflects on the UI without requiring a page refresh.
 - Admin dashboards also display a real-time "Recent Activity" feed summarizing these events.
 - **Student Dashboard Features**:
+  - **Profile Overview**: Displays a read-only real-time reflection of the student's demographic and registration details (Aadhar, PAN, Passport, Photo) directly from their user document.
   - Displays a dynamically updating progress bar for each enrolled course based on `assignedAt` date and `duration`.
   - Shows an "Upcoming Exams" section for enrolled courses, dynamically presenting the `nextExam` dates assigned by admins.
 
