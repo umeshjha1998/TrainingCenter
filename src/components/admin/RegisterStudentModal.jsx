@@ -83,8 +83,8 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 2 * 1024 * 1024) {
-                toast.error("Image size must be less than 2MB");
+            if (file.size > 500 * 1024) {
+                toast.error("Image size must be less than 500KB");
                 return;
             }
             setImageFile(file);
@@ -151,11 +151,8 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
             let finalImageUrl = initialData?.profilePhotoUrl || "";
 
             if (imageFile) {
-                const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
-                const { storage } = await import("../../firebase");
-                const storageRef = ref(storage, `students/${Date.now()}_${imageFile.name}`);
-                const snapshot = await uploadBytes(storageRef, imageFile);
-                finalImageUrl = await getDownloadURL(snapshot.ref);
+                // Instead of uploading to Firebase Storage, use the Base64 data URL
+                finalImageUrl = imagePreview;
             }
 
             if (initialData?.id) {
@@ -295,7 +292,7 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
                                                 <Upload size={10} /> Requirements
                                             </span>
                                             • Clear frontal face<br />
-                                            • Max 2MB size<br />
+                                            • Max 500KB size<br />
                                             • JPG or PNG only
                                         </p>
                                     </div>
