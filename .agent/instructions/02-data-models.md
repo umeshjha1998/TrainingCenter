@@ -7,7 +7,12 @@ These are the primary entities managed by Admins and mapped out to Student/Admin
 - **`uid`** (String): Firebase Auth ID for the user.
 - **`role`** (String): Distinguishes the user type, e.g., 'student', 'admin'.
 - **`email`** (String): Registered email. Modified via OTP-based confirmation.
-- **`displayName`** (String): User's full name.
+- **`displayName`** / **`fullName`** (String): User's full name.
+- **`profilePhotoUrl`** (String): URL linking to an image stored on Firebase Storage (max 2MB, mandatory).
+- **`aadhar`** (String): 12-digit student Aadhar number.
+- **`pan`** (String): 10-character code for PAN.
+- **`passport`** (String): Student Passport number.
+- **`phone`**, **`address`**, **`gender`** (String): Standard demographic information.
 - **`enrolledCourses`** (Array of Objects): A list of objects referencing Course IDs and marking the enrollment status or dynamic progress.
   - **Structure detail**: Often includes `courseId`, `status`, and progress metrics.
   - **Dropout Feature**: Students can remove courses from this list via a `Dropout` function in their portal.

@@ -251,7 +251,16 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                             </div>
                             <div className="absolute inset-0 border border-primary/10 rounded-xl"></div>
                         </div>
-                        <div className="text-left">
+
+                        {data.studentPhoto && (
+                            <div className="bg-white p-2 pb-6 shadow-md border border-slate-200 rotate-[-2deg] shrink-0 print:border-slate-300 print:shadow-sm">
+                                <div className="w-24 h-32 bg-slate-100 overflow-hidden border border-slate-100">
+                                    <img src={data.studentPhoto} alt={data.studentName} className="w-full h-full object-cover sepia-[0.1] contrast-[1.05]" crossOrigin="anonymous" />
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="text-left ml-2">
                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Verify Authenticity</p>
                             <p className="text-lg font-mono font-bold text-primary">{data.certificateId}</p>
                             <div className="h-px w-full bg-gold/30 my-2"></div>

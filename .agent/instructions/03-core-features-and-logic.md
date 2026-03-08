@@ -94,5 +94,12 @@ To ensure accessibility and visibility across both light and dark modes, all UI 
 - **Dynamic Contrast**: In Day Mode, `primary` is typically dark (requiring light text), while in Dark Mode, `primary` is typically light (requiring dark text). The `text-primary-foreground` utility handles this automatically.
 - **Icon Visibility**: Material Icons should use `text-primary-foreground` when placed inside primary-colored containers to maintain legibility.
 
+## 13. Student Registration & Manage Students
+Students register through the public signup page, and administrators can register or edit students via the Admin Dashboard.
+### Workflow:
+- **Mandatory Photo Upload**: All new student registrations (via public signup or admin creation) require a profile photo. The system enforces a maximum file size of 2MB (JPG/PNG).
+- **Storage**: Photos are uploaded to Firebase Storage and linked to the `profilePhotoUrl` field in the user document.
+- **Administrative Parity**: The admin's `RegisterStudentModal` provides full parity with public registration fields, including inputs for Aadhar, PAN, and Passport numbers, ensuring complete records can be managed internally.
+
 ---
 *Note: Any new feature requests must be reflected in this file by updating their workflow definition.*

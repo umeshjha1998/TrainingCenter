@@ -41,6 +41,7 @@ export default function PublicCertificate() {
                     let courseName = data.course;
                     let courseDuration = data.duration; // Fallback if stored directly
                     let instructorName = data.instructorName || data.instructor; // Snapshot or fallback
+                    let profilePhotoUrl = data.profilePhotoUrl || "";
 
                     // Fetch latest names and duration if IDs exist
                     try {
@@ -50,6 +51,7 @@ export default function PublicCertificate() {
                             if (studentSnap.exists()) {
                                 const sData = studentSnap.data();
                                 studentName = sData.fullName || sData.name || studentName;
+                                profilePhotoUrl = sData.profilePhotoUrl || profilePhotoUrl;
                             }
                         }
                         if (data.courseId) {
@@ -88,6 +90,7 @@ export default function PublicCertificate() {
 
                     setCertificateData({
                         studentName: studentName,
+                        studentPhoto: profilePhotoUrl,
                         courseName: courseName,
                         courseDuration: courseDuration, // Add duration
                         instructorName: instructorName,
