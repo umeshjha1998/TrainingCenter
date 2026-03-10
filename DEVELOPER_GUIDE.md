@@ -29,6 +29,46 @@ Welcome to the central developer documentation for the AC & DC Technical Institu
 
 The application is built on a modern, React-based web stack designed for real-time reactivity, comprehensive SEO routing, and robust serverless deployment.
 
+```mermaid
+flowchart TB
+    %% Styling Classes
+    classDef frontend fill:#0ea5e9,stroke:#0369a1,stroke-width:2px,color:#fff,rx:5px,ry:5px
+    classDef firebase fill:#f59e0b,stroke:#b45309,stroke-width:2px,color:#fff,rx:5px,ry:5px
+    classDef api fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff,rx:5px,ry:5px
+    classDef db fill:#8b5cf6,stroke:#6d28d9,stroke-width:2px,color:#fff,rx:5px,ry:5px
+
+    %% Architecture Nodes
+    subgraph Frontend["Frontend Client (Next.js 16)"]
+        direction TB
+        UI["Tailwind CSS v4 & shadcn/ui"]
+        Pages["App / Pages Router"]
+        Portals["Public | Student | Admin Portals"]
+    end
+
+    subgraph BackendServices["Backend Services"]
+        direction LR
+        subgraph Firebase["Firebase (BaaS)"]
+            Auth["Firebase Auth\n(Identity & Roles)"]
+            Firestore[("Firestore NoSQL\n(Real-time Database)")]
+        end
+        
+        subgraph InternalAPI["Next.js Server API"]
+            Mailer["/api/send-otp\n(NodeMailer SMTP)"]
+        end
+    end
+
+    %% Data Flow Connections
+    Portals -->|"Authenticates (Email/Pass)"| Auth
+    Portals <-->|"CRUD & Real-time Listeners\n(onSnapshot)"| Firestore
+    Portals -->|"Requests OTP / Approvals"| Mailer
+    
+    %% Apply Styling
+    Frontend:::frontend
+    Auth:::firebase
+    Firestore:::db
+    InternalAPI:::api
+```
+
 *   **Framework**: **Next.js 16**. The project was recently migrated from React/Vite. All new pages and API routes should leverage Next.js paradigms.
 *   **Routing**: The application structure leverages Next.js routing capabilities. Note any specific `pages/` or `app/` router boundaries defined in the root directory.
 *   **Authentication Flow**: 
