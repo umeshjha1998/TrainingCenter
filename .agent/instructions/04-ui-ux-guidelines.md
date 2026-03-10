@@ -10,6 +10,7 @@ The AC & DC Technical Institute application maintains a modern, accessible, and 
 - Keep components modular. If building a new feature like 'Reports', wrap its structural parts into semantic React components (`src/components/...`).
 - **shadcn/ui First**: Before building custom UI elements (buttons, dialogs, forms, cards, etc.), check if a shadcn/ui component exists. If it does, install and use it.
 - **Modals**: Heavy reliance on shadcn/ui Dialog/Modal components (e.g., `RegisterStudentModal`, `AssignCourseModal`, `GenerateCertificateModal`) to perform CRUD without unnecessary routing overhead.
+- **Modal Layout Constraints**: For complex forms involving media (like Instructor Image Upload) along with multiple text fields, adopt a **side-by-side view** (e.g., using grid layouts `grid-cols-1 md:grid-cols-2`). This prevents severe vertical scrolling on desktop viewports and significantly improves UX, while remaining stacked on mobile.
 - **Buttons / Forms**: Utilize shadcn/ui components and leverage their built-in accessibility, hover, focus, and disabled states.
 
 ## 3. Student Progress & Visuals
@@ -32,6 +33,8 @@ Ensure all images are adequately referred to in `public/` and linked via root-re
 ## 6. Certificates & Print Aesthetics
 - Generated Certificates use QR codes via `qrcode.react`. These are intentionally scaled up (e.g., multiplier of 5) for better camera scanning functionality.
 - Include a specific, clear aesthetic hierarchy for the Student Name, Dynamic Subjects mapped out by score, Issue Dates, and digital signature approximations.
+- **Print Optimization**: Certificates *must* be strictly optimized for direct browser printing. Ensure the layout gracefully fits precisely on a single A4 page in portrait orientation.
+- Use CSS `@media print` directives and `print-color-adjust: exact` (or `-webkit-print-color-adjust`) globally within the print container to guarantee background colors, seals, borders, and the marks table render flawlessly without overlap or clipping during PDF generation or physical printing.
 
 ## 7. Icons and Internationalization
 - When utilizing `material-icons`, you **MUST** attach `class="notranslate"` and `translate="no"` to the icon element (e.g., `<span className="material-icons notranslate" translate="no">home</span>`).

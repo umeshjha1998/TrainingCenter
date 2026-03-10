@@ -6,6 +6,10 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Vercel**: [AC & DC Technical Institute Training Center](https://acdcinstitute.vercel.app/#/)
 - **GitHub Pages**: [AC & DC Technical Institute Training Center](https://umeshjha1998.github.io/TrainingCenter)
 
+## 📌 Developer & AI Documentation
+We have established a rigorous structural guide for building new features, updating databases, or utilizing the shadcn/ui framework. 
+> 👉 **[Please read the DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) before contributing or prompting AI agents to modify this codebase.**
+
 ## Features
 
 ### Public Portal
@@ -53,6 +57,9 @@ A comprehensive web platform for managing a technical training institute, featur
 - **Robust OTP & Email Infrastructure**: Fixed NodeMailer integration to securely handle OTP dispatch. Certificates are now automatically shared to students via email upon generation.
 - **Dynamic Instructor Profiles**: Integrated professional image upload for faculty, featuring real-time previews, size validation (500KB), and automated Base64 text storage directly in Firestore.
 - **Improved Data Visibility**: Instructor photos are now displayed across the Admin Dashboard and the public Faculty Directory, enhancing the institute's professional presentation.
+- **Comprehensive Student Profiles**: Implemented mandatory photo uploads for students and extended administrative registration to manage Aadhar, PAN, and Passport details. Students can view these real-time on a new 'My Profile' dashboard widget.
+- **Enhanced Certificate Printing**: Refactored the Public Certificate View template perfectly for single-page A4 printing. Background colors, CSS layouts, and signatures accurately persist through browser print dialogs.
+- **Social Connectivity**: Added Facebook integration to the global Footer component alongside YouTube and WhatsApp links.
 
 ## Technologies Used
 

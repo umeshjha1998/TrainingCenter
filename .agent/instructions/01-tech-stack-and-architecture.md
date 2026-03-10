@@ -1,6 +1,7 @@
 # Tech Stack & Architecture
 
 This document describes the foundational technologies and architectural choices for the AC & DC Technical Institute Training Center application. Agents working on this project must adhere to these choices unless explicitly instructed by the user to migrate or change them.
+**Note for AI Agents**: Always consult the top-level `DEVELOPER_GUIDE.md` for the unified source of truth regarding architecture, connectivity, and development prompts.
 
 ## Core Technologies
 - **Framework**: Next.js 16 (Migrated from React/Vite)
