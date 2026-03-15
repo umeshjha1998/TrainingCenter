@@ -8,7 +8,7 @@ All new unverified accounts and unverified email modification requests are chann
 - A user/admin triggers an email change or registrations.
 - Fetch random 6-digit OTP -> send through SMTP -> store in session/local state dynamically.
 - Present a modal allowing 60 seconds of validity.
-- Fallback constraint for development environment without ENV vars: present the OTP directly via `window.alert()` to prevent lock-outs.
+- Fallback constraint for development environment without ENV vars: present the OTP directly via `window.alert()` to prevent lock-outs. Success and error feedback for users should always use **sonner** notifications (`toast.success`/`toast.error`).
 
 ## 2. Certificate Generation & Verification Engine
 The `Generate Certificate` engine relies heavily on accurate matching.
@@ -27,7 +27,16 @@ Students can self-manage certain aspects of their enrollment.
 ### Workflow:
 - Admins typically assign courses via `Assign Course Modal`, tying the course details and default metadata.
 - A student logs into their portal and sees the new assignment. These assignments propagate to the Student Dashboard instantly via Firebase `onSnapshot` real-time listeners, ensuring the student sees the updated Enrolled courses and Available courses immediately.
-- To `Dropout`, they choose to forfeit the course via the button that prompts a `Window Verification/Confirmation Dialog`. Deletion reflects back synchronously in Firestore and updates the visual DOM state without full page refreshes.
+- To `Dropout`, they choose to forfeit the course via the button that prompts a confirmation dialog. Deletion reflects back synchronously in Firestore and updates the visual DOM state without full page refreshes, providing feedback via **sonner** notifications.
+- **Administrative Deletion & Data Integrity**: When an admin deletes a student record entirely:
+    - A cascading delete MUST be performed for the student's:
+        - Profile document in `users` collection.
+        - All related `enrollmentRequests`.
+        - All issued `certificates`.
+        - All personal `notifications`.
+        - Firebase Authentication user account (via secure `/api/admin/delete-student` server endpoint).
+    - This ensures no orphaned records remain in the database and user access is fully revoked.
+    - All process feedback must use `sonner` toasts.
 
 ## 5. Internationalization (i18n)
 The application handles multi-language support (English, Hindi, Bhojpuri, Maithili) via a custom wrapper around the Google Translate widget (`GoogleTranslate.jsx`).

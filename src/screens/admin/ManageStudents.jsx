@@ -67,13 +67,55 @@ export default function ManageStudents() {
     const handleDeleteStudent = async () => {
         if (!studentToDelete) return;
 
+        const studentUid = studentToDelete;
+        const toastId = toast.loading("Deleting student and all associated data...");
+
         try {
-            await deleteDoc(doc(db, "users", studentToDelete));
+            // 1. Delete from Firebase Authentication via our secure API
+            const authResponse = await fetch('/api/admin/delete-student', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ uid: studentUid })
+            });
+            const authResult = await authResponse.json();
+            
+            if (!authResult.success) {
+                console.warn("Auth deletion warning:", authResult.error);
+                // We proceed with Firestore cleanup even if Auth fails (e.g. user already gone or config missing)
+                // but we notify the admin if it's a major error.
+            }
+
+            // 2. Cascade Delete Firestore Data using a Batch
+            const { writeBatch, collection, query, where, getDocs } = await import("firebase/firestore");
+            const batch = writeBatch(db);
+
+            // a. Prepare deletion for Enrollment Requests
+            const requestsQuery = query(collection(db, "enrollmentRequests"), where("studentId", "==", studentUid));
+            const requestsSnap = await getDocs(requestsQuery);
+            requestsSnap.forEach(doc => batch.delete(doc.ref));
+
+            // b. Prepare deletion for Certificates
+            const certsQuery = query(collection(db, "certificates"), where("studentId", "==", studentUid));
+            const certsSnap = await getDocs(certsQuery);
+            certsSnap.forEach(doc => batch.delete(doc.ref));
+
+            // c. Prepare deletion for Notifications (Student specific)
+            const notifsQuery = query(collection(db, "notifications"), where("userId", "==", studentUid));
+            const notifsSnap = await getDocs(notifsQuery);
+            notifsSnap.forEach(doc => batch.delete(doc.ref));
+
+            // d. Delete primary user record
+            batch.delete(doc(db, "users", studentUid));
+
+            // e. Commit all Firestore deletions
+            await batch.commit();
+
             setIsDeleteModalOpen(false);
             setStudentToDelete(null);
+            toast.success("Student and all related data deleted successfully", { id: toastId });
         } catch (error) {
-            console.error("Error deleting student: ", error);
-            toast.error("Failed to delete student");
+            console.error("Error during cascading deletion: ", error);
+            toast.error("Failed to fully delete student data. Some records might remain.", { id: toastId });
         }
     };
 

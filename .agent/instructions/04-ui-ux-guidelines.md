@@ -12,6 +12,10 @@ The AC & DC Technical Institute application maintains a modern, accessible, and 
 - **Modals**: Heavy reliance on shadcn/ui Dialog/Modal components (e.g., `RegisterStudentModal`, `AssignCourseModal`, `GenerateCertificateModal`) to perform CRUD without unnecessary routing overhead.
 - **Modal Layout Constraints**: For complex forms involving media (like Instructor Image Upload) along with multiple text fields, adopt a **side-by-side view** (e.g., using grid layouts `grid-cols-1 md:grid-cols-2`). This prevents severe vertical scrolling on desktop viewports and significantly improves UX, while remaining stacked on mobile.
 - **Buttons / Forms**: Utilize shadcn/ui components and leverage their built-in accessibility, hover, focus, and disabled states.
+- **Unified Notifications**: Use **`sonner`** toast notifications for all feedback (success, error, info). 
+    - **Avoid `alert()`**: Native browser alerts are prohibited in user-facing flows.
+    - **Implementation**: Import `toast` from `sonner` and use `toast.success("Message")` or `toast.error("Message")`.
+    - **Validation Feedback**: For form validation errors, use `toast.error` instead of local state variables (`error`, `message`) when a global notification is more appropriate for context.
 
 ## 3. Student Progress & Visuals
 - Enrolled courses on the student dashboard dynamically display max marks and obtained marks visually.

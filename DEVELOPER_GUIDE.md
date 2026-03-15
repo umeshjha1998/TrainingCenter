@@ -95,6 +95,11 @@ The application uses **Firebase Firestore** as its primary NoSQL database. Conne
 5.  **`instructors`**: Faculty directory.
     *   *Key Fields*: `id`, `name`, `department`, `image` (Base64 string < 500KB), `assignedCourses` (Array).
 
+*   **Data Integrity & Cascading Deletes**: 
+    *   When a student is deleted via the Admin Dashboard, a cascading delete MUST be performed.
+    *   Related data in `enrollmentRequests`, `certificates`, and `notifications` (where `studentId` or `userId` matches) must be removed in a single batch operation alongside the student document.
+    *   The student MUST also be removed from **Firebase Authentication**.
+
 *   **Data Connectivity Rules for AI**: When adding a new feature that requires data storage, create a logical, flat collection structure. Never arbitrarily nest heavy objects in arrays if they require independent querying. Ensure real-time `onSnapshot` listeners are properly cleaned up (`unsubscribe()`) in `useEffect` hooks.
 
 ---
@@ -110,6 +115,9 @@ The visual identity of the platform prioritizes accessibility, mobile responsive
     *   *Layout Constraint*: For dense forms inside modals (e.g., uploading an image alongside 5 text inputs), use a **side-by-side grid layout** (`grid-cols-1 md:grid-cols-2`) to eliminate vertical scrolling.
 *   **Theme**: The application supports dynamic **Dark Mode**. Ensure all custom Tailwind classes leverage the `dark:` prefix appropriately. Use semantic coloring (e.g., `bg-primary`, `text-primary-foreground`) to let the theme engine handle contrast.
 *   **Print Aesthetics**: The `CertificateTemplate.jsx` must remain pixel-perfect for A4 browser printing. Any modifications to certificates must strictly employ `@media print` directives and `-webkit-print-color-adjust: exact` to maintain the integrity of background seals and tables.
+*   **Notifications**: The application uses **`sonner`** (integrated via `shadcn/ui`) for all user feedback. 
+    *   *Requirement*: Replace all `window.alert()` and local state-based error displays with `toast.success()` or `toast.error()`.
+    *   *Global Setup*: The `Toaster` is located in `src/app/layout.jsx`.
 *   **Map Integrations**: Maps (like the homepage footer) are built using `react-leaflet`. Leaflet components must be imported dynamically using `next/dynamic` with `{ ssr: false }` to prevent server-side rendering errors in Next.js 16.
 *   **Image Normalization**: All user-uploaded images (Student Photos, Instructor Photos) MUST be normalized client-side before storage using the `normalizeImage` utility in `src/utils/imageProcessor.js`. This utilizes `browser-image-compression` to resize images (e.g., max 800x800 or 500x500) and compress them to JPEG. Do not store raw, uncompressed images in Firebase Storage or Firestore (Base64).
 
@@ -124,6 +132,11 @@ The system integrates directly with external services using internal API routes 
     *   *Purpose*: Handles dispatching secure One-Time Passwords or auto-emailing generated certificates to users.
     *   *Tech*: Powered by `nodemailer`. 
     *   *Variables*: Relies on `SMTP_USER` and `SMTP_PASS` environment variables. If these are missing (Development Mode), the frontend seamlessly degrades to triggering a local `window.alert()` to expose the OTP.
+
+*   **`POST /api/admin/delete-student`**:
+    *   *Purpose*: Securely deletes a student from Firebase Authentication.
+    *   *Tech*: Powered by `firebase-admin` (`adminAuth.deleteUser`).
+    *   *Configuration*: Requires a Firebase Service Account key set in `FIREBASE_SERVICE_ACCOUNT_KEY` (JSON string) for production deployment.
 
 ### Third-Party Utility Integrations:
 *   **QR Code Handling**: Uses `qrcode.react`. All generated certificates contain a dynamically embedded QR code linking back to the exact `/c/[certificateId]` public URL.

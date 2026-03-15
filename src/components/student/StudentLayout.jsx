@@ -200,7 +200,12 @@ export default function StudentLayout({ children }) {
                                             )}
                                         </div>
                                         <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-700 text-center">
-                                            <Link href="/student-dashboard" className="text-xs font-medium text-primary hover:text-primary-dark transition-colors">Close Overview</Link>
+                                            <button 
+                                                onClick={() => setIsNotificationsOpen(false)}
+                                                className="text-xs font-medium text-primary hover:text-primary-dark transition-colors cursor-pointer"
+                                            >
+                                                Close Overview
+                                            </button>
                                         </div>
                                     </div>
                                 )}
