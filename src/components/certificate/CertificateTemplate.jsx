@@ -28,6 +28,12 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                 }
                 .font-cinzel { font-family: 'Cinzel', serif; }
                 .font-signature { font-family: 'Great Vibes', cursive; }
+                
+                .high-visibility-text, .high-visibility-text th {
+                    color: #000000 !important;
+                    font-weight: 900 !important;
+                }
+
                 @media print {
                     @page {
                         size: portrait;
@@ -99,7 +105,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                     <h1 className="text-4xl font-cinzel font-bold text-emerald-950 tracking-[0.2em] uppercase">AC &amp; DC Technical Institute</h1>
                     <div className="flex items-center justify-center gap-4 mt-2">
                         <div className="h-px w-12 bg-gold/60"></div>
-                        <p className="text-primary font-semibold tracking-widest text-xs uppercase">Advancing Technical Proficiency Worldwide</p>
+                        <p className="font-bold tracking-widest text-sm uppercase high-visibility-text">Advancing Technical Proficiency Worldwide</p>
                         <div className="h-px w-12 bg-gold/60"></div>
                     </div>
                 </div>
@@ -114,7 +120,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                     <p className="text-slate-600 text-lg max-w-lg mx-auto leading-relaxed">
                         Who has exhibited exceptional dedication and technical mastery in the comprehensive certification course of
                     </p>
-                    <h4 className="text-3xl font-cinzel font-bold text-primary mt-4 border-t border-gold/20 pt-3">{data.courseName}</h4>
+                    <h4 className="text-3xl font-cinzel font-bold text-primary mt-4 border-t border-gold/20 pt-3 high-visibility-text">{data.courseName}</h4>
                     <p className="text-lg font-serif italic text-emerald-800 mt-2 border-b border-gold/20 pb-3 mb-10">Instructed by <span className="font-bold">{data.instructorName || "Prof. Nandan Jha"}</span></p>
                 </div>
 
@@ -123,7 +129,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                     <div className="w-full max-w-4xl mx-auto backdrop-blur-sm bg-white/40 border-2 border-primary/10 rounded-xl overflow-hidden shadow-xl mb-8 marks-table-container">
                         <table className="w-full text-base">
                             <thead>
-                                <tr className="bg-primary text-white font-cinzel tracking-wider text-sm table-header-print">
+                                <tr className="bg-primary text-white font-cinzel tracking-wider text-sm table-header-print high-visibility-text">
                                     <th className="px-8 py-4 text-left font-semibold border-r border-white/20">Subject</th>
                                     <th className="px-8 py-4 text-center font-semibold border-r border-white/20">Max Marks</th>
                                     <th className="px-8 py-4 text-center font-semibold border-r border-white/20">Obtained</th>
@@ -201,9 +207,9 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                                         <tr key={index} className="hover:bg-primary/5 transition-colors table-row-print">
                                             <td className="px-8 py-4 text-left font-serif font-semibold border-r border-primary/10">{item.subject}</td>
                                             <td className="px-8 py-4 text-center text-slate-500 border-r border-primary/10">{displayMax}</td>
-                                            <td className="px-8 py-4 text-center font-bold text-primary text-lg border-r border-primary/10">{displayObtained}</td>
+                                            <td className="px-8 py-4 text-center font-bold text-primary text-lg border-r border-primary/10 high-visibility-text !text-xl">{displayObtained}</td>
                                             <td className="px-8 py-4 text-center">
-                                                <span className={`${gradeBgColor} ${gradeTextColor} px-3 py-1 rounded-full text-xs font-bold border ${gradeBorderColor} uppercase`}>
+                                                <span className={`${gradeBgColor} ${gradeTextColor} px-4 py-2 rounded-full text-lg font-black border ${gradeBorderColor} uppercase shadow-sm !bg-white/70`}>
                                                     {displayGrade}
                                                 </span>
                                             </td>
@@ -232,8 +238,8 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                                             <>
                                                 <td className="px-8 py-5 text-left font-cinzel text-lg text-emerald-950 uppercase border-r border-primary/10">Total Score</td>
                                                 <td className="px-8 py-5 text-center text-slate-600 border-r border-primary/10">{sumMax > 0 ? sumMax : "-"}</td>
-                                                <td className="px-8 py-5 text-center text-primary text-xl border-r border-primary/10">{sumObtained > 0 ? sumObtained : "-"}</td>
-                                                <td className="px-8 py-5 text-center text-primary text-xl">{totalPct > 0 ? `${totalPct}%` : "-"}</td>
+                                                <td className="px-8 py-5 text-center text-primary text-xl border-r border-primary/10 high-visibility-text !text-2xl">{sumObtained > 0 ? sumObtained : "-"}</td>
+                                                <td className="px-8 py-5 text-center text-primary text-xl high-visibility-text !text-2xl">{totalPct > 0 ? `${totalPct}%` : "-"}</td>
                                             </>
                                         );
                                     })()}
@@ -262,7 +268,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
 
                         <div className="text-left ml-2">
                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Verify Authenticity</p>
-                            <p className="text-lg font-mono font-bold text-primary">{data.certificateId}</p>
+                            <p className="text-lg font-mono font-bold text-primary high-visibility-text">{data.certificateId}</p>
                             <div className="h-px w-full bg-gold/30 my-2"></div>
                             <p className="text-xs text-slate-500 font-medium italic">Validated: {data.issueDate}</p>
                         </div>
