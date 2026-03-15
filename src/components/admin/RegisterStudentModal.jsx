@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner";
+import { normalizeImage } from "../../utils/imageProcessor";
 
 export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
     const [formData, setFormData] = useState({
@@ -80,19 +81,21 @@ export default function RegisterStudentModal({ isOpen, onClose, initialData }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 500 * 1024) {
-                toast.error("Image size must be less than 500KB");
-                return;
+            try {
+                // setLoading(true); // Modal doesn't have a dedicated loading state for file select, we can just await
+                const { file: compressedFile, dataUrl } = await normalizeImage(file, {
+                    maxSizeMB: 0.5, // 500KB limit for modals
+                    maxWidthOrHeight: 500,
+                });
+                setImageFile(compressedFile);
+                setImagePreview(dataUrl);
+            } catch (err) {
+                console.error("Error processing image:", err);
+                toast.error("Failed to process image.");
             }
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
         }
     };
 

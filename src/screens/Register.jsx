@@ -8,6 +8,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { signIn } from "next-auth/react";
 import { auth, db, storage } from "../firebase";
 import { Upload, X, User } from "lucide-react";
+import { normalizeImage } from "../utils/imageProcessor";
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -36,20 +37,23 @@ export default function Register() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 2 * 1024 * 1024) {
-                setError("Image size must be less than 2MB");
-                return;
+            try {
+                setLoading(true);
+                const { file: compressedFile, dataUrl } = await normalizeImage(file, {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 800,
+                });
+                setImageFile(compressedFile);
+                setImagePreview(dataUrl);
+            } catch (err) {
+                console.error("Error processing image:", err);
+                setError("Failed to process image. " + err.message);
+            } finally {
+                setLoading(false);
             }
-            setError("");
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
         }
     };
 

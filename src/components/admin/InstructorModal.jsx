@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner";
+import { normalizeImage } from "../../utils/imageProcessor";
 
 export default function InstructorModal({ isOpen, onClose, initialData, courses = [] }) {
     const [formData, setFormData] = useState({
@@ -51,19 +52,20 @@ export default function InstructorModal({ isOpen, onClose, initialData, courses 
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 500 * 1024) {
-                toast.error("Image size must be less than 500KB");
-                return;
+            try {
+                const { file: compressedFile, dataUrl } = await normalizeImage(file, {
+                    maxSizeMB: 0.5,
+                    maxWidthOrHeight: 500,
+                });
+                setImageFile(compressedFile);
+                setImagePreview(dataUrl);
+            } catch (err) {
+                console.error("Error processing instructor image:", err);
+                toast.error("Failed to process image.");
             }
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
         }
     };
 
