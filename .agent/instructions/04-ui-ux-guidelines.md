@@ -41,4 +41,9 @@ Ensure all images are adequately referred to in `public/` and linked via root-re
 - Failure to do this will cause the text ligature (e.g., "home") to be translated into another language by Google Translate, breaking the visual icon rendering.
 
 ---
+## 8. Embedded Maps
+- Use `react-leaflet` for any map integrations (like the homepage footer).
+- Always wrap map components with `next/dynamic` and set `{ ssr: false }` to prevent SSR issues in Next.js.
+- Ensure proper attribution is passed to Leaflet components.
+
 *Note: Ensure to update these design guidelines if introducing new component libraries or changing the fundamental themes.*

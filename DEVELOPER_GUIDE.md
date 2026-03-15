@@ -110,6 +110,7 @@ The visual identity of the platform prioritizes accessibility, mobile responsive
     *   *Layout Constraint*: For dense forms inside modals (e.g., uploading an image alongside 5 text inputs), use a **side-by-side grid layout** (`grid-cols-1 md:grid-cols-2`) to eliminate vertical scrolling.
 *   **Theme**: The application supports dynamic **Dark Mode**. Ensure all custom Tailwind classes leverage the `dark:` prefix appropriately. Use semantic coloring (e.g., `bg-primary`, `text-primary-foreground`) to let the theme engine handle contrast.
 *   **Print Aesthetics**: The `CertificateTemplate.jsx` must remain pixel-perfect for A4 browser printing. Any modifications to certificates must strictly employ `@media print` directives and `-webkit-print-color-adjust: exact` to maintain the integrity of background seals and tables.
+*   **Map Integrations**: Maps (like the homepage footer) are built using `react-leaflet`. Leaflet components must be imported dynamically using `next/dynamic` with `{ ssr: false }` to prevent server-side rendering errors in Next.js 16.
 
 ---
 

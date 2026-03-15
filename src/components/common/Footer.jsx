@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import MapEmbedded from "./MapEmbedded";
 
 export default function Footer() {
     return (
@@ -190,18 +191,8 @@ export default function Footer() {
                                 <span>nandan.bbc@gmail.com</span>
                             </li>
                         </ul>
-                        <div className="mt-6 w-full h-32 bg-slate-800 rounded-lg overflow-hidden relative group cursor-pointer border border-slate-700">
-                            <img
-                                alt="Map location of Darbhanga"
-                                className="w-full h-full object-cover opacity-50 group-hover:opacity-75 transition-opacity"
-                                data-location="Darbhanga"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc21DCp9AOAGrXaSq69lb7_xZqKW7W-2xu2yrUwLpXwQLgNgl94yymIzD12bpJCVXfXmbICNEYDySgwX-XuuZoFDLnegJicp2fnyL64ASTDpnYDv8ypHZVP9fK7XOisIxGrPyTz26iPE0sHawCZUjPE8JNOUEnOMIrZG5FcUoL1JFTgJIvOlDYofZd5l5HwwG-6LZd1SgyQd0Qy-RTof8HNcmfIgqxhmF1eAa0AdcRI4cvsdbqGj5COgpIAKPoK_3LOEks3c6HVJk"
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="bg-slate-900/80 px-3 py-1 rounded text-xs text-white">
-                                    View on Map
-                                </span>
-                            </div>
+                        <div className="mt-6 w-full h-48 bg-slate-800 rounded-lg overflow-hidden relative border border-slate-700">
+                            <MapEmbedded />
                         </div>
                     </div>
                 </div>
