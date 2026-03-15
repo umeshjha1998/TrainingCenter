@@ -52,9 +52,9 @@ The platform maintains a public directory of instructors and their assigned cour
 ### Workflow:
 - Admins manage instructors via the Admin Dashboard (CRUD operations).
 - **Image Management**: During creation or update, admins can upload a professional headshot.
-    - **Validation**: Strict client-side check for 500KB file size limit.
-    - **Storage**: Photos are converted to Base64 strings and saved directly to the instructor document in Firestore.
-    - **Instruction UI**: Admins see clear guidelines on photo requirements (professional, clear, high-quality) and technical limits (500KB, JPG/PNG).
+    - **Normalization**: Images MUST be client-side normalized (resized to max 500x500, compressed to JPEG, max 500KB) using `browser-image-compression` via `src/utils/imageProcessor.js`.
+    - **Storage**: The normalized photos are converted to Base64 strings and saved directly to the instructor document in Firestore.
+    - **Instruction UI**: Admins see clear guidelines on photo requirements (professional, clear, high-quality) and technical limits.
 - During creation/update, admins can directly assign existing courses to these instructors.
 - The public `OurInstructors` page fetches this data and provides filtering by department and text search. Images are displayed prominently in the directory.
 
@@ -98,8 +98,8 @@ To ensure accessibility and visibility across both light and dark modes, all UI 
 ## 13. Student Registration & Manage Students
 Students register through the public signup page, and administrators can register or edit students via the Admin Dashboard.
 ### Workflow:
-- **Mandatory Photo Upload**: All new student registrations (via public signup or admin creation) require a profile photo. The system enforces a maximum file size of 500KB (JPG/PNG).
-- **Storage**: Photos are converted to Base64 strings and linked to the `profilePhotoUrl` field directly inside the user document in Firestore.
+- **Mandatory Photo Upload**: All new student registrations (via public signup or admin creation) require a profile photo. The system MUST normalize this photo client-side using `browser-image-compression` (via `src/utils/imageProcessor.js`) to limit size (e.g., max 800x800 or 500x500 constraints) and convert to JPEG format.
+- **Storage**: Photos are uploaded to Firebase Storage (for public registration) or converted to Base64 strings (for admin modal) and linked to the `profilePhotoUrl` field directly inside the user document in Firestore.
 - **Administrative Parity**: The admin's `RegisterStudentModal` provides full parity with public registration fields, including inputs for Aadhar, PAN, and Passport numbers, ensuring complete records can be managed internally.
 
 ---

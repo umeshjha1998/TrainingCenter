@@ -111,6 +111,7 @@ The visual identity of the platform prioritizes accessibility, mobile responsive
 *   **Theme**: The application supports dynamic **Dark Mode**. Ensure all custom Tailwind classes leverage the `dark:` prefix appropriately. Use semantic coloring (e.g., `bg-primary`, `text-primary-foreground`) to let the theme engine handle contrast.
 *   **Print Aesthetics**: The `CertificateTemplate.jsx` must remain pixel-perfect for A4 browser printing. Any modifications to certificates must strictly employ `@media print` directives and `-webkit-print-color-adjust: exact` to maintain the integrity of background seals and tables.
 *   **Map Integrations**: Maps (like the homepage footer) are built using `react-leaflet`. Leaflet components must be imported dynamically using `next/dynamic` with `{ ssr: false }` to prevent server-side rendering errors in Next.js 16.
+*   **Image Normalization**: All user-uploaded images (Student Photos, Instructor Photos) MUST be normalized client-side before storage using the `normalizeImage` utility in `src/utils/imageProcessor.js`. This utilizes `browser-image-compression` to resize images (e.g., max 800x800 or 500x500) and compress them to JPEG. Do not store raw, uncompressed images in Firebase Storage or Firestore (Base64).
 
 ---
 
