@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot, deleteDoc, doc, getDocs, addDoc } from "firebase/firestore";
+import { toast } from "sonner";
 import { db } from "../../firebase";
 import CourseModal from "../../components/admin/CourseModal";
 import ResetConfirmationModal from "../../components/admin/ResetConfirmationModal";
@@ -43,7 +44,7 @@ export default function ManageCourses() {
         );
 
         if (invalidCourses.length > 0) {
-            alert(`Error: Cannot reset. The following default courses have missing or empty subjects: ${invalidCourses.map(c => c.name).join(", ")}`);
+            toast.error(`Error: Cannot reset. The following default courses have missing or empty subjects: ${invalidCourses.map(c => c.name).join(", ")}`);
             setLoading(false);
             return;
         }
@@ -68,12 +69,11 @@ export default function ManageCourses() {
                 });
             });
             await Promise.all(addCoursePromises);
-
-            alert("Courses and certificates have been reset successfully.");
+            toast.success("Courses and certificates have been reset successfully.");
             setIsResetModalOpen(false); // Close modal
         } catch (error) {
             console.error("Error resetting data: ", error);
-            alert("Failed to reset data: " + error.message);
+            toast.error("Failed to reset data: " + error.message);
         } finally {
             setLoading(false);
         }
@@ -103,7 +103,7 @@ export default function ManageCourses() {
             setCourseToDelete(null);
         } catch (error) {
             console.error("Error deleting course: ", error);
-            alert("Failed to delete course");
+            toast.error("Failed to delete course");
         }
     };
 

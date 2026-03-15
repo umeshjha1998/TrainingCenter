@@ -10,6 +10,8 @@ export const metadata = {
     description: "Training center for AC & DC Technical Institute",
 };
 
+import { Toaster } from "@/components/ui/sonner";
+
 export default function RootLayout({ children }) {
     return (
         <html lang="en" suppressHydrationWarning>
@@ -28,6 +30,7 @@ export default function RootLayout({ children }) {
                         {children}
                     </AuthProvider>
                 </ThemeProvider>
+                <Toaster richColors closeButton position="top-right" />
                 <Analytics />
                 <SpeedInsights />
             </body>

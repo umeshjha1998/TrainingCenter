@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot, query, doc, deleteDoc } from "firebase/firestore";
+import { toast } from "sonner";
 import { db } from "../../firebase";
 import InstructorModal from "../../components/admin/InstructorModal";
 import ConfirmationModal from "../../components/admin/ConfirmationModal";
@@ -74,7 +75,7 @@ export default function ManageInstructors() {
             setInstructorToDelete(null);
         } catch (error) {
             console.error("Error deleting instructor: ", error);
-            alert("Failed to delete instructor");
+            toast.error("Failed to delete instructor");
         }
     };
 

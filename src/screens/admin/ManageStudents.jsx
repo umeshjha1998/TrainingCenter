@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot, query, where, doc, deleteDoc } from "firebase/firestore";
+import { toast } from "sonner";
 import { db } from "../../firebase";
 import AssignCourseModal from "../../components/admin/AssignCourseModal";
 import RegisterStudentModal from "../../components/admin/RegisterStudentModal";
@@ -72,7 +73,7 @@ export default function ManageStudents() {
             setStudentToDelete(null);
         } catch (error) {
             console.error("Error deleting student: ", error);
-            alert("Failed to delete student");
+            toast.error("Failed to delete student");
         }
     };
 

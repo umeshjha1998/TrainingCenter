@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { collection, query, where, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { collection, query, where, orderBy, limit, onSnapshot, doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 export default function StudentLayout({ children }) {
@@ -14,6 +14,7 @@ export default function StudentLayout({ children }) {
     const pathname = usePathname();
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [userData, setUserData] = useState(null);
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
 
@@ -44,6 +45,34 @@ export default function StudentLayout({ children }) {
 
         return () => unsubscribe();
     }, [currentUser]);
+
+    // Fetch User Profile Data
+    useEffect(() => {
+        if (!currentUser?.uid) return;
+
+        const fetchUserData = async () => {
+            try {
+                const docRef = doc(db, "users", currentUser.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    setUserData(docSnap.data());
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchUserData();
+
+        // Also listen for real-time changes
+        const unsub = onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
+            if (doc.exists()) {
+                setUserData(doc.data());
+            }
+        });
+
+        return () => unsub();
+    }, [currentUser?.uid]);
 
     const handleMarkAllRead = async () => {
         try {
@@ -182,9 +211,17 @@ export default function StudentLayout({ children }) {
                                     <p className="text-xs text-primary mt-1">{currentUser?.email}</p>
                                 </div>
                                 <div className="relative">
-                                    <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="flex items-center focus:outline-none">
-                                        <div className="h-10 w-10 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center border-2 border-primary/30 text-slate-500 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
-                                            <span className="material-icons notranslate" translate="no">person</span>
+                                    <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="flex items-center focus:outline-none group">
+                                        <div className="h-10 w-10 rounded-lg bg-slate-200 dark:bg-slate-700 overflow-hidden border-2 border-primary/30 group-hover:border-primary transition-all flex items-center justify-center">
+                                            {userData?.profilePhotoUrl ? (
+                                                <img 
+                                                    src={userData.profilePhotoUrl} 
+                                                    alt="Profile" 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <span className="material-icons text-slate-500 notranslate" translate="no">person</span>
+                                            )}
                                         </div>
                                     </button>
                                     {/* Dropdown for logout */}

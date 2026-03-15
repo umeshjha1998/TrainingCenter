@@ -4,24 +4,27 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../firebase';
+import { toast } from 'sonner';
 
 function VerifyOTPContent() {
     const searchParams = useSearchParams();
     const email = searchParams.get('email') || "your email";
-    const [resendStatus, setResendStatus] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleResend = async () => {
-        setResendStatus('Sending...');
+        setLoading(true);
         try {
             const actionCodeSettings = {
                 url: window.location.origin + '/#/reset-password',
                 handleCodeInApp: true,
             };
             await sendPasswordResetEmail(auth, email, actionCodeSettings);
-            setResendStatus('Sent!');
+            toast.success('Password reset link resent successfully!');
         } catch (error) {
             console.error(error);
-            setResendStatus('Failed to send.');
+            toast.error('Failed to resend the link. Please try again later.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -60,12 +63,12 @@ function VerifyOTPContent() {
                     <div className="mt-8 text-center">
                         <p className="text-sm text-slate-500 dark:text-slate-400 font-display">
                             Didn't receive the email?
-                            <button
+                             <button
                                 onClick={handleResend}
-                                className="text-[#135bec] hover:text-[#135bec]/80 font-medium ml-1 transition-colors focus:outline-none focus:underline font-display"
-                                disabled={resendStatus === 'Sending...'}
+                                className="text-[#135bec] hover:text-[#135bec]/80 font-medium ml-1 transition-colors focus:outline-none focus:underline font-display disabled:opacity-50"
+                                disabled={loading}
                             >
-                                {resendStatus || 'Resend Link'}
+                                {loading ? 'Resending...' : 'Resend Link'}
                             </button>
                         </p>
                         <div className="mt-6">

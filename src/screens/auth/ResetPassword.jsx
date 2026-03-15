@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { confirmPasswordReset } from 'firebase/auth';
 import { auth } from '../../firebase';
+import { toast } from 'sonner';
 
 function ResetPasswordContent() {
     const router = useRouter();
@@ -16,33 +17,42 @@ function ResetPasswordContent() {
     const oobCode = searchParams.get('oobCode');
 
     // Initialize error state based on oobCode presence
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState(oobCode ? '' : 'Invalid or missing reset code. Please try requesting a new password reset link.');
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    // Initial check for oobCode
+    React.useEffect(() => {
+        if (!oobCode) {
+            toast.error('Invalid or missing reset code. Please try requesting a new password reset link.');
+        }
+    }, [oobCode]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage('');
-        setError('');
+        setIsProcessing(true);
 
         if (password !== confirmPassword) {
-            setError("Passwords do not match");
+            toast.error("Passwords do not match");
+            setIsProcessing(false);
             return;
         }
 
         if (!oobCode) {
-            setError("Missing reset code.");
+            toast.error("Missing reset code.");
+            setIsProcessing(false);
             return;
         }
 
         try {
             await confirmPasswordReset(auth, oobCode, password);
-            setMessage("Password has been reset successfully. Redirecting to login...");
+            toast.success("Password has been reset successfully. Redirecting to login...");
             setTimeout(() => {
                 router.push('/admin-login');
             }, 3000);
         } catch (err) {
             console.error(err);
-            setError("Failed to reset password. The link may have expired or is invalid.");
+            toast.error("Failed to reset password. The link may have expired or is invalid.");
+        } finally {
+            setIsProcessing(false);
         }
     };
 
@@ -87,18 +97,6 @@ function ResetPasswordContent() {
                                 Your new password must be different from previously used passwords.
                             </p>
                         </div>
-
-                        {/* Messages */}
-                        {message && (
-                            <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded text-sm text-center">
-                                {message}
-                            </div>
-                        )}
-                        {error && (
-                            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm text-center">
-                                {error}
-                            </div>
-                        )}
 
                         {/* Form */}
                         <form onSubmit={handleSubmit} className="space-y-6">
@@ -181,10 +179,11 @@ function ResetPasswordContent() {
 
                             {/* Submit Button */}
                             <button
-                                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-[#102216] bg-[#13ec5b] hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13ec5b] focus:ring-offset-[#102216] transition-all duration-200 uppercase tracking-wide font-display"
+                                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-[#102216] bg-[#13ec5b] hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13ec5b] focus:ring-offset-[#102216] transition-all duration-200 uppercase tracking-wide font-display disabled:opacity-50"
                                 type="submit"
+                                disabled={isProcessing}
                             >
-                                Update Password
+                                {isProcessing ? 'Updating...' : 'Update Password'}
                             </button>
 
                             <div className="text-center mt-4">

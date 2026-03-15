@@ -1,14 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { data: session } = useSession();
@@ -21,7 +20,6 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         const result = await signIn("credentials", {
@@ -32,8 +30,9 @@ export default function Login() {
         });
 
         if (result?.error) {
-            setError("Failed to log in: " + result.error);
+            toast.error("Failed to log in: " + result.error);
         } else {
+            toast.success("Successfully logged in!");
             router.push("/student-dashboard");
         }
         setLoading(false);
@@ -109,11 +108,6 @@ export default function Login() {
                     </div>
 
                     <div className="px-8 pb-10">
-                        {error && (
-                            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
-                                {error}
-                            </div>
-                        )}
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
                                 <label

@@ -4,17 +4,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../firebase';
+import { toast } from 'sonner';
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
 
         try {
             const actionCodeSettings = {
@@ -22,11 +21,12 @@ export default function ForgotPassword() {
                 handleCodeInApp: true,
             };
             await sendPasswordResetEmail(auth, email, actionCodeSettings);
+            toast.success("Password reset link sent to your email!");
             // Navigate to the verification page to inform the user
             router.push('/verify-otp?email=' + encodeURIComponent(email));
         } catch (err) {
             console.error(err);
-            setError('Failed to send reset email. Please check the email address.');
+            toast.error('Failed to send reset email. Please check the email address.');
         }
 
         setLoading(false);
@@ -68,11 +68,6 @@ export default function ForgotPassword() {
 
                         {/* Form */}
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            {error && (
-                                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm text-center">
-                                    {error}
-                                </div>
-                            )}
 
                             <div className="space-y-2 group">
                                 <label className="block text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-[#13ec5b]/70 ml-1 font-display" htmlFor="email">

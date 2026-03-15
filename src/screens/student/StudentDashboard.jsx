@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { db } from "../../firebase";
 import { doc, getDoc, collection, query, where, getDocs, addDoc, Timestamp, deleteDoc, onSnapshot } from "firebase/firestore";
+import { toast } from "sonner";
 
 export default function StudentDashboard() {
     const { data: session } = useSession();
@@ -127,7 +128,7 @@ export default function StudentDashboard() {
         // Ensure not already requested and pending/approved
         const existingReq = myRequests.find(r => r.courseId === course.id && (r.status === "pending" || r.status === "approved"));
         if (existingReq) {
-            alert("You already have an active request for this course.");
+            toast.error("You already have an active request for this course.");
             return;
         }
 
@@ -147,10 +148,10 @@ export default function StudentDashboard() {
 
             // Add to local state to reflect immediately
             setMyRequests([{ id: docRef.id, ...requestData }, ...myRequests]);
-            alert("Enrollment request submitted successfully! An admin will review it soon.");
+            toast.success("Enrollment request submitted successfully! An admin will review it soon.");
         } catch (error) {
             console.error("Error submitting request:", error);
-            alert("Failed to submit request.");
+            toast.error("Failed to submit request.");
         } finally {
             setRequesting(false);
         }
@@ -161,10 +162,10 @@ export default function StudentDashboard() {
         try {
             await deleteDoc(doc(db, "enrollmentRequests", requestId));
             setMyRequests(myRequests.filter(req => req.id !== requestId));
-            alert("Request cancelled successfully.");
+            toast.success("Request cancelled successfully.");
         } catch (error) {
             console.error("Error cancelling request:", error);
-            alert("Failed to cancel request.");
+            toast.error("Failed to cancel request.");
         }
     };
 

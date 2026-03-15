@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { signIn } from "next-auth/react";
-import { auth, db, storage } from "../firebase";
+import { auth, db } from "../firebase";
 import { Upload, X, User } from "lucide-react";
 import { normalizeImage } from "../utils/imageProcessor";
+import { toast } from "sonner";
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -25,7 +25,6 @@ export default function Register() {
     });
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState("");
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [otpSent, setOtpSent] = useState(false);
     const [generatedOtp, setGeneratedOtp] = useState("");
@@ -43,14 +42,14 @@ export default function Register() {
             try {
                 setLoading(true);
                 const { file: compressedFile, dataUrl } = await normalizeImage(file, {
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 800,
+                    maxSizeMB: 0.5,
+                    maxWidthOrHeight: 500,
                 });
                 setImageFile(compressedFile);
                 setImagePreview(dataUrl);
             } catch (err) {
                 console.error("Error processing image:", err);
-                setError("Failed to process image. " + err.message);
+                toast.error("Failed to process image: " + err.message);
             } finally {
                 setLoading(false);
             }
@@ -65,13 +64,12 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
-            return setError("Passwords do not match");
+            return toast.error("Passwords do not match");
         }
         if (!imageFile) {
-            return setError("Please upload a student photo before registering.");
+            return toast.error("Please upload a student photo before registering.");
         }
 
-        setError("");
         setLoading(true);
 
         if (!otpSent) {
@@ -88,14 +86,15 @@ export default function Register() {
                 const result = await response.json();
                 if (result.success) {
                     setOtpSent(true);
+                    toast.success("OTP sent successfully to " + formData.email);
                     if (result.devMode) {
                         setDevOtpMsg(`[DEV MODE] Your OTP is: ${otp}`);
                     }
                 } else {
-                    setError(result.error || "Failed to send OTP email.");
+                    toast.error(result.error || "Failed to send OTP email.");
                 }
             } catch (err) {
-                setError("Error communicating with server for OTP.");
+                toast.error("Error communicating with server for OTP.");
             }
             setLoading(false);
             return;
@@ -103,15 +102,13 @@ export default function Register() {
 
         if (userOtp !== generatedOtp) {
             setLoading(false);
-            return setError("Invalid OTP code.");
+            return toast.error("Invalid OTP code.");
         }
 
         try {
             let profilePhotoUrl = "";
-            if (imageFile) {
-                const storageRef = ref(storage, `students/${Date.now()}_${imageFile.name}`);
-                const snapshot = await uploadBytes(storageRef, imageFile);
-                profilePhotoUrl = await getDownloadURL(snapshot.ref);
+            if (imagePreview) {
+                profilePhotoUrl = imagePreview;
             }
 
             const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
@@ -142,14 +139,15 @@ export default function Register() {
             });
 
             if (result?.error) {
-                setError("Account created, but failed to automatically log in. Please try logging in manually.");
+                toast.error("Account created, but failed to automatically log in. Please try logging in manually.");
                 setTimeout(() => router.push("/login"), 3000);
             } else {
+                toast.success("Account created and logged in successfully!");
                 router.push("/student-dashboard");
             }
 
         } catch (err) {
-            setError("Failed to create account: " + err.message);
+            toast.error("Failed to create account: " + err.message);
         }
         setLoading(false);
     };
@@ -169,7 +167,6 @@ export default function Register() {
                     </div>
                 </div>
                 <div className="p-8">
-                    {error && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">{error}</div>}
                     <form onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8">
                             {/* Personal Info */}
