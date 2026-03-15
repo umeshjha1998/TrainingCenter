@@ -1,17 +1,24 @@
+"use client";
+
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import GoogleTranslate from "./GoogleTranslate";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { currentUser, isAdmin } = useAuth();
+    const { data: session } = useSession();
+
+    const currentUser = session?.user;
+    const isAdmin = currentUser?.role === "admin";
 
     return (
         <nav className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-20 items-center">
                     <div className="flex-shrink-0 flex items-center gap-3">
-                        <Link to="/" className="flex items-center gap-3">
+                        <Link href="/" className="flex items-center gap-3">
                             <div className="h-12 w-12 flex items-center justify-center text-primary">
                                 <svg
                                     className="w-full h-full"
@@ -75,36 +82,46 @@ export default function Navbar() {
                         </Link>
                     </div>
                     <div className="hidden md:flex space-x-8 items-center">
-                        <Link className="text-primary font-semibold px-3 py-2 text-sm" to="/">
+                        <Link className="text-primary font-semibold px-3 py-2 text-sm" href="/">
                             Home
                         </Link>
                         <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
-                            to="/courses"
+                            href="/#courses"
                         >
                             Courses
                         </Link>
                         <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
-                            to="/about"
+                            href="/instructors"
+                        >
+                            Instructors
+                        </Link>
+                        <Link
+                            className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
+                            href="/#about"
                         >
                             About Us
                         </Link>
                         <Link
                             className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium transition-colors flex items-center gap-1"
-                            to="/verify"
+                            href="/#verify"
                         >
-                            <span className="material-icons text-sm">qr_code_scanner</span>{" "}
+                            <span className="material-icons text-sm notranslate" translate="no">qr_code_scanner</span>{" "}
                             Verification
                         </Link>
+                        <div className="flex items-center gap-1">
+                            <ThemeToggle />
+                            <GoogleTranslate />
+                        </div>
                     </div>
                     <div className="hidden md:flex items-center gap-3">
                         {!currentUser ? (
                             <Link
                                 className="bg-white dark:bg-slate-900 text-primary hover:text-primary-dark border border-primary/40 hover:border-primary hover:bg-green-50/50 dark:hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
-                                to="/login"
+                                href="/login"
                             >
-                                <span className="material-icons text-sm">person_outline</span> Login
+                                <span className="material-icons text-sm notranslate" translate="no">person_outline</span> Login
                                 / Register
                             </Link>
                         ) : (
@@ -116,17 +133,17 @@ export default function Navbar() {
                         {isAdmin && (
                             <Link
                                 className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700"
-                                to="/admin"
+                                href="/admin"
                             >
-                                <span className="material-icons text-sm">dashboard</span> Admin
+                                <span className="material-icons text-sm notranslate" translate="no">dashboard</span> Admin
                             </Link>
                         )}
                         {currentUser && !isAdmin && (
                             <Link
                                 className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 border border-slate-200 dark:border-slate-700"
-                                to="/student-dashboard"
+                                href="/student-dashboard"
                             >
-                                <span className="material-icons text-sm">school</span> Dashboard
+                                <span className="material-icons text-sm notranslate" translate="no">school</span> Dashboard
                             </Link>
                         )}
                     </div>
@@ -136,7 +153,7 @@ export default function Navbar() {
                             type="button"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                         >
-                            <span className="material-icons">menu</span>
+                            <span className="material-icons notranslate" translate="no">menu</span>
                         </button>
                     </div>
                 </div>
@@ -144,25 +161,63 @@ export default function Navbar() {
             {/* Mobile menu */}
             {isMenuOpen && (
                 <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 pt-2 pb-4 space-y-1">
-                    <Link className="block text-primary font-semibold px-3 py-2 text-sm" to="/" onClick={() => setIsMenuOpen(false)}>
+                    <Link className="block text-primary font-semibold px-3 py-2 text-sm" href="/" onClick={() => setIsMenuOpen(false)}>
                         Home
                     </Link>
                     <Link
                         className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
-                        to="/courses"
+                        href="/#courses"
                         onClick={() => setIsMenuOpen(false)}
                     >
                         Courses
                     </Link>
                     <Link
                         className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
-                        to="/login"
+                        href="/instructors"
                         onClick={() => setIsMenuOpen(false)}
                     >
-                        Login / Register
+                        Instructors
                     </Link>
+                    <div className="px-3 py-1 flex items-center gap-2 border-t border-slate-100 dark:border-slate-800 mt-2 pt-2">
+                        <ThemeToggle />
+                        <GoogleTranslate />
+                    </div>
+                    {!currentUser ? (
+                        <Link
+                            className="block text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-3 py-2 text-sm font-medium"
+                            href="/login"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Login / Register
+                        </Link>
+                    ) : (
+                        <>
+                            <div className="block px-3 py-2 text-sm font-medium text-slate-500">
+                                Hello, {currentUser.email}
+                            </div>
+                            {isAdmin && (
+                                <Link
+                                    className="block text-primary font-semibold px-3 py-2 text-sm"
+                                    href="/admin"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Admin Dashboard
+                                </Link>
+                            )}
+                            {currentUser && !isAdmin && (
+                                <Link
+                                    className="block text-primary font-semibold px-3 py-2 text-sm"
+                                    href="/student-dashboard"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Student Dashboard
+                                </Link>
+                            )}
+                        </>
+                    )}
                 </div>
-            )}
-        </nav>
+            )
+            }
+        </nav >
     );
 }

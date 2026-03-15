@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
 import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { toast } from "sonner";
 
 export default function CourseModal({ isOpen, onClose, initialData }) {
     const [formData, setFormData] = useState({
         name: "",
         duration: "",
-        instructor: "", // Added instructor field
-        subjects: [], // Now an array of subject objects { id, name }
+        instructor: "",
+        subjects: [],
         nextExam: ""
     });
     const [loading, setLoading] = useState(false);
+    const [instructors, setInstructors] = useState([]);
 
     useEffect(() => {
         if (initialData) {
@@ -22,7 +34,7 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
                     if (typeof sub === 'string') {
                         return { id: Date.now() + index, name: sub };
                     }
-                    return sub; // Assume it's already {id, name}
+                    return sub;
                 });
             }
 
@@ -64,6 +76,28 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
         }));
     };
 
+    // Fetch instructors for dropdown
+    useEffect(() => {
+        const fetchInstructors = async () => {
+            try {
+                const { getDocs, query, collection } = await import("firebase/firestore");
+                const q = query(collection(db, "instructors"));
+                const querySnapshot = await getDocs(q);
+                const instructorsList = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setInstructors(instructorsList);
+            } catch (error) {
+                console.error("Error fetching instructors:", error);
+            }
+        };
+
+        if (isOpen) {
+            fetchInstructors();
+        }
+    }, [isOpen]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -73,7 +107,7 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
 
         // Validation: At least one subject required
         if (validSubjectObjs.length === 0) {
-            alert("A course must have at least one subject.");
+            toast.error("A course must have at least one subject.");
             setLoading(false);
             return;
         }
@@ -92,111 +126,116 @@ export default function CourseModal({ isOpen, onClose, initialData }) {
                 // Update existing course
                 const courseRef = doc(db, "courses", initialData.id);
                 await updateDoc(courseRef, courseData);
-                alert("Course updated successfully!");
+                toast.success("Course updated successfully!");
             } else {
                 // Add new course
                 await addDoc(collection(db, "courses"), {
                     ...courseData,
                     createdAt: new Date()
                 });
-                alert("Course added successfully!");
+                toast.success("Course added successfully!");
             }
             onClose();
         } catch (error) {
             console.error("Error saving course: ", error);
-            alert("Failed to save course");
+            toast.error("Failed to save course");
         } finally {
             setLoading(false);
         }
     };
 
-    if (!isOpen) return null;
+    return (
+        <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+            <DialogContent className="sm:max-w-[500px]">
+                <form onSubmit={handleSubmit}>
+                    <DialogHeader>
+                        <DialogTitle>{initialData ? "Edit Course" : "Add New Course"}</DialogTitle>
+                    </DialogHeader>
 
-    return createPortal(
-        <div className="fixed inset-0 z-[100] overflow-y-auto" role="dialog">
-            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div className="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity" onClick={onClose}></div>
-                <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-                <div className="relative z-50 inline-block align-bottom bg-white dark:bg-slate-900 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200 dark:border-slate-800">
-                    <form onSubmit={handleSubmit}>
-                        <div className="bg-white dark:bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                            <h3 className="text-lg leading-6 font-medium text-slate-900 dark:text-white mb-4">
-                                {initialData ? "Edit Course" : "Add New Course"}
-                            </h3>
-                            <div className="space-y-4">
-                                <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Course Name</label>
-                                    <input type="text" id="name" name="name" required className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.name} onChange={handleInputChange} />
-                                </div>
-                                <div>
-                                    <label htmlFor="duration" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Duration</label>
-                                    <input type="text" id="duration" name="duration" required placeholder="e.g. 6 Months" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.duration} onChange={handleInputChange} />
-                                </div>
-                                <div>
-                                    <label htmlFor="instructor" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Instructor Name</label>
-                                    <input type="text" id="instructor" name="instructor" placeholder="e.g. Eng. Sarah Connor" className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border" value={formData.instructor} onChange={handleInputChange} />
-                                </div>
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Course Name</Label>
+                            <Input id="name" name="name" type="text" required value={formData.name} onChange={handleInputChange} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="duration">Duration</Label>
+                            <Input id="duration" name="duration" type="text" required placeholder="e.g. 6 Months" value={formData.duration} onChange={handleInputChange} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="instructor">Instructor</Label>
+                            <select
+                                id="instructor"
+                                name="instructor"
+                                value={formData.instructor}
+                                onChange={handleInputChange}
+                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                <option value="" disabled>Select an Instructor</option>
+                                {instructors.map(inst => (
+                                    <option key={inst.id} value={inst.name}>{inst.name} ({inst.expertise})</option>
+                                ))}
+                            </select>
+                        </div>
 
-                                {/* Subjects Section */}
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Subjects</label>
-                                    <div className="space-y-2 max-h-48 overflow-y-auto p-1">
-                                        {formData.subjects.map((subject, index) => (
-                                            <div key={subject.id} className="flex items-center gap-2">
-                                                <input
-                                                    type="text"
-                                                    required
-                                                    placeholder={`Subject ${index + 1}`}
-                                                    className="flex-1 rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"
-                                                    value={subject.name}
-                                                    onChange={(e) => handleSubjectChange(subject.id, e.target.value)}
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleRemoveSubject(subject.id)}
-                                                    className="text-slate-400 hover:text-red-500 p-2"
-                                                    title="Remove Subject"
-                                                >
-                                                    <span className="material-icons text-lg">delete</span>
-                                                </button>
-                                            </div>
-                                        ))}
+                        {/* Subjects Section */}
+                        <div className="space-y-2">
+                            <Label>Subjects</Label>
+                            <div className="space-y-2 max-h-48 overflow-y-auto p-1">
+                                {formData.subjects.map((subject, index) => (
+                                    <div key={subject.id} className="flex items-center gap-2">
+                                        <Input
+                                            type="text"
+                                            required
+                                            placeholder={`Subject ${index + 1}`}
+                                            value={subject.name}
+                                            onChange={(e) => handleSubjectChange(subject.id, e.target.value)}
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleRemoveSubject(subject.id)}
+                                            className="text-slate-400 hover:text-red-500"
+                                            title="Remove Subject"
+                                        >
+                                            <span className="material-icons text-lg notranslate" translate="no">delete</span>
+                                        </Button>
                                     </div>
-                                    <button
-                                        type="button"
-                                        onClick={handleAddSubject}
-                                        className="mt-2 inline-flex items-center text-sm font-medium text-primary hover:text-primary-dark"
-                                    >
-                                        <span className="material-icons text-lg mr-1">add</span>
-                                        Add Subject
-                                    </button>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="nextExam" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Next Exam Date</label>
-                                    <input
-                                        type="datetime-local"
-                                        id="nextExam"
-                                        name="nextExam"
-                                        className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 border"
-                                        value={formData.nextExam}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
+                                ))}
                             </div>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleAddSubject}
+                                className="w-full mt-2"
+                            >
+                                <span className="material-icons text-lg mr-1 notranslate" translate="no">add</span>
+                                Add Subject
+                            </Button>
                         </div>
-                        <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                            <button type="submit" disabled={loading} className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-dark sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
-                                {loading ? "Saving..." : (initialData ? "Update Course" : "Add Course")}
-                            </button>
-                            <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-slate-300 dark:border-slate-700 shadow-sm px-4 py-2 bg-white dark:bg-slate-800 text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onClose}>
-                                Cancel
-                            </button>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="nextExam">Next Exam Date</Label>
+                            <Input
+                                type="datetime-local"
+                                id="nextExam"
+                                name="nextExam"
+                                value={formData.nextExam}
+                                onChange={handleInputChange}
+                            />
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>,
-        document.body
+                    </div>
+
+                    <DialogFooter>
+                        <Button type="button" variant="outline" onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading}>
+                            {loading ? "Saving..." : (initialData ? "Update Course" : "Add Course")}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 }

@@ -1,0 +1,53 @@
+# UI/UX & Design Guidelines
+
+The AC & DC Technical Institute application maintains a modern, accessible, and intuitive interface powered primarily by Tailwind CSS v4, shadcn/ui components, and Next.js. Shadcn/ui is the primary styling framework and component library across the website. Any new pages or features built by agents should mirror these existing design patterns and utilize shadcn/ui components whenever possible.
+
+## 1. Color Palette & Typography
+- The application uses a dynamic, modern color scheme (typically with sleek dark modes or contrasting branding matching an institutional tone). Avoid generic "red", "green", "blue" unless they are semantic aliases like `bg-red-500` for delete buttons.
+- Intersect brand guidelines and fallback to system fonts if necessary.
+
+## 2. Component Design & Reusability
+- Keep components modular. If building a new feature like 'Reports', wrap its structural parts into semantic React components (`src/components/...`).
+- **shadcn/ui First**: Before building custom UI elements (buttons, dialogs, forms, cards, etc.), check if a shadcn/ui component exists. If it does, install and use it.
+- **Modals**: Heavy reliance on shadcn/ui Dialog/Modal components (e.g., `RegisterStudentModal`, `AssignCourseModal`, `GenerateCertificateModal`) to perform CRUD without unnecessary routing overhead.
+- **Modal Layout Constraints**: For complex forms involving media (like Instructor Image Upload) along with multiple text fields, adopt a **side-by-side view** (e.g., using grid layouts `grid-cols-1 md:grid-cols-2`). This prevents severe vertical scrolling on desktop viewports and significantly improves UX, while remaining stacked on mobile.
+- **Buttons / Forms**: Utilize shadcn/ui components and leverage their built-in accessibility, hover, focus, and disabled states.
+- **Unified Notifications**: Use **`sonner`** toast notifications for all feedback (success, error, info). 
+    - **Avoid `alert()`**: Native browser alerts are prohibited in user-facing flows.
+    - **Implementation**: Import `toast` from `sonner` and use `toast.success("Message")` or `toast.error("Message")`.
+    - **Validation Feedback**: For form validation errors, use `toast.error` instead of local state variables (`error`, `message`) when a global notification is more appropriate for context.
+
+## 3. Student Progress & Visuals
+- Enrolled courses on the student dashboard dynamically display max marks and obtained marks visually.
+- The progression bar uses specific duration calculations to map progression. New mathematical calculations or chart renders should rely on **Recharts**. Example: `Course Popularity (Top 5)` charts.
+
+## 4. Mobile Responsiveness
+- All views must scale from dense desktop administration tables to vertically stacked, tappable mobile layouts. Use standard breakpoints (`sm:`, `md:`, `lg:`).
+- Ensure critical action buttons, such as the Logout button on the Student Dashboard, remain fully visible and clickable without being obscured or clipped on mobile.
+- Dropdown menus (like the globe icon language selector) must render completely on mobile devices without falling off the edge of the screen. Utilize padding, dynamic positioning, or responsive widths.
+
+## 4.5 Dark Mode
+- A toggle switch should be available (e.g., in the Navbar) to flip between light and dark modes.
+- Dark mode values should contrast sufficiently and present an elevated, creative aesthetic, without degrading the visibility of important layout components.
+- **Day Mode Legibility**: Ensure that elements using an active or filled background color (`bg-primary`) in daytime have accessible text colors (like `text-white dark:text-slate-900`) so they remain legible in light mode instead of reverting to dark text on dark backgrounds.
+
+## 5. File System References
+Ensure all images are adequately referred to in `public/` and linked via root-relative paths like `/images/...` to prevent broken links during GitHub/Vercel routing differences.
+
+## 6. Certificates & Print Aesthetics
+- Generated Certificates use QR codes via `qrcode.react`. These are intentionally scaled up (e.g., multiplier of 5) for better camera scanning functionality.
+- Include a specific, clear aesthetic hierarchy for the Student Name, Dynamic Subjects mapped out by score, Issue Dates, and digital signature approximations.
+- **Print Optimization**: Certificates *must* be strictly optimized for direct browser printing. Ensure the layout gracefully fits precisely on a single A4 page in portrait orientation.
+- Use CSS `@media print` directives and `print-color-adjust: exact` (or `-webkit-print-color-adjust`) globally within the print container to guarantee background colors, seals, borders, and the marks table render flawlessly without overlap or clipping during PDF generation or physical printing.
+
+## 7. Icons and Internationalization
+- When utilizing `material-icons`, you **MUST** attach `class="notranslate"` and `translate="no"` to the icon element (e.g., `<span className="material-icons notranslate" translate="no">home</span>`).
+- Failure to do this will cause the text ligature (e.g., "home") to be translated into another language by Google Translate, breaking the visual icon rendering.
+
+---
+## 8. Embedded Maps
+- Use `react-leaflet` for any map integrations (like the homepage footer).
+- Always wrap map components with `next/dynamic` and set `{ ssr: false }` to prevent SSR issues in Next.js.
+- Ensure proper attribution is passed to Leaflet components.
+
+*Note: Ensure to update these design guidelines if introducing new component libraries or changing the fundamental themes.*

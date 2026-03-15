@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Instructor Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-dark": "#182e21",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+<div class="flex h-screen w-full overflow-hidden">
+<!-- Sidebar -->
+<aside class="flex w-72 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark transition-all duration-300">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 px-2 py-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-base font-semibold leading-tight text-slate-900 dark:text-white">Admin Portal</h1>
+<p class="text-xs font-normal text-slate-500 dark:text-slate-400">Manage Academy</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="group flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-primary dark:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px] fill-1">group</span>
+<span class="text-sm font-medium">Instructors</span>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">menu_book</span>
+<span class="text-sm font-medium">Courses</span>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">school</span>
+<span class="text-sm font-medium">Students</span>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<div class="border-t border-slate-200 dark:border-slate-800 pt-4">
+<button class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+<span class="material-symbols-outlined text-[24px]">logout</span>
+<span class="text-sm font-medium">Sign Out</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-8">
+<div class="mx-auto max-w-7xl">
+<!-- Header -->
+<header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+<div>
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Manage Instructors</h2>
+<p class="mt-1 text-slate-500 dark:text-slate-400">View and manage instructor details, assignments, and access.</p>
+</div>
+<div class="flex gap-3">
+<button class="inline-flex items-center justify-center gap-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background-dark transition-all">
+<span class="material-symbols-outlined text-[20px]">file_download</span>
+<span>Export CSV</span>
+</button>
+<button class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-slate-900 shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background-dark transition-all">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+<span>Register New Instructor</span>
+</button>
+</div>
+</header>
+<!-- Stats Overview -->
+<div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+<div class="rounded-xl bg-surface-light dark:bg-surface-dark p-5 shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Instructors</p>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">42</p>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-surface-light dark:bg-surface-dark p-5 shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Active Now</p>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">38</p>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-surface-light dark:bg-surface-dark p-5 shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Courses</p>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">156</p>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-surface-light dark:bg-surface-dark p-5 shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined">star</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Top Rated</p>
+<p class="text-2xl font-bold text-slate-900 dark:text-white">12</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Filters & Search -->
+<div class="mb-6 flex flex-col gap-4 rounded-xl bg-surface-light dark:bg-surface-dark p-4 shadow-sm border border-slate-200 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
+<div class="relative w-full max-w-md">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="block w-full rounded-lg border-0 bg-slate-100 dark:bg-background-dark py-2.5 pl-10 pr-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:ring-2 focus:ring-primary dark:focus:ring-primary sm:text-sm sm:leading-6" placeholder="Search by name, expertise or email..." type="text"/>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<select class="rounded-lg border-0 bg-slate-100 dark:bg-background-dark py-2.5 pl-3 pr-10 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-primary dark:focus:ring-primary">
+<option>All Departments</option>
+<option>Engineering</option>
+<option>Design</option>
+<option>Business</option>
+</select>
+<select class="rounded-lg border-0 bg-slate-100 dark:bg-background-dark py-2.5 pl-3 pr-10 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-primary dark:focus:ring-primary">
+<option>Status: All</option>
+<option>Active</option>
+<option>On Leave</option>
+</select>
+</div>
+</div>
+<!-- Data Table -->
+<div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400">
+<tr>
+<th class="px-6 py-4 font-medium" scope="col">Instructor Name</th>
+<th class="px-6 py-4 font-medium" scope="col">Expertise</th>
+<th class="px-6 py-4 font-medium" scope="col">Assigned Courses</th>
+<th class="px-6 py-4 font-medium" scope="col">Contact Info</th>
+<th class="px-6 py-4 font-medium text-right" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Portrait of Dr. Sarah Jones" class="h-10 w-10 rounded-full object-cover" data-alt="Portrait of Dr. Sarah Jones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMd3M_cfbyvZzaaaCb3VUyCeeFqevkKwW59sY66CgkfidtDi6JmptB4i2Iik-uyrJtCDnXIcvRxsKcRGZGNUMbneMZuuUxEKO4VEZ4pLP1bkmCc_15pEvKA_f3uFBi5e1ggvVwqTTh-gybNU7tsCoBAtypXg0dVGyuWV8GI_R_zGd3IC8AhZbUeILtEEQTuUDXz3BK7xhuhdDSg12ZGcbapO1bSfiB0tCImZMB8TSi50OY_tZ6X4I5-CTLY5QJC9A05GvL5hKc068"/>
+<div>
+<div class="font-medium text-slate-900 dark:text-white">Dr. Sarah Jones</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: INS-001</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300">
+                                            Data Science
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                Python 101
+                                            </span>
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                Machine Learning
+                                            </span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">sarah.j@edu.com</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">+1 (555) 123-4567</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="rounded-lg p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Portrait of Prof. Mark Smith" class="h-10 w-10 rounded-full object-cover" data-alt="Portrait of Prof. Mark Smith" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWntEd1xKbRrTCdk6VAIK7DTFN6OWbRwbZqG-yHHGNCgVhAVlsj6md7eY6oM-pYn7gVY_Wl3zaoS3W2SYX8josp4H3QAejQvLGXG5FhzTjMd-M7YkeYxIZ6XeNjI9JR3IfgImHsOeR4LpWEn5KsqAWAFFoxKwp0gjyCrMx7wbgOtnslFLTksPug-DxEYAZZoxxX6cSwN2uOuFvW6vUJSYw15rv9-IdCkRBjqU453Qhpqd0GyKu5S1RpaLL_1FH6p62YvRmyTm8d_Y"/>
+<div>
+<div class="font-medium text-slate-900 dark:text-white">Prof. Mark Smith</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: INS-002</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-2.5 py-0.5 text-xs font-medium text-purple-700 dark:text-purple-300">
+                                            Web Development
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                React JS
+                                            </span>
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                Node.js Advanced
+                                            </span>
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                +1
+                                            </span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">mark.s@edu.com</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">+1 (555) 987-6543</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="rounded-lg p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Portrait of Emily Chen" class="h-10 w-10 rounded-full object-cover" data-alt="Portrait of Emily Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNXZnZaYVtswEc1r6FrzMiSPNdEDX4-NwDUwy7lnPZQSVW_1CwIJQVfI1E5kTY-aVd0dT8r_IL7dED4stwWajn62df2BiYQSWU_qSYJhkUbcC21xRgkfnOnpZaz8LWaaiYrTKJ2Rs6Pw28nMCx6-kmpyAHeSey46m47vMsXKmNU-F2FSdx_GVTqoRXVUbloIxWvTmNNhvg3xWKAAXiQ_o_ccgigKgUW9kFIiPW_IqcZJkA4wxmr7RbzihlAXuO_btcJYNVNH0_vEI"/>
+<div>
+<div class="font-medium text-slate-900 dark:text-white">Emily Chen</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: INS-003</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-pink-100 dark:bg-pink-900/30 px-2.5 py-0.5 text-xs font-medium text-pink-700 dark:text-pink-300">
+                                            UX Design
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                Figma Mastery
+                                            </span>
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                Design Systems
+                                            </span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">emily.c@edu.com</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">+1 (555) 234-5678</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="rounded-lg p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Portrait of David Lee" class="h-10 w-10 rounded-full object-cover" data-alt="Portrait of David Lee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQTeqsV1Mh1xvF0j84s0lGt0wVEZMbypP05FM3ZPluttMH_8RKpOwxeUM02alX5PEpQ2sBvXjuOHUiWdeZMWvNPXT_vkHlEAOBdOCUYLbO9gGsElTPEiGsm8VsS79uJiV4YqLfdcAiUsYD-M5Fxw4PUrPOY6P9YVS3XMDyfC4PhJ0uY0iqt9oNIiNgDJPRtT6GjtDpII6Fbze6phSr1XzR6rjX2VqbDHiuFBSIsXlyViBxLSL8s2aKsGnAwaDaPBrCkPg3mEAFNnk"/>
+<div>
+<div class="font-medium text-slate-900 dark:text-white">David Lee</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: INS-004</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-red-100 dark:bg-red-900/30 px-2.5 py-0.5 text-xs font-medium text-red-700 dark:text-red-300">
+                                            Cybersecurity
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                Network Security
+                                            </span>
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                Ethical Hacking
+                                            </span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">david.l@edu.com</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">+1 (555) 345-6789</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="rounded-lg p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex items-center gap-3">
+<img alt="Portrait of Jessica Brown" class="h-10 w-10 rounded-full object-cover" data-alt="Portrait of Jessica Brown" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjH9K7iR3Re05mnXX_u8AJaLmwVKNMVjXoiu0ZQmPfJDerxeQolwUDEuNUlg89toiS4gAtf9jAJ07QYiQmNTdxqF1Ixb0ub3Osw5ca5u2317yRo1owHmLzspL784lY_yWutc4XGnmW8QnKpPCeRP7_kSGX5zJ_OefX1Baoqpug8fVRFdT_v7o82N7os5jV2i6yuNw6QTllB0pmdMWv5XAxS5Tusk227AROSJksN3ylz6HRbs22Z4LXH-wD1zH1k7tuQrClE8bYm7I"/>
+<div>
+<div class="font-medium text-slate-900 dark:text-white">Jessica Brown</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: INS-005</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-orange-100 dark:bg-orange-900/30 px-2.5 py-0.5 text-xs font-medium text-orange-700 dark:text-orange-300">
+                                            Cloud Computing
+                                        </span>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                AWS Basics
+                                            </span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">jess.b@edu.com</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">+1 (555) 678-9012</span>
+</div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="rounded-lg p-2 text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 px-6 py-4">
+<div class="text-sm text-slate-500 dark:text-slate-400">
+                            Showing <span class="font-medium text-slate-900 dark:text-white">1</span> to <span class="font-medium text-slate-900 dark:text-white">5</span> of <span class="font-medium text-slate-900 dark:text-white">42</span> results
+                        </div>
+<div class="flex items-center gap-2">
+<button class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-surface-light dark:bg-surface-dark text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-slate-900 font-medium">1</button>
+<button class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-surface-light dark:bg-surface-dark text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800">2</button>
+<button class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-surface-light dark:bg-surface-dark text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800">3</button>
+<span class="text-slate-500">...</span>
+<button class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-surface-light dark:bg-surface-dark text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800">9</button>
+<button class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-surface-light dark:bg-surface-dark text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
